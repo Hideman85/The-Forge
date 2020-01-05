@@ -58,3 +58,11 @@ Art/
 # Nuget packages
 Tools/ShaderBuildCommand/packages/
 **/ThirdParty/OpenSource/hlslparser/Ext/ShaderTranslator/packages/
+
+# CLion
+.idea/
+
+# CMake build system
+cmake-build-debug/
+CMakeFiles/
+build/

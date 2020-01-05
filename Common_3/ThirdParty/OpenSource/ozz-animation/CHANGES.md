@@ -70,7 +70,7 @@ Release version 0.8.0
   - [offline] Adds fbx 20161.* sdk support.
 
 * Build pipeline
-  - Adds c++11 build option for gcc/clang compilers. Use cmake ozz_build_cpp11 option.
+  - Adds c++11 build option for gcc/clang compilers. Use cmake ozz_build_cpp14 option.
   - Automatically detects SIMD implementation based on compiler settings. SSE2 implementation is automatically enabled on x64/amd64 targets, or if /arch:SSE2 is selected on MSVC/x86 builds. One could use ozz_build_simd_ref cmake option (OZZ_BUILD_SIMD_REF preprocessor directive) to bypass detection and force reference (aka scalar) implementation. OZZ_HAS_SSE2 is now deprecated.
   - Fixes #3 gcc5 warnings with simd math reference implementation.
   - Fixes #6 by updating to gtest 1.70 to support new platforms (FreeBSD...).

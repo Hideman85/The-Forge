@@ -605,7 +605,7 @@ SET( assimp_src
   ${COMPILER_HEADERS}
 
   # Android JNI IOSYSTEM
-  ../port/AndroidJNI/AndroidJNIIOSystem.cpp
+#  ../port/AndroidJNI/AndroidJNIIOSystem.cpp
 )
 ADD_DEFINITIONS( -DOPENDDLPARSER_BUILD )
 

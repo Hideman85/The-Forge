@@ -29,21 +29,21 @@
 
 
 //Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <OS/Interfaces/ICameraController.h>
+#include <OS/Interfaces/IApp.h>
+#include <OS/Interfaces/ILog.h>
+#include <OS/Interfaces/IInput.h>
+#include <OS/Interfaces/IFileSystem.h>
+#include <OS/Interfaces/ITime.h>
+#include <OS/Interfaces/IProfiler.h>
+#include <UI/AppUI.h>
+#include <Renderer/IRenderer.h>
+#include <Renderer/ResourceLoader.h>
 
 //Math
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <OS/Math/MathTypes.h>
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <OS/Interfaces/IMemory.h>
 
 /// Demo structures
 struct PlanetInfoStruct
@@ -143,7 +143,7 @@ public:
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/01_Transformations");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -151,7 +151,7 @@ public:
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
         }
-        
+
 		// window and renderer setup
 		RendererDesc settings = { 0 };
 		initRenderer(GetName(), &settings, &pRenderer);
@@ -435,7 +435,7 @@ public:
 
     // Initialize microprofiler and it's UI.
     initProfiler();
-    
+
     // Gpu profiler can only be added after initProfile.
     addGpuProfiler(pRenderer, pGraphicsQueue, &pGpuProfiler, "GpuProfiler");
 
@@ -470,7 +470,7 @@ public:
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		DescriptorData params[6] = {};
 		params[0].pName = "RightText";
@@ -645,7 +645,7 @@ public:
 		/************************************************************************/
 		static float currentTime = 0.0f;
 		currentTime += deltaTime * 1000.0f;
-	
+
 		// update camera with time
 		mat4 viewMat = pCameraController->getViewMatrix();
 
@@ -695,7 +695,7 @@ public:
     /************************************************************************/
     // Update GUI
     /************************************************************************/
-    gAppUI.Update(deltaTime);  
+    gAppUI.Update(deltaTime);
 	}
 
 	void Draw()
@@ -746,7 +746,7 @@ public:
 		cmdSetScissor(cmd, 0, 0, pRenderTarget->mDesc.mWidth, pRenderTarget->mDesc.mHeight);
 
 		cmdBindDescriptorSet(cmd, 0, pDescriptorSetTexture);
-    
+
 		//// draw skybox
 		cmdBeginGpuTimestampQuery(cmd, pGpuProfiler, "Draw skybox", true);
 		cmdBindPipeline(cmd, pSkyBoxDrawPipeline);

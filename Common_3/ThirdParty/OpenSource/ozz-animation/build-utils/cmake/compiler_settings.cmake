@@ -29,8 +29,8 @@ set(cxx_all_flags
 #--------------------------------------
 # Cross compiler compilation flags
 
-if(ozz_build_cpp11)
-  set(CMAKE_CXX_STANDARD 11)
+if(ozz_build_cpp14)
+  set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 

@@ -30,11 +30,11 @@ distribution.
 #include <cstring>
 #include <cstdarg>
 
-#include "Common_3/OS/Interfaces/IFileSystem.h"
+#include "OS/Interfaces/IFileSystem.h"
 #define IMEMORY_FROM_HEADER
-#include "Common_3/OS/Interfaces/IMemory.h" //NOTE: this should be the last include in a .cpp
+#include "OS/Interfaces/IMemory.h" //NOTE: this should be the last include in a .cpp
 
-/* 
+/*
    TODO: intern strings instead of allocation.
 */
 /*
@@ -68,9 +68,9 @@ distribution.
 	/*int _snprintf_s(
 	   char *buffer,
 	   size_t sizeOfBuffer,
-	   size_t count,	
+	   size_t count,
 	   const char *format [,
-		  argument] ... 
+		  argument] ...
 	);*/
 	inline int TIXML_SNPRINTF( char* buffer, size_t size, const char* format, ... ) {
 	    va_list va;
@@ -138,7 +138,7 @@ public:
 	void SetInternedStr( const char* str ) { Reset(); this->start = const_cast<char*>(str); }
 	void SetStr( const char* str, int flags=0 );
 
-	char* ParseText( char* in, const char* endTag, int strFlags );	
+	char* ParseText( char* in, const char* endTag, int strFlags );
 	char* ParseName( char* in );
 
 
@@ -152,7 +152,7 @@ private:
 
 	// After parsing, if *end != 0, it can be set to zero.
 	int flags;
-	char* start;	
+	char* start;
 	char* end;
 };
 
@@ -166,7 +166,7 @@ template <class T, int INIT>
 class DynArray
 {
 public:
-	DynArray< T, INIT >() 
+	DynArray< T, INIT >()
 	{
 		mem = pool;
 		allocated = INIT;
@@ -194,7 +194,7 @@ public:
 	T Pop() {
 		return mem[--size];
 	}
-	void PopArr( int count ) 
+	void PopArr( int count )
 	{
 		TIXMLASSERT( size >= count );
 		size -= count;
@@ -240,7 +240,7 @@ public:
 
 	virtual int ItemSize() const = 0;
 	virtual void* Alloc() = 0;
-	virtual void Free( void* ) = 0; 
+	virtual void Free( void* ) = 0;
 };
 
 
@@ -324,7 +324,7 @@ private:
 	If you return 'true' from a Visit method, recursive parsing will continue. If you return
 	false, <b>no children of this node or its sibilings</b> will be visited.
 
-	All flavors of Visit methods have a default implementation that returns 'true' (continue 
+	All flavors of Visit methods have a default implementation that returns 'true' (continue
 	visiting). You need to only override methods that are interesting to you.
 
 	Generally Accept() is called on the TiXmlDocument, although all nodes support visiting.
@@ -365,7 +365,7 @@ public:
 class XMLUtil
 {
 public:
-	// Anything in the high order range of UTF-8 is assumed to not be whitespace. This isn't 
+	// Anything in the high order range of UTF-8 is assumed to not be whitespace. This isn't
 	// correct, but simple, and usually works.
 	static const char* SkipWhiteSpace( const char* p )	{ while( !IsUTF8Continuation(*p) && isspace( *reinterpret_cast<const unsigned char*>(p) ) ) { ++p; } return p; }
 	static char* SkipWhiteSpace( char* p )				{ while( !IsUTF8Continuation(*p) && isspace( *reinterpret_cast<unsigned char*>(p) ) )		{ ++p; } return p; }
@@ -399,7 +399,7 @@ public:
 	XML Document Object Model (DOM), except XMLAttributes.
 	Nodes have siblings, a parent, and children which can
 	be navigated. A node is always in a XMLDocument.
-	The type of a XMLNode can be queried, and it can 
+	The type of a XMLNode can be queried, and it can
 	be cast to its more defined type.
 
 	A XMLDocument allocates memory for all its Nodes.
@@ -485,7 +485,7 @@ public:
 	*/
 	const XMLElement* LastChildElement( const char* value=0 ) const;
 	XMLElement* LastChildElement( const char* _value=0 )	{ return const_cast<XMLElement*>(const_cast<const XMLNode*>(this)->LastChildElement(_value) ); }
-	
+
 	/// Get the previous (left) sibling node of this node.
 	const XMLNode*	PreviousSibling() const					{ return prev; }
 	XMLNode*	PreviousSibling()							{ return prev; }
@@ -493,11 +493,11 @@ public:
 	/// Get the previous (left) sibling element of this node, with an opitionally supplied name.
 	const XMLElement*	PreviousSiblingElement( const char* value=0 ) const ;
 	XMLElement*	PreviousSiblingElement( const char* _value=0 ) { return const_cast<XMLElement*>(const_cast<const XMLNode*>(this)->PreviousSiblingElement( _value ) ); }
-	
+
 	/// Get the next (right) sibling node of this node.
 	const XMLNode*	NextSibling() const						{ return next; }
 	XMLNode*	NextSibling()								{ return next; }
-		
+
 	/// Get the next (right) sibling element of this node, with an opitionally supplied name.
 	const XMLElement*	NextSiblingElement( const char* value=0 ) const;
  	XMLElement*	NextSiblingElement( const char* _value=0 )	{ return const_cast<XMLElement*>(const_cast<const XMLNode*>(this)->NextSiblingElement( _value ) ); }
@@ -516,7 +516,7 @@ public:
 		Add a node after the specified child node.
 	*/
 	XMLNode* InsertAfterChild( XMLNode* afterThis, XMLNode* addThis );
-	
+
 	/**
 		Delete all the children of this node.
 	*/
@@ -530,7 +530,7 @@ public:
 	/**
 		Make a copy of this node, but not its children.
 		You may pass in a Document pointer that will be
-		the owner of the new Node. If the 'document' is 
+		the owner of the new Node. If the 'document' is
 		null, then the node returned will be allocated
 		from the current Document. (this->GetDocument())
 
@@ -546,7 +546,7 @@ public:
 	*/
 	virtual bool ShallowEqual( const XMLNode* compare ) const = 0;
 
-	/** Accept a hierarchical visit of the nodes in the TinyXML DOM. Every node in the 
+	/** Accept a hierarchical visit of the nodes in the TinyXML DOM. Every node in the
 		XML tree will be conditionally visited and the host will be called back
 		via the TiXmlVisitor interface.
 
@@ -557,7 +557,7 @@ public:
 		The interface has been based on ideas from:
 
 		- http://www.saxproject.org/
-		- http://c2.com/cgi/wiki?HierarchicalVisitorPattern 
+		- http://c2.com/cgi/wiki?HierarchicalVisitorPattern
 
 		Which are both good references for "visiting".
 
@@ -578,7 +578,7 @@ public:
 protected:
 	XMLNode( const XMLNode& );	// not supported
 	void operator=( const XMLNode& );	// not supported
-	
+
 	XMLDocument*	document;
 	XMLNode*		parent;
 	mutable StrPair	value;
@@ -602,9 +602,9 @@ private:
 	<root>This is <b>bold</b></root>
 	@endverbatim
 
-	A text node can have 2 ways to output the next. "normal" output 
+	A text node can have 2 ways to output the next. "normal" output
 	and CDATA. It will default to the mode it was parsed from the XML file and
-	you generally want to leave it alone, but you can change the output mode with 
+	you generally want to leave it alone, but you can change the output mode with
 	SetCDATA() and query it with CDATA().
 */
 class XMLText : public XMLNode
@@ -839,15 +839,15 @@ public:
 	virtual bool Accept( XMLVisitor* visitor ) const;
 
 	/** Given an attribute name, Attribute() returns the value
-		for the attribute of that name, or null if none 
+		for the attribute of that name, or null if none
 		exists. For example:
 
 		@verbatim
 		const char* value = ele->Attribute( "foo" );
 		@endverbatim
 
-		The 'value' parameter is normally null. However, if specified, 
-		the attribute will only be returned if the 'name' and 'value' 
+		The 'value' parameter is normally null. However, if specified,
+		the attribute will only be returned if the 'name' and 'value'
 		match. This allow you to write code:
 
 		@verbatim
@@ -865,7 +865,7 @@ public:
 
 	/** Given an attribute name, IntAttribute() returns the value
 		of the attribute interpreted as an integer. 0 will be
-		returned if there is an error. For a method with error 
+		returned if there is an error. For a method with error
 		checking, see QueryIntAttribute()
 	*/
 	int		 IntAttribute( const char* name ) const		{ int i=0;		QueryIntAttribute( name, &i );		return i; }
@@ -878,7 +878,7 @@ public:
 	/// See IntAttribute()
 	float	 FloatAttribute( const char* name ) const	{ float f=0;	QueryFloatAttribute( name, &f );	return f; }
 
-	/** Given an attribute name, QueryIntAttribute() returns 
+	/** Given an attribute name, QueryIntAttribute() returns
 		XML_NO_ERROR, XML_WRONG_ATTRIBUTE_TYPE if the conversion
 		can't be performed, or XML_NO_ATTRIBUTE if the attribute
 		doesn't exist. If successful, the result of the conversion
@@ -891,7 +891,7 @@ public:
 		QueryIntAttribute( "foo", &value );		// if "foo" isn't found, value will still be 10
 		@endverbatim
 	*/
-	int QueryIntAttribute( const char* name, int* _value ) const				{ const XMLAttribute* a = FindAttribute( name ); if ( !a ) return XML_NO_ATTRIBUTE; return a->QueryIntValue( _value ); } 
+	int QueryIntAttribute( const char* name, int* _value ) const				{ const XMLAttribute* a = FindAttribute( name ); if ( !a ) return XML_NO_ATTRIBUTE; return a->QueryIntValue( _value ); }
 	/// See QueryIntAttribute()
 	int QueryUnsignedAttribute( const char* name, unsigned int* _value ) const	{ const XMLAttribute* a = FindAttribute( name ); if ( !a ) return XML_NO_ATTRIBUTE; return a->QueryUnsignedValue( _value ); }
 	/// See QueryIntAttribute()
@@ -925,7 +925,7 @@ public:
 	/** Convenience function for easy access to the text inside an element. Although easy
 		and concise, GetText() is limited compared to getting the TiXmlText child
 		and accessing it directly.
-	
+
 		If the first child of 'this' is a TiXmlText, the GetText()
 		returns the character string of the Text node, else null is returned.
 
@@ -935,18 +935,18 @@ public:
 		const char* str = fooElement->GetText();
 		@endverbatim
 
-		'str' will be a pointer to "This is text". 
-		
+		'str' will be a pointer to "This is text".
+
 		Note that this function can be misleading. If the element foo was created from
 		this XML:
 		@verbatim
-		<foo><b>This is text</b></foo> 
+		<foo><b>This is text</b></foo>
 		@endverbatim
 
 		then the value of str would be null. The first child node isn't a text node, it is
 		another element. From this XML:
 		@verbatim
-		<foo>This is <b>text</b></foo> 
+		<foo>This is <b>text</b></foo>
 		@endverbatim
 		GetText() will return "This is ".
 	*/
@@ -982,7 +982,7 @@ private:
 };
 
 
-/** A Document binds together all the functionality. 
+/** A Document binds together all the functionality.
 	It can be saved, loaded, and printed to the screen.
 	All Nodes are connected and allocated to a Document.
 	If the Document is deleted, all its Nodes are also deleted.
@@ -992,7 +992,7 @@ class XMLDocument : public XMLNode
 	friend class XMLElement;
 public:
 	/// constructor
-	XMLDocument( bool processEntities = true ); 
+	XMLDocument( bool processEntities = true );
 	~XMLDocument();
 
 	virtual XMLDocument* ToDocument()				{ return this; }
@@ -1004,36 +1004,36 @@ public:
 		an errorID.
 	*/
 	int Parse( const char* xml );
-	
+
 	/**
 		Load an XML file from disk.
 		Returns XML_NO_ERROR (0) on success, or
-		an errorID.The function is using filesystem 
+		an errorID.The function is using filesystem
         to do read and write. If filesys is NULL,
         default filesystem will be used.
-	*/	
+	*/
 	int LoadFile( const Path* filePath );
 
     /**
 		Load an XML file from data in, specify size
 		Returns XML_NO_ERROR (0) on success, or
-		an errorID. 
-	*/	
+		an errorID.
+	*/
     int LoadFileData( const char* dataIn, size_t size);
-	
+
 	/**
 		Load an XML file from disk. You are responsible
 		for providing and closing the FILE*.
 
 		Returns XML_NO_ERROR (0) on success, or
 		an errorID.
-	*/	
+	*/
 	int LoadFile(FileStream* fileStream );
-	
+
 	/**
 		Save the XML file to disk.
 		Returns XML_NO_ERROR (0) on success, or
-		an errorID.The function is using filesystem 
+		an errorID.The function is using filesystem
         to do read and write. If filesys is NULL,
         default filesystem will be used.
 	*/
@@ -1125,7 +1125,7 @@ public:
 	void DeleteNode( XMLNode* node )	{ node->parent->DeleteChild( node ); }
 
 	void SetError( int error, const char* str1, const char* str2 );
-	
+
 	/// Return true if there was an error parsing the document.
 	bool Error() const { return errorID != XML_NO_ERROR; }
 	/// Return the errorID.
@@ -1177,7 +1177,7 @@ private:
 	</Document>
 	@endverbatim
 
-	Assuming you want the value of "attributeB" in the 2nd "Child" element, it's very 
+	Assuming you want the value of "attributeB" in the 2nd "Child" element, it's very
 	easy to write a *lot* of code that looks like:
 
 	@verbatim
@@ -1197,7 +1197,7 @@ private:
 	@endverbatim
 
 	And that doesn't even cover "else" cases. XMLHandle addresses the verbosity
-	of such code. A XMLHandle checks for null pointers so it is perfectly safe 
+	of such code. A XMLHandle checks for null pointers so it is perfectly safe
 	and correct to use:
 
 	@verbatim
@@ -1242,12 +1242,12 @@ public:
 	/// Get the previous sibling element of this handle.
 	XMLHandle PreviousSiblingElement( const char* _value=0 )				{ return XMLHandle( node ? node->PreviousSiblingElement( _value ) : 0 ); }
 	/// Get the next sibling of this handle.
-	XMLHandle NextSibling()													{ return XMLHandle( node ? node->NextSibling() : 0 ); }		
+	XMLHandle NextSibling()													{ return XMLHandle( node ? node->NextSibling() : 0 ); }
 	/// Get the next sibling element of this handle.
 	XMLHandle NextSiblingElement( const char* _value=0 )					{ return XMLHandle( node ? node->NextSiblingElement( _value ) : 0 ); }
 
 	/// Safe cast to XMLNode. This can return null.
-	XMLNode* ToNode()							{ return node; } 
+	XMLNode* ToNode()							{ return node; }
 	/// Safe cast to XMLElement. This can return null.
 	XMLElement* ToElement() 					{ return ( ( node && node->ToElement() ) ? node->ToElement() : 0 ); }
 	/// Safe cast to XMLText. This can return null.
@@ -1285,7 +1285,7 @@ public:
 	const XMLConstHandle NextSiblingElement( const char* _value=0 ) const			{ return XMLConstHandle( node ? node->NextSiblingElement( _value ) : 0 ); }
 
 
-	const XMLNode* ToNode() const				{ return node; } 
+	const XMLNode* ToNode() const				{ return node; }
 	const XMLElement* ToElement() const			{ return ( ( node && node->ToElement() ) ? node->ToElement() : 0 ); }
 	const XMLText* ToText() const				{ return ( ( node && node->ToText() ) ? node->ToText() : 0 ); }
 	const XMLUnknown* ToUnknown() const			{ return ( ( node && node->ToUnknown() ) ? node->ToUnknown() : 0 ); }
@@ -1314,7 +1314,7 @@ private:
 	@endverbatim
 
 	Print to a File
-	
+
 	You provide the file pointer.
 	@verbatim
 	XMLPrinter printer( fp );
@@ -1390,7 +1390,7 @@ public:
 	*/
 	const char* CStr() const { return buffer.Mem(); }
 	/**
-   		If in print to memory mode, return the size 
+   		If in print to memory mode, return the size
 		of the XML file in memory. (Note the size returned
 		includes the terminating null.)
   	*/
