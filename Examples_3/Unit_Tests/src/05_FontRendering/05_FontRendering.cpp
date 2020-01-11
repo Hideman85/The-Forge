@@ -35,22 +35,22 @@
 #include <EASTL/string.h>
 
 // Interfaces
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/OS/Interfaces/IInput.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 // Math
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 // Input
 // Memory
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"    // NOTE: should be the last include in a .cpp!
+#include <TheForge/OS/Interfaces/IMemory.h>    // NOTE: should be the last include in a .cpp!
 
 /************************************************************************/
 /* SCENE VARIABLES

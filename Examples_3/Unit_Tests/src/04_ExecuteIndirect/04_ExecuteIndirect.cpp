@@ -52,29 +52,29 @@
 #include <EASTL/unordered_map.h>
 
 //Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/OS/Interfaces/IInput.h>
 
 //Renderer
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 //Math
-#include "../../../../Common_3/OS/Core/ThreadSystem.h"
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Core/ThreadSystem.h>
+#include <TheForge/OS/Math/MathTypes.h>
 
 #if !defined(TARGET_IOS)
 //PostProcess
-#include "../../../../Middleware_3/PaniniProjection/Panini.h"
+#include <TheForge/PaniniProjection/Panini.h>
 #endif
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define MAX_LOD_OFFSETS 10
 

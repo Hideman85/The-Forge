@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Components/WorldBoundsComponent.h"
-#include "../../../../../Middleware_3/ECS/ComponentRepresentation.h"
+#include <TheForge/ECS/ComponentRepresentation.h>
 
 FORGE_START_GENERATE_COMPONENT_REPRESENTATION(WorldBoundsComponent)
 

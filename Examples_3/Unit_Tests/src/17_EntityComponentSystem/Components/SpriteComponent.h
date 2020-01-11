@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../../Middleware_3/ECS/BaseComponent.h"
+#include <TheForge/ECS/BaseComponent.h>
 
 class SpriteComponent : public BaseComponent {
 

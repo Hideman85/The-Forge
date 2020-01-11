@@ -28,6 +28,11 @@ option(USE_LUA "Build package with lua support." OFF)
 option(COMPILE_UNIT_TESTS "Build unit tests." ON)
 option(COMPILE_SAMPLE "Build visibility buffer sample." ON)
 
+option(VULKAN "Build with vulkan support" ON)
+option(METAL "Build with metal support" ON)
+option(DIRECT3D11 "Build with D3DX11 support" OFF)
+option(DIRECT3D12 "Build with D3DX12 support" OFF)
+
 ##########################################
 ##      Include TheForge dirs
 ##########################################
@@ -53,17 +58,16 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 ##      System deps
 ##########################################
 find_package(Vulkan REQUIRED)
-#include_directories(${Vulkan_INCLUDE_DIR})
-#link_libraries(${Vulkan_LIBRARIES})
+include_directories(${Vulkan_INCLUDE_DIR})
+link_libraries(${Vulkan_LIBRARIES})
+add_definitions(-DVULKAN=TRUE)
 
 if (UNIX)
     find_package(X11 REQUIRED)
     find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
-#    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
-#    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} -pthread)
-    link_libraries(-lX11 -lvulkan -pthread)
+    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
+    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} -pthread)
 endif()
-#link_libraries(-lvulkan -lX11 -pthread -ldl -lz -lasound)
 
 ##########################################
 ##      Compile nested deps
@@ -289,5 +293,5 @@ if (COMPILE_UNIT_TESTS)
     add_subdirectory(Examples_3/Unit_Tests/src)
 endif()
 if (COMPILE_SAMPLE)
-#    add_subdirectory(Examples_3/Visibility_Buffer/src) # need to implement the CMakeLists.txt
+    add_subdirectory(Examples_3/Visibility_Buffer/src)
 endif()

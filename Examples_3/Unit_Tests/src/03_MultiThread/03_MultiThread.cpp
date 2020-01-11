@@ -31,18 +31,18 @@
 #include <tinyimageformat_query.h>
 
 //Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Common_3/OS/Interfaces/IThread.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/OS/Interfaces/IThread.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
 
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
-#include "../../../../Common_3/OS/Math/MathTypes.h"
-#include "../../../../Common_3/OS/Core/ThreadSystem.h"
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/IInput.h>
+#include <TheForge/OS/Math/MathTypes.h>
+#include <TheForge/OS/Core/ThreadSystem.h>
 
 
 // for cpu usage query
@@ -63,11 +63,11 @@
 #include <mach/mach_host.h>
 #endif
 
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/GpuProfiler.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/GpuProfiler.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // startdust hash function, use this to generate all the seed and update the position of all particles
 #define RND_GEN(x) (x = x * 196314165 + 907633515)

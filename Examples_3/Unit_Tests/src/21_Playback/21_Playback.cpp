@@ -32,36 +32,36 @@
 *********************************************************************************************************/
 
 // Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/OS/Interfaces/IInput.h>
 
 // Rendering
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 // Middleware packages
-#include "../../../../Middleware_3/Animation/SkeletonBatcher.h"
-#include "../../../../Middleware_3/Animation/AnimatedObject.h"
-#include "../../../../Middleware_3/Animation/Animation.h"
-#include "../../../../Middleware_3/Animation/Clip.h"
-#include "../../../../Middleware_3/Animation/ClipController.h"
-#include "../../../../Middleware_3/Animation/Rig.h"
+#include <TheForge/Animation/SkeletonBatcher.h>
+#include <TheForge/Animation/AnimatedObject.h>
+#include <TheForge/Animation/Animation.h>
+#include <TheForge/Animation/Clip.h>
+#include <TheForge/Animation/ClipController.h>
+#include <TheForge/Animation/Rig.h>
 
-#include "../../../../Middleware_3/UI/AppUI.h"
+#include <TheForge/UI/AppUI.h>
 // tiny stl
 #include <EASTL/vector.h>
 #include <EASTL/string.h>
 
 // Math
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 // Memory
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 //--------------------------------------------------------------------------------------------
 // RENDERING PIPELINE DATA

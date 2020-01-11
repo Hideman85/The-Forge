@@ -26,8 +26,8 @@
 #define Geometry_h
 
 #include <EASTL/vector.h>
-#include "../../../Common_3/Renderer/IRenderer.h"
-#include "../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 #if defined(METAL)
 #include "Shaders/Metal/shader_defs.h"

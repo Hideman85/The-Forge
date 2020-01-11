@@ -39,7 +39,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Renderer/ResourceLoader.h>
 #include <cstdint>
 
 void genTextures(uint32_t texture_count, RawImageData* out_data);

@@ -29,12 +29,12 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../Common_3/OS/Core/Compiler.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Core/Compiler.h>
 
-#include "../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
-#include "../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/Tools/AssimpImporter/AssimpImporter.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define DEFAULT_ALBEDO "Default"
 #define DEFAULT_NORMAL "Default_NRM"

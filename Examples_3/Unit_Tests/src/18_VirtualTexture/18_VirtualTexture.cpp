@@ -29,24 +29,24 @@
 //#define GARUANTEE_PAGE_SYNC
 
 //assimp
-#include "../../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
+#include <TheForge/Tools/AssimpImporter/AssimpImporter.h>
 
 //Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IInput.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 //Math
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 /// Demo structures
 struct PlanetInfoStruct
@@ -83,7 +83,7 @@ struct UniformVirtualTextureInfo
 	uint ID;
 	uint pad1;
 	uint pad2;
-	
+
 	vec4 CameraPos;
 };
 
@@ -220,7 +220,7 @@ public:
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/18_VirtualTexture");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,				"../../../../Art/SparseTextures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,					"../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,		"../../UnitTestResources/Fonts");
@@ -228,7 +228,7 @@ public:
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,	"../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,		"../../../../Middleware_3/UI");
         }
-        
+
 		// window and renderer setup
 		RendererDesc settings = { 0 };
 		initRenderer(GetName(), &settings, &pRenderer);
@@ -280,7 +280,7 @@ public:
 			addResource(&textureLoadDesc, true);
 			virtualTexturePath.~PathHandle();
 		}
-		
+
 
 		if (!gVirtualJoystick.Init(pRenderer, "circlepad", RD_TEXTURES))
 		{
@@ -303,7 +303,7 @@ public:
 
 		//addShader(pRenderer, &skyShader, &pSkyBoxDrawShader);
 		addShader(pRenderer, &basicShader, &pSphereShader);
-		addShader(pRenderer, &debugShader, &pDebugShader);		
+		addShader(pRenderer, &debugShader, &pDebugShader);
 		addShader(pRenderer, &sunShader, &pSunShader);
 
 		BlendStateDesc blendStateDesc = {};
@@ -349,7 +349,7 @@ public:
 		desc = { pRootSignature, DESCRIPTOR_UPDATE_FREQ_PER_FRAME, gNumPlanets * gImageCount + gImageCount };
 		addDescriptorSet(pRenderer, &desc, &pDescriptorSetUniforms);
 
-		
+
 
 		ShaderLoadDesc fillPageShader = {};
 		fillPageShader.mStages[0] = { "fillPage.comp", NULL, 0, RD_SHADER_SOURCES };
@@ -360,7 +360,7 @@ public:
 		rootDesc = {};
 		rootDesc.mShaderCount = 1;
 		rootDesc.ppShaders = computeShaders;
-		addRootSignature(pRenderer, &rootDesc, &pRootSignatureCompute);		
+		addRootSignature(pRenderer, &rootDesc, &pRootSignatureCompute);
 
 		desc = { pRootSignatureCompute, DESCRIPTOR_UPDATE_FREQ_NONE, gNumPlanets };
 		addDescriptorSet(pRenderer, &desc, &pDescriptorSetComputeFix);
@@ -396,13 +396,13 @@ public:
 		sphereVbDesc.pData = pSpherePoints;
 		sphereVbDesc.ppBuffer = &pSphereVertexBuffer;
 		addResource(&sphereVbDesc);
-		
+
 		// Need to free memory;
 		conf_free(pSpherePoints);
 		*/
 
 /////////////////////////////////////
-//						Load Sphere			     
+//						Load Sphere
 /////////////////////////////////////
 
 		AssimpImporter        importer;
@@ -633,7 +633,7 @@ public:
 		debugInfoDesc.mDesc.mFlags = BUFFER_CREATION_FLAG_PERSISTENT_MAP_BIT;
 		debugInfoDesc.pData = NULL;
 		debugInfoDesc.ppBuffer = &pDebugInfo;
-		addResource(&debugInfoDesc);		
+		addResource(&debugInfoDesc);
 
 		finishResourceLoading();
 
@@ -763,7 +763,7 @@ public:
 
 		gPlanetInfoData.push_back(PlanetInfo);
 
-		
+
 		if (!gAppUI.Init(pRenderer))
 			return false;
 
@@ -785,7 +785,7 @@ public:
 		pGui->AddWidget(DSampling);
 
 		CheckboxWidget Play("Play Planet's movement", &gPlay);
-		pGui->AddWidget(Play);		
+		pGui->AddWidget(Play);
 
 		SliderFloatWidget TimeScale("Time Scale", &gTimeScale, 1.0f, 10.0f, 0.0001f);
 		pGui->AddWidget(TimeScale);
@@ -803,7 +803,7 @@ public:
 
     // Initialize microprofiler and it's UI.
     initProfiler();
-    
+
     // Gpu profiler can only be added after initProfile.
     addGpuProfiler(pRenderer, pGraphicsQueue, &pGpuProfiler, "GpuProfiler");
 
@@ -837,10 +837,10 @@ public:
 		actionDesc = { InputBindings::FLOAT_LEFTSTICK, [](InputActionContext* ctx) { return onCameraInput(ctx, 0); }, NULL, 20.0f, 200.0f, 1.0f };
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
-		addInputAction(&actionDesc);		
+		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_L3, [](InputActionContext* ctx) { gShowUI = !gShowUI; return true; } };
-		addInputAction(&actionDesc);		
-		
+		addInputAction(&actionDesc);
+
 		// Prepare descriptor sets
 		for (uint32_t j = 0; j < gNumPlanets; ++j)
 		{
@@ -858,11 +858,11 @@ public:
 			params[4].ppTextures = &pSkyBoxTextures[4];
 			params[5].pName = "BackText";
 			params[5].ppTextures = &pSkyBoxTextures[5];
-*/			
+*/
 			params[0].pName = "SparseTextureInfo";
 			params[0].ppBuffers = &pVirtualTextureInfo[j];
 			params[1].pName = "MipLevel";
-			params[1].ppBuffers = &pDebugInfo;	
+			params[1].ppBuffers = &pDebugInfo;
 
 			if (j == 0)
 			{
@@ -938,7 +938,7 @@ public:
 		}
 
 
-		
+
 
 		return true;
 	}
@@ -988,9 +988,9 @@ public:
 
 		removeResource(gSphere.pIndexBuffer);
 		removeResource(gSphere.pVertexBuffer);
-		
+
 		removeResource(gSaturn.pIndexBuffer);
-		removeResource(gSaturn.pVertexBuffer);		
+		removeResource(gSaturn.pVertexBuffer);
 
 		removeBlendState(pSunBlend);
 		removeBlendState(pSaturnBlend);
@@ -1000,7 +1000,7 @@ public:
 
 		gSaturn.materialID.set_capacity(0);
 		gSaturn.cmdArray.set_capacity(0);
-		
+
 /*
 		for (uint i = 0; i < 6; ++i)
 			removeResource(pSkyBoxTextures[i]);
@@ -1034,7 +1034,7 @@ public:
 		removeCmdPool(pRenderer, pCmdPool);
 
 		removeCmd_n(pComputeCmdPool, gImageCount, ppComputeCmds);
-		removeCmdPool(pRenderer, pComputeCmdPool);		
+		removeCmdPool(pRenderer, pComputeCmdPool);
 
 		removeGpuProfiler(pRenderer, pGpuProfiler);
 		removeResourceLoaderInterface(pRenderer);
@@ -1135,7 +1135,7 @@ public:
 		pipelineSettings.pRasterizerState = pSkyboxRast;
 		pipelineSettings.pBlendState = NULL;
 		pipelineSettings.pShaderProgram = pSkyBoxDrawShader;
-		addPipeline(pRenderer, &desc, &pSkyBoxDrawPipeline);		
+		addPipeline(pRenderer, &desc, &pSkyBoxDrawPipeline);
 */
 		{
 			PipelineDesc computeDesc = {};
@@ -1158,13 +1158,13 @@ public:
 
 		gVirtualJoystick.Unload();
 
-		//removePipeline(pRenderer, pSkyBoxDrawPipeline);		
+		//removePipeline(pRenderer, pSkyBoxDrawPipeline);
 		removePipeline(pRenderer, pSpherePipeline);
 		removePipeline(pRenderer, pDebugPipeline);
 		removePipeline(pRenderer, pSunPipeline);
 		removePipeline(pRenderer, pSaturnPipeline);
 
-		removePipeline(pRenderer, pFillPagePipeline);		
+		removePipeline(pRenderer, pFillPagePipeline);
 
 		removeSwapChain(pRenderer, pSwapChain);
 		removeRenderTarget(pRenderer, pDepthBuffer);
@@ -1182,7 +1182,7 @@ public:
 
 		if(!gPlay)
 			deltaTime =	0.0f;
-		
+
 		currentTime += deltaTime * gTimeScale * 130.0f;
 		// update camera with time
 		mat4 viewMat = pCameraController->getViewMatrix();
@@ -1241,7 +1241,7 @@ public:
 
 			gUniformVirtualTextureInfo[i].ID = i;
 			gUniformVirtualTextureInfo[i].CameraPos = vec4(pCameraController->getViewPosition(), 0.0f);
-			
+
 
 			gUniformVirtualTextureInfo[i].DebugMode = gDebugMode ? 1: 0;
 
@@ -1249,8 +1249,8 @@ public:
 			updateResource(&virtualTextureInfoCbv);
 		}
 
-		
-	
+
+
 		/************************************************************************/
 		/************************************************************************/
 
@@ -1263,7 +1263,7 @@ public:
     /************************************************************************/
     // Update GUI
     /************************************************************************/
-    gAppUI.Update(deltaTime);  
+    gAppUI.Update(deltaTime);
 	}
 
 	void Draw()
@@ -1272,7 +1272,7 @@ public:
 
 		RenderTarget* pRenderTarget = pSwapChain->ppSwapchainRenderTargets[gFrameIndex];
 		Semaphore*    pRenderCompleteSemaphore = pRenderCompleteSemaphores[gFrameIndex];
-		Fence*        pRenderCompleteFence = pRenderCompleteFences[gFrameIndex];		
+		Fence*        pRenderCompleteFence = pRenderCompleteFences[gFrameIndex];
 
 		// Stall if CPU is running "Swap Chain Buffer Count" frames ahead of GPU
 		FenceStatus fenceStatus;
@@ -1328,7 +1328,7 @@ public:
 		cmdBindRenderTargets(cmd, 1, &pRenderTarget, pDepthBuffer, &loadActions, NULL, NULL, -1, -1);
 		cmdSetViewport(cmd, 0.0f, 0.0f, (float)pRenderTarget->mDesc.mWidth, (float)pRenderTarget->mDesc.mHeight, 0.0f, 1.0f);
 		cmdSetScissor(cmd, 0, 0, pRenderTarget->mDesc.mWidth, pRenderTarget->mDesc.mHeight);
-    
+
 	{
 			cmdBeginGpuTimestampQuery(cmd, pGpuProfiler, "Draw Planets", true);
 
@@ -1337,19 +1337,19 @@ public:
 			//// draw planets
 			for (uint32_t j = 1; j < gNumPlanets - 1; ++j)
 			{
-				cmdBindDescriptorSet(cmd, j, pDescriptorSetTexture);			
-				cmdBindDescriptorSet(cmd, gNumPlanets * gFrameIndex + j + gImageCount, pDescriptorSetUniforms);		
-			
+				cmdBindDescriptorSet(cmd, j, pDescriptorSetTexture);
+				cmdBindDescriptorSet(cmd, gNumPlanets * gFrameIndex + j + gImageCount, pDescriptorSetUniforms);
+
 				cmdBindVertexBuffer(cmd, 1, &gSphere.pVertexBuffer, NULL);
 				cmdBindIndexBuffer(cmd, gSphere.pIndexBuffer, 0);
 				cmdDrawIndexed(cmd, gSphere.cmdArray[0].indexCount, 0, 0);
-			}		
+			}
 
 			cmdBindPipeline(cmd, pSaturnPipeline);
 
 			cmdBindDescriptorSet(cmd, gNumPlanets - 1, pDescriptorSetTexture);
-			cmdBindDescriptorSet(cmd, gNumPlanets * gFrameIndex + gNumPlanets - 1 + gImageCount, pDescriptorSetUniforms);		
-		
+			cmdBindDescriptorSet(cmd, gNumPlanets * gFrameIndex + gNumPlanets - 1 + gImageCount, pDescriptorSetUniforms);
+
 			cmdBindVertexBuffer(cmd, 1, &gSaturn.pVertexBuffer, NULL);
 			cmdBindIndexBuffer(cmd, gSaturn.pIndexBuffer, 0);
 			cmdDrawIndexed(cmd, gSaturn.cmdArray[0].indexCount, 0, 0);
@@ -1364,7 +1364,7 @@ public:
 
 			cmdEndGpuTimestampQuery(cmd, pGpuProfiler);
 	}
-	
+
 	if(gShowUI)
 	{
 		loadActions = {};
@@ -1406,7 +1406,7 @@ public:
 
 		queueSubmit(pGraphicsQueue, 1, &cmd, pRenderCompleteFence, 1, &pImageAcquiredSemaphore, 1, &pRenderCompleteSemaphore);
 		queuePresent(pGraphicsQueue, pSwapChain, gFrameIndex, 1, &pRenderCompleteSemaphore);
-		flipProfiler();	
+		flipProfiler();
 
 		// Get visibility info
 		if (gAccuFrameIndex % gFrequency == 0)
@@ -1442,7 +1442,7 @@ public:
 				int PageCount = (uint)pPageTable->size();
 
 				while (PageCount > 0)
-				{				
+				{
 					BufferUpdateDesc pageCountInfoCbv = { pPageCountInfo, &pageCountSt };
 					updateResource(&pageCountInfoCbv);
 
@@ -1480,8 +1480,8 @@ public:
 																			 pThreadGroupSize[1],
 																			 pThreadGroupSize[2] };
 
-				cmdDispatch(pCmdCompute, Dispatch[0], Dispatch[1], Dispatch[2]);				
-	#endif				
+				cmdDispatch(pCmdCompute, Dispatch[0], Dispatch[1], Dispatch[2]);
+	#endif
 			}
 
 			endCmd(pCmdCompute);

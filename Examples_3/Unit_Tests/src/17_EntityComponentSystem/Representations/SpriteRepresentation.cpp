@@ -1,6 +1,6 @@
 #include "SpriteRepresentation.h"
 
-#include "../../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 using namespace FCR;
 
 FORGE_DEFINE_COMPONENT_ID(SpriteComponent)

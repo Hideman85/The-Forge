@@ -26,35 +26,35 @@
 // Unit Test for testing materials and pbr.
 
 //assimp
-#include "../../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
+#include <TheForge/Tools/AssimpImporter/AssimpImporter.h>
 
 //tiny stl
 #include <EASTL/vector.h>
 #include <EASTL/string.h>
 
 //Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/OS/Core/Atomics.h"
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/OS/Core/Atomics.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/OS/Interfaces/IInput.h>
 
 //Math
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 //ui
-#include "../../../../Middleware_3/UI/AppUI.h"
+#include <TheForge/UI/AppUI.h>
 
 //Input
-#include "../../../../Common_3/OS/Core/ThreadSystem.h"
+#include <TheForge/OS/Core/ThreadSystem.h>
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define DEFERRED_RT_COUNT 3
 #define MAX_PLANES 4

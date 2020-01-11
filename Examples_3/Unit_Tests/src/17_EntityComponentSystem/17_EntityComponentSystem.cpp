@@ -28,8 +28,8 @@
 #define MAX_PLANETS 20    // Does not affect test, just for allocating space in uniform block. Must match with shader.
 
 // ECS
-#include "../../../../Middleware_3/ECS/EntityManager.h"
-#include "../../../../Middleware_3/ECS/ComponentRepresentation.h"
+#include <TheForge/ECS/EntityManager.h>
+#include <TheForge/ECS/ComponentRepresentation.h>
 
 // REPRESENTATIONS
 #include "../17_EntityComponentSystem/Representations/WorldBoundsRepresentation.h"
@@ -44,22 +44,22 @@
 #include "../17_EntityComponentSystem/Components/MoveComponent.h"
 
 //Interfaces
-#include "../../../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../../../Common_3/OS/Interfaces/IApp.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ITime.h"
-#include "../../../../Middleware_3/UI/AppUI.h"
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/OS/Interfaces/IProfiler.h"
-#include "../../../../Common_3/OS/Interfaces/IInput.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
-#include "../../../../Common_3/OS/Core/ThreadSystem.h"
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/OS/Interfaces/IInput.h>
+#include <TheForge/Renderer/ResourceLoader.h>
+#include <TheForge/OS/Core/ThreadSystem.h>
 
 //Math
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"    // Must be the last include in a cpp file
+#include <TheForge/OS/Interfaces/IMemory.h>    // Must be the last include in a cpp file
 
 // Profilers
 GuiComponent*			pGuiWindow;
@@ -181,7 +181,7 @@ struct MoveSystem
 
 		timeAndBounds data		= { spriteEntities, deltaTime, &bounds};
 		timeAndBounds avoidData = { avoidEntities, deltaTime, &bounds };
-		
+
 		if (multiThread)
 		{
 			for (size_t i = 0; i < SpriteEntityCount; ++i)
@@ -211,7 +211,7 @@ struct MoveSystem
 	}
 
 	static void threadedUpdate(void* pData, uintptr_t id)
-	{	
+	{
 		timeAndBounds& data			= *(timeAndBounds*)pData;
 		Entity* pEntity				= (data.entities)[id];
 		PositionComponent& position = *(pEntity->getComponent<PositionComponent>());
@@ -233,12 +233,12 @@ struct AvoidanceSystem
 	static eastl::vector<float>    avoidDistanceList;
 
 	Mutex emplaceMutex;
-	
+
 	bool init()
 	{
 		return emplaceMutex.Init();
 	}
-	
+
 	void exit()
 	{
 		emplaceMutex.Destroy();
@@ -276,7 +276,7 @@ struct AvoidanceSystem
 		const WorldBoundsComponent& bounds = *worldBoundsEntity->getComponent<WorldBoundsComponent>();
 
 		timeAndBounds data = { spriteEntities, deltaTime, &bounds };
-		
+
 		if (multiThread)
 		{
 			for (size_t i = 0; i < SpriteEntityCount; ++i)
@@ -338,7 +338,7 @@ static void createEntities(void* pData, uintptr_t i)
 {
 	// NOT DESERIALIZED WAY TO CREATE ENTITIES
 	//spriteEntities[i] = pEntityManager->createEntity();
-	
+
 	CreationData data = *(CreationData*)pData;
 
 	// DESERIALIZED WAY
@@ -353,7 +353,7 @@ static void createEntities(void* pData, uintptr_t i)
 		position = &(pEntityManager->addComponentToEntity<PositionComponent>(entityId));	// ADD CUSTOM COMPONENTS
 	position->x = x;
 	position->y = y;
-	
+
 	MoveComponent* move = (data.entities)[i]->getComponent<MoveComponent>();
 	if (!move)
 		move = &( pEntityManager->addComponentToEntity<MoveComponent>(entityId) );
@@ -365,7 +365,7 @@ static void createEntities(void* pData, uintptr_t i)
 
 	if (strcmp(data.entityTypeName, "avoid")) {
 		pAvoidanceSystem->addAvoidThisObjectToSystem((data.entities)[i], 1.3f);
-		
+
 		sprite->colorR = 1.0f;
 		sprite->colorG = 1.0f;
 		sprite->colorB = 1.0f;
@@ -394,7 +394,7 @@ class EntityComponentSystem: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/17_EntityComponentSystem");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -402,7 +402,7 @@ class EntityComponentSystem: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
         }
-        
+
 
 		SpriteComponentRepresentation::BUILD_VAR_REPRESENTATIONS();
 		MoveComponentRepresentation::BUILD_VAR_REPRESENTATIONS();
@@ -539,8 +539,8 @@ class EntityComponentSystem: public IApp
 		guiDesc.mStartPosition = vec2(0.0f, guiDesc.mStartSize.getY());
 		pGuiWindow = gAppUI.AddGuiComponent(GetName(), &guiDesc);
 
-		pGuiWindow->AddWidget(CheckboxWidget("Toggle Micro Profiler", &gMicroProfiler)); 
-		
+		pGuiWindow->AddWidget(CheckboxWidget("Toggle Micro Profiler", &gMicroProfiler));
+
 		const TextDrawDesc UIPanelWindowTitleTextDesc = { 0, 0xffff00ff, 16 };
 
 		float   dpiScale = getDpiScale().x;
@@ -548,7 +548,7 @@ class EntityComponentSystem: public IApp
 		GuiDesc guiDesc2({}, UIPanelSize, UIPanelWindowTitleTextDesc);
 		guiDesc2.mStartPosition = vec2(0.0f, mSettings.mHeight / dpiScale - guiDesc.mStartSize.getY() * 0.5f);
 		GUIWindow = gAppUI.AddGuiComponent("MultiThread", &guiDesc2);
-		
+
 		CheckboxWidget Checkbox("Threading", &multiThread);
 		GUIWindow->AddWidget(Checkbox);
 
@@ -556,7 +556,7 @@ class EntityComponentSystem: public IApp
 		// Create entities
 		pAvoidanceSystem = conf_new(AvoidanceSystem);
 		pAvoidanceSystem->init();
-		
+
 		pMoveSystem = conf_new(MoveSystem);
 
 		EntityId worldBoundsEntityId = pEntityManager->createEntity();
@@ -572,13 +572,13 @@ class EntityComponentSystem: public IApp
 
 		CreationData data	   = { spriteEntities, bounds, "sprite" };
 		CreationData avoidData = { avoidEntities,  bounds, "avoid" };
-		
+
 		if (multiThread)
 		{
 			for (size_t i = 0; i < SpriteEntityCount; ++i) {
 				addThreadSystemTask(pThreadSystem, &createEntities, &data, i);
 			}
-			
+
 			for (size_t i = 0; i < AvoidCount; ++i) {
 				addThreadSystemTask(pThreadSystem, &createEntities, &avoidData, i);
 			}
@@ -614,7 +614,7 @@ class EntityComponentSystem: public IApp
 			}, this
 		};
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		DescriptorData params[1] = {};
 		params[0].pName = "uTexture0";
@@ -635,11 +635,11 @@ class EntityComponentSystem: public IApp
 		exitInputSystem();
 
 		shutdownThreadSystem(pThreadSystem);
-		
+
 		pAvoidanceSystem->exit();
 		conf_delete(pAvoidanceSystem);
 		conf_delete(pMoveSystem);
-		
+
 		conf_delete(pEntityManager);
 
 		waitQueueIdle(pGraphicsQueue);
@@ -660,7 +660,7 @@ class EntityComponentSystem: public IApp
 		removeDescriptorSet(pRenderer, pDescriptorSetUniforms);
 		removeSampler(pRenderer, pLinearClampSampler);
 		removeRootSignature(pRenderer, pRootSignature);
-		
+
 		removeDepthState(pDepthState);
 		removeRasterizerState(pRasterizerStateCullNone);
 		removeBlendState(pBlendState);
@@ -752,7 +752,7 @@ class EntityComponentSystem: public IApp
 			Entity* pEntity				= spriteEntities[i];
 			PositionComponent& position = *(pEntity->getComponent<PositionComponent>());
 			SpriteComponent&     sprite = *(pEntity->getComponent<SpriteComponent>());
-			
+
 			SpriteData& spriteData = gSpriteData[gDrawSpriteCount++];
 			spriteData.posX   = position.x * globalScale;
 			spriteData.posY   = position.y * globalScale;
@@ -858,10 +858,10 @@ class EntityComponentSystem: public IApp
 		TextDrawDesc uiTextDesc;    // default
 		uiTextDesc.mFontColor = 0xff00cc00;
 		uiTextDesc.mFontSize = 18;
-		 
+
 		gAppUI.DrawText(
 			cmd, float2(8.0f, 15.0f), eastl::string().sprintf("CPU %f ms", gTimer.GetUSecAverage() / 1000.0f).c_str(), &uiTextDesc);
-		
+
 		gAppUI.DrawText(
 			cmd, float2(8.0f, 40.0f), eastl::string().sprintf("GPU %f ms", (float)pGpuProfiler->mCumulativeTime * 1000.0f).c_str(),
 			&uiTextDesc);

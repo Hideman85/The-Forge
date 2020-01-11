@@ -2,12 +2,12 @@
 #define Geometry_h
 
 
-#include "../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 //EA stl
 #include <EASTL/vector.h>
-#include "../../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
-#include "../../../../Common_3/Renderer/IRenderer.h"
-#include "../../../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Tools/AssimpImporter/AssimpImporter.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 namespace eastl
 {

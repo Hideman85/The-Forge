@@ -67,8 +67,8 @@
 #include <TheForge/OS/Core/Atomics.h>
 #include <TheForge/OS/Core/GPUConfig.h>
 #include <tinyimageformat_base.h>
-#include <tinyimageformat_query.h"
-#include "VulkanCapsBuilder.h>
+#include <tinyimageformat_query.h>
+#include "VulkanCapsBuilder.h"
 
 #if defined(VK_USE_DISPATCH_TABLES)
 #include <volkForgeExt.h>

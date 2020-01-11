@@ -26,12 +26,12 @@
 
 //#include <EASTL/unordered_set.h>
 
-#include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../Common_3/OS/Core/Compiler.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Core/Compiler.h>
 
 
-#include "../../../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define DEFAULT_ALBEDO "Default"
 #define DEFAULT_NORMAL "Default_NRM"
