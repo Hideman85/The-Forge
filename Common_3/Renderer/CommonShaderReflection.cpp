@@ -23,9 +23,9 @@
 */
 
 #include "IRenderer.h"
-#include "../OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
-#include "../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 //This file contains shader reflection code that is the same for all platforms.
 //We know it's the same for all platforms since it only interacts with the
@@ -43,7 +43,7 @@ static bool ShaderResourceCmp(ShaderResource* a, ShaderResource* b)
 #ifdef METAL
     isSame = isSame && (a->mtlArgumentDescriptors.mArgumentIndex == b->mtlArgumentDescriptors.mArgumentIndex);
 #endif
-    
+
 #ifdef RESOURCE_NAME_CHECK
 	// we may not need this, the rest is enough but if we want to be super sure we can do this check
 	isSame = isSame && (a->name_size == b->name_size);

@@ -28,8 +28,8 @@
 // using Responsive Real-Time Grass Rendering for General 3D Scenes
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -233,7 +233,7 @@ class Tessellation: public IApp
 		mSettings.mContentScaleFactor = 1.f;
 #endif
 	}
-	
+
 	bool Init()
 	{
         // FILE PATHS
@@ -242,7 +242,7 @@ class Tessellation: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/07_Tessellation");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,             "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,     "../../UnitTestResources/Fonts");
@@ -250,7 +250,7 @@ class Tessellation: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,     "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,     "../../../../Middleware_3/UI");
         }
-        
+
 		initNoise();
 
 		initBlades();
@@ -884,7 +884,7 @@ class Tessellation: public IApp
 			{ pCulledBladeStorageBuffer, RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER },
 		};
 		cmdResourceBarrier(cmd, 2, metalSRVBarriers, 0, NULL);
-		
+
 		// On Metal, we have to run the grass_vertexHull compute shader before running the post-tesselation shaders.
 		DescriptorData vertexHullParams[5] = {};
 		cmdBindPipeline(cmd, pGrassVertexHullPipeline);
@@ -892,7 +892,7 @@ class Tessellation: public IApp
 		cmdBindDescriptorSet(cmd, gFrameIndex, pDescriptorSetGrassVertexHull[1]);
 		cmdDispatch(cmd, (int)ceil(NUM_BLADES / pThreadGroupSize[0]), pThreadGroupSize[1], pThreadGroupSize[2]);
 #endif
-		
+
 		TextureBarrier barriers[] = {
 			{ pRenderTarget->pTexture, RESOURCE_STATE_RENDER_TARGET },
 		};
@@ -928,11 +928,11 @@ class Tessellation: public IApp
         TextureBarrier rtBarriers[] = {
             { pRenderTarget->pTexture, RESOURCE_STATE_COMMON },
         };
-        
+
         cmdResourceBarrier(cmd, 0, NULL, 1, rtBarriers);
-        
+
         cmdBindRenderTargets(cmd, 0, NULL, NULL, NULL, NULL, NULL, -1, -1);
-        
+
 		BufferBarrier uavBarriers[] = {
 			{ pBladeNumBuffer, RESOURCE_STATE_UNORDERED_ACCESS },
 			{ pCulledBladeStorageBuffer, RESOURCE_STATE_UNORDERED_ACCESS },
@@ -950,11 +950,11 @@ class Tessellation: public IApp
 		// Draw UI
 		cmd = ppUICmds[gFrameIndex];
 		beginCmd(cmd);
-        
+
         rtBarriers[0] = { pRenderTarget->pTexture, RESOURCE_STATE_RENDER_TARGET },
-        
+
         cmdResourceBarrier(cmd, 0, NULL, 1, rtBarriers);
-        
+
 		cmdBeginDebugMarker(cmd, 0, 1, 0, "Draw UI");
 		cmdBindRenderTargets(cmd, 1, &pRenderTarget, NULL, NULL, NULL, NULL, -1, -1);
 		cmdSetViewport(cmd, 0.0f, 0.0f, (float)pRenderTarget->mDesc.mWidth, (float)pRenderTarget->mDesc.mHeight, 0.0f, 1.0f);

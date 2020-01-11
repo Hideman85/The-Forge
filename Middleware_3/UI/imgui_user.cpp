@@ -1,5 +1,5 @@
 #include "imgui_user.h"
-#include "../../Common_3/ThirdParty/OpenSource/imgui/imgui_internal.h"
+#include <imgui_internal.h>
 
 #ifndef M_PI
 #define M_PI 3.14159f

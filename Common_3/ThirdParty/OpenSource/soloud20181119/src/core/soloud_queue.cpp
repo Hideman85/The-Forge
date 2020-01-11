@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -32,12 +32,12 @@ namespace SoLoud
 		mParent = aParent;
 		mFlags |= PROTECTED;
 	}
-	
+
 	unsigned int QueueInstance::getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize)
 	{
 		if (mParent->mCount == 0)
 		{
-			return 0;			
+			return 0;
 		}
 		unsigned int copycount = aSamplesToRead;
 		unsigned int copyofs = 0;
@@ -74,7 +74,7 @@ namespace SoLoud
 		mWriteIndex = 0;
 		mCount = 0;
 	}
-	
+
 	QueueInstance * Queue::createInstance()
 	{
 		if (mInstance)
@@ -105,7 +105,7 @@ namespace SoLoud
 		{
 			return INVALID_PARAMETER;
 		}
-	
+
 		findQueueHandle();
 
 		if (mQueueHandle == 0)
@@ -165,7 +165,7 @@ namespace SoLoud
 
 	    return SO_NO_ERROR;
 	}
-	
+
 	result Queue::setParams(float aSamplerate, unsigned int aChannels)
 	{
 	    if (aChannels < 1 || aChannels > MAX_CHANNELS)

@@ -29,7 +29,7 @@ distribution.
 #include <string.h>
 #include "soloud.h"
 #include "soloud_file.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -87,13 +87,13 @@ namespace SoLoud
 
 	DiskFile::DiskFile()
 	{
-		
+
 	}
 
 	result DiskFile::open(const char *aFilename)
 	{
 		if (!aFilename)
-			return INVALID_PARAMETER;	
+			return INVALID_PARAMETER;
 
         mForgeFile = fsOpenFileInResourceDirectory(RD_AUDIO, aFilename, FM_READ_BINARY);
 
@@ -110,7 +110,7 @@ namespace SoLoud
 
 
 	unsigned int MemoryFile::read(unsigned char *aDst, unsigned int aBytes)
-	{		
+	{
 		if (mOffset + aBytes >= mDataLength)
 			aBytes = mDataLength - mOffset;
 

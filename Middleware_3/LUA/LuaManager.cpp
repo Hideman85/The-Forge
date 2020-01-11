@@ -1,8 +1,8 @@
 #include "LuaManager.h"
 #include "LuaManagerImpl.h"
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 void LuaManager::Init()
 {

@@ -27,8 +27,8 @@
 // Unit Test for testing Compute Shaders
 // using Julia 4D demonstration
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -142,7 +142,7 @@ class Compute: public IApp
 		mSettings.mContentScaleFactor = 1.f;
 #endif
 	}
-	
+
 	bool Init()
 	{
         // FILE PATHS
@@ -151,7 +151,7 @@ class Compute: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/02_Compute");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,             "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,     "../../UnitTestResources/Fonts");
@@ -159,7 +159,7 @@ class Compute: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,     "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,     "../../../../Middleware_3/UI");
         }
-        
+
 		initNoise();
 
 		// window and renderer setup

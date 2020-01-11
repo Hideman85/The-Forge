@@ -31,9 +31,9 @@
 // Provides Stream interface used to read/write a memory buffer or a file with
 // Crt fread/fwrite/fseek/ftell like functions.
 
-#include "../../../../../../../OS/Interfaces/IFileSystem.h"
-#include "../../../../../../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../../../../../ThirdParty/OpenSource/EASTL/vector.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
 #include "../platform.h"
 
 #include <cstddef>
@@ -103,7 +103,7 @@ class File : public Stream {
   // Open a file at path _filename with mode * _mode, in conformance with
   // fopen specifications. Use opened() function to test opening result.
   File(const char* _filename, const char* _mode);
-    
+
   File(const Path* path, FileMode mode);
 
   // Gives _file ownership to the FileStream, which will be in charge of

@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #include <stdio.h>
 #include "soloud_openmpt.h"
 #include "soloud_file.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 extern "C"
 {
@@ -40,8 +40,8 @@ namespace SoLoud
 	OpenmptInstance::OpenmptInstance(Openmpt *aParent)
 	{
 		mParent = aParent;
-		mModfile = openmpt_module_create_from_memory((const void*)mParent->mData, mParent->mDataLen, NULL, NULL, NULL);		
-		mPlaying = mModfile != NULL;		
+		mModfile = openmpt_module_create_from_memory((const void*)mParent->mData, mParent->mDataLen, NULL, NULL, NULL);
+		mPlaying = mModfile != NULL;
 	}
 
 	unsigned int OpenmptInstance::getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize)
@@ -50,7 +50,7 @@ namespace SoLoud
 			return 0;
 		int s = aSamplesToRead;
 		unsigned int outofs = 0;
-		
+
 		while (s && mPlaying)
 		{
 			int samples = 512;

@@ -1,4 +1,4 @@
-#include "../../Common_3/OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
 #include "EntityManager.h"
 // Components ////////////////////////////////////
@@ -7,7 +7,7 @@
 #include "ComponentRepresentation.h"
 // Component Representations -- as to get component ids /////////////////////////////////////////
 //----
-#include "../../Common_3/OS/Interfaces/IMemory.h" // NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IMemory.h> // NOTE: this should be the last include in a .cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 Entity::~Entity()
@@ -28,14 +28,14 @@ Entity::~Entity()
 Entity* Entity::clone() const
 {
 	Entity* new_entity = conf_placement_new<Entity>(conf_calloc(1, sizeof(Entity)));
-	
+
 	for (ComponentMap::const_iterator it = mComponents.begin(); it != mComponents.end(); ++it)
 	{
 		BaseComponent* pNewComponent = NULL;
 		pNewComponent = it->second->clone();
 		new_entity->addComponent(pNewComponent);
 	}
-	
+
 	return new_entity;
 }
 
@@ -88,7 +88,7 @@ EntityManager::EntityManager()
 		map.rehash(11083);
 		mComponentViseMap.insert(eastl::pair< uint32_t, ComponentLookup >(pair.first, map));
 	}
-	
+
 	mEntitiesMutex.Init();
 	mIdMutex.Init();
 	mComponentMutex.Init();
@@ -145,7 +145,7 @@ EntityId EntityManager::cloneEntity(EntityId id)
 		MutexLock entLock(mEntitiesMutex);
 		mEntities[newid] = new_entity;
 	}
-	
+
 	return newid;
 }
 

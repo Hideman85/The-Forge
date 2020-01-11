@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include "../../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/skeleton.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/animation.h"
-#include "../../../ThirdParty/OpenSource/EASTL/string.h"
+#include <ozz/animation/runtime/skeleton.h>
+#include <ozz/animation/runtime/animation.h>
+#include <EASTL/string.h>
 
 #include "gltfpack.h"
 

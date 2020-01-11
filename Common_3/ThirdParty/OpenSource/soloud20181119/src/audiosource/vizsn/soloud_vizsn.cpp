@@ -15,7 +15,7 @@ released under same license.
 #include <string.h>
 #include <math.h>
 #include "soloud_vizsn.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 /*
 
@@ -304,7 +304,7 @@ namespace SoLoud
 	}
 
 	float VizsnInstance::vcsrc(int aPitch, int aVoicetype)
-	{		
+	{
 		mA += aPitch;
 
 		if (mOrgv != aVoicetype)
@@ -336,7 +336,7 @@ namespace SoLoud
 	}
 
 	float VizsnInstance::genwave()
-	{		
+	{
 		float s, o, noise, voice, glot, parglot;
 		int ob;
 

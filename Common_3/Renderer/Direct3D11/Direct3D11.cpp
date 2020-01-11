@@ -31,20 +31,20 @@
 #define RENDERER_IMPLEMENTATION
 #define IID_ARGS IID_PPV_ARGS
 
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../ThirdParty/OpenSource/EASTL/string_hash_map.h"
-#include "../../OS/Interfaces/ILog.h"
+#include <EASTL/string.h>
+#include <EASTL/unordered_map.h>
+#include <EASTL/vector.h>
+#include <EASTL/string_hash_map.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 #include "../IRenderer.h"
-#include "../../OS/Core/RingBuffer.h"
-#include "../../ThirdParty/OpenSource/EASTL/functional.h"
+#include <TheForge/OS/Core/RingBuffer.h>
+#include <EASTL/functional.h>
 #include "../../ThirdParty/OpenSource/winpixeventruntime/Include/WinPixEventRuntime/pix3.h"
-#include "../../OS/Core/GPUConfig.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_apis.h"
-#include "../../OS/Image/ImageHelper.h"
+#include <TheForge/OS/Core/GPUConfig.h>
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_query.h>
+#include <tinyimageformat_apis.h>
+#include <TheForge/OS/Image/ImageHelper.h>
 #include "Direct3D11CapBuilder.h"
 #include "Direct3D11Commands.h"
 
@@ -74,7 +74,7 @@ extern "C"
 }
 
 //#include "Direct3D11MemoryAllocator.h"
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // clang-format off
 extern void d3d11_createShaderReflection(const uint8_t* shaderCode, uint32_t shaderSize, ShaderStage shaderStage, ShaderReflection* pOutReflection);
@@ -1519,7 +1519,7 @@ void compileShader(
 {
 	if (shaderTarget > pRenderer->mSettings.mShaderTarget)
 	{
-		LOGF(eERROR, 
+		LOGF(eERROR,
 			"Requested shader target (%u) is higher than the shader target that the renderer supports (%u). Shader wont be compiled",
 			(uint32_t)shaderTarget, (uint32_t)pRenderer->mSettings.mShaderTarget);
 		return;
@@ -1900,7 +1900,7 @@ void mapBuffer(Renderer* pRenderer, Buffer* pBuffer, ReadRange* pRange)
 	switch (mem)
 	{
 		case RESOURCE_MEMORY_USAGE_CPU_ONLY: mapType = D3D11_MAP_READ_WRITE; break;
-		case RESOURCE_MEMORY_USAGE_CPU_TO_GPU: 
+		case RESOURCE_MEMORY_USAGE_CPU_TO_GPU:
 			// its possible a driver doesn't support partial updates to constant buffers
 			// this errors out in that case if a partial update is asked for
 			// To maintain API compatibility on these devices, a cpu buffer
@@ -2358,7 +2358,7 @@ void addRootSignature(Renderer* pRenderer, const RootSignatureDesc* pRootSignatu
 			{
 				if (shaderResources[pNode->second].reg != pRes->reg)
 				{
-					LOGF(eERROR, 
+					LOGF(eERROR,
 						"\nFailed to create root signature\n"
 						"Shared shader resource %s has mismatching register. All shader resources "
 						"shared by multiple shaders specified in addRootSignature "
@@ -2368,7 +2368,7 @@ void addRootSignature(Renderer* pRenderer, const RootSignatureDesc* pRootSignatu
 				}
 				if (shaderResources[pNode->second].set != pRes->set)
 				{
-					LOGF(eERROR, 
+					LOGF(eERROR,
 						"\nFailed to create root signature\n"
 						"Shared shader resource %s has mismatching space. All shader resources "
 						"shared by multiple shaders specified in addRootSignature "

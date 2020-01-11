@@ -22,7 +22,7 @@
  * under the License.
 */
 
-#include "../../ThirdParty/OpenSource/EASTL/deque.h"
+#include <EASTL/deque.h>
 
 #include "../Interfaces/IThread.h"
 #include "../Interfaces/ILog.h"
@@ -122,7 +122,7 @@ void initThreadSystem(ThreadSystem** ppThreadSystem)
 	pThreadSystem->mQueueMutex.Init();
 	pThreadSystem->mQueueCond.Init();
 	pThreadSystem->mIdleCond.Init();
-	
+
 	pThreadSystem->mRun = true;
 	pThreadSystem->mNumIdleLoaders = 0;
 

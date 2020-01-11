@@ -44,7 +44,7 @@ freely, subject to the following restrictions:
 #include <stdlib.h> // rand
 #include <math.h> // sin
 
-#include "../../../../OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
 #ifdef SOLOUD_NO_ASSERTS
 #define SOLOUD_ASSERT(x)

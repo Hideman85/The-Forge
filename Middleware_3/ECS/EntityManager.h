@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/OS/Interfaces/IThread.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IThread.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/unordered_set.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/string.h>
+#include <EASTL/unordered_set.h>
+#include <EASTL/unordered_map.h>
+#include <EASTL/vector.h>
 
 namespace FCR
 {
@@ -68,7 +68,7 @@ T* Entity::getComponent()
 		componentOut = (T*)it->second;
 
 	//ASSERT((componentOut != nullptr) && "Couldn't find desired component on entity.");
-	
+
 	return componentOut;
 }
 
@@ -108,7 +108,7 @@ public:
 	void deleteEntity(EntityId id);
 
 	Entity* getEntityById(EntityId const id);
-    
+
 	bool entityExist(EntityId const id);
 
 	void reset();
@@ -160,7 +160,7 @@ template <typename T>
 T& EntityManager::addComponentToEntity(EntityId _id)
 {
 	MutexLock lock(mComponentMutex);
-	
+
 	BaseComponent* pComponent = nullptr;
 
 	const eastl::unordered_map< uint32_t, ComponentGeneratorFctPtr >& CompGenMap   = ComponentRegistrator::getInstance()->getComponentGeneratorMap();

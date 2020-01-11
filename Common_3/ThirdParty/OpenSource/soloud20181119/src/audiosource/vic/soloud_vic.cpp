@@ -30,7 +30,7 @@ freely, subject to the following restrictions:
 #include <string.h>
 #include <math.h>
 #include "soloud_vic.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -151,17 +151,17 @@ namespace SoLoud
 		return m_model;
 	}
 
-	void Vic::setRegister(int reg, unsigned char value) 
-	{ 
-		m_regs[reg] = value; 
-	}
-	
-	unsigned char Vic::getRegister(int reg)
-	{ 
-		return m_regs[reg]; 
+	void Vic::setRegister(int reg, unsigned char value)
+	{
+		m_regs[reg] = value;
 	}
 
-	AudioSourceInstance * Vic::createInstance() 
+	unsigned char Vic::getRegister(int reg)
+	{
+		return m_regs[reg];
+	}
+
+	AudioSourceInstance * Vic::createInstance()
 	{
 		return conf_new(VicInstance, this);
 	}

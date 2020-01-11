@@ -2,12 +2,12 @@
 
 #include <stdarg.h>  // for va_* stuff
 #include "BaseComponent.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../Common_3/OS/Math/MathTypes.h"
+#include <EASTL/unordered_map.h>
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 #undef alignment
 
 #ifdef METAL
@@ -44,8 +44,8 @@ enum ComponentVarType
 	FLOAT4,
 	TRANSFORM_MATRIX,	// MAT4
 	STRING,				// eastl::string
-	
-	// Resources are eastl::strings ////////////	
+
+	// Resources are eastl::strings ////////////
 	TEXTURE_2D,
 	TEXTURE_CUBEMAP,
 	MATERIAL,
@@ -76,8 +76,8 @@ struct ComponentVarRepresentation
 	}
 
 	ComponentVarRepresentation(
-		eastl::string const& name, 
-		ComponentVarType const type, 
+		eastl::string const& name,
+		ComponentVarType const type,
 		ComponentVarAccess const access)
 	{
 		this->name = name;
@@ -89,8 +89,8 @@ struct ComponentVarRepresentation
 	}
 
 	ComponentVarRepresentation(
-		eastl::string const& name, 
-		ComponentVarType const type, 
+		eastl::string const& name,
+		ComponentVarType const type,
 		ComponentVarAccess const access,
 		eastl::unordered_map<int32_t, eastl::string> const& valueRepresentations)
 	{
@@ -125,7 +125,7 @@ public:
 
 ////////////////////////////////////////////////////////
 // Variable Value Classes
-struct CompVarType 
+struct CompVarType
 {
 	CompVarType();
 	virtual ~CompVarType();
@@ -135,121 +135,121 @@ struct CompVarType
 	setValueFromComponent(void* const pVal) = 0;
 };
 
-struct BoolVar : public CompVarType 
+struct BoolVar : public CompVarType
 {
 	BoolVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const BoolVar &otherVar) const;
 
 	bool value;
 };
 
-struct IntVar : public CompVarType 
+struct IntVar : public CompVarType
 {
 	IntVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const IntVar &otherVar) const;
 
 	int32_t value;
 };
 
-struct UintVar : public CompVarType 
+struct UintVar : public CompVarType
 {
 	UintVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const UintVar &otherVar) const;
 
 	uint32_t value;
 };
 
-struct FloatVar : public CompVarType 
+struct FloatVar : public CompVarType
 {
 	FloatVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const FloatVar &otherVar) const;
 
 	float value;
 };
 
-struct Float2Var : public CompVarType 
+struct Float2Var : public CompVarType
 {
 	Float2Var();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const Float2Var &otherVar) const;
 
 	float2 value;
 };
 
-struct Float3Var : public CompVarType 
+struct Float3Var : public CompVarType
 {
 	Float3Var();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const Float3Var &otherVar) const;
 
 	float3 value;
 };
 
-struct Float4Var : public CompVarType 
+struct Float4Var : public CompVarType
 {
 	Float4Var();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const Float4Var &otherVar) const;
 
 	float4 value;
 };
 
-struct TransformMatrixVar : public CompVarType 
+struct TransformMatrixVar : public CompVarType
 {
 	TransformMatrixVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const TransformMatrixVar &otherVar) const;
 
 	mat4 value;
 };
 
-struct StringVar : public CompVarType 
+struct StringVar : public CompVarType
 {
 	StringVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const StringVar &otherVar) const;
 
-	StringVar& 
+	StringVar&
 	operator= (const StringVar& other);
 
 	StringVar(const StringVar& other);
@@ -262,17 +262,17 @@ struct GeometryVar : public StringVar
 	GeometryVar();
 };
 
-struct EnumVar : public CompVarType 
+struct EnumVar : public CompVarType
 {
 	EnumVar();
 
 	void
 	setValueFromComponent(void* const pVal);
 
-	bool 
+	bool
 	operator ==(const EnumVar &otherVar) const;
 
-	int32_t value;	
+	int32_t value;
 };
 ////////////////////////////////////////////////////////
 
@@ -285,7 +285,7 @@ public:
 	// Constructor will pass in the component object by ref.
 	// *ComponentClassRepresentation*( *ComponentType* * const component) { Init(component); }
 	virtual ~ComponentRepresentation(){}
-	
+
 	virtual eastl::unordered_map<eastl::string, ComponentVariableId> const& getNamedVariableIds() const = 0;
 
 	virtual eastl::unordered_map<ComponentVariableId, ComponentVarRepresentation> const&
@@ -295,13 +295,13 @@ public:
 	getOrderedVariableIds() const = 0; // will return *ComponentClass*_orderedVarIds
 
 	// T must derive CompVarType and MUST match the varId's type... otherwise things will be really bad.
-	template <class T> void 
+	template <class T> void
 	getVariableValue(ComponentVariableId const varId, T& varValueOut) const;
 
 	// this will modify the component that was passed in the constructor
 	// T must derive CompVarType and MUST match the varId's type... otherwise things will be really bad.
-	template <class T, typename InternalType> void 
-	setVariableValue(ComponentVariableId const varId, T const& varValueOut);	
+	template <class T, typename InternalType> void
+	setVariableValue(ComponentVariableId const varId, T const& varValueOut);
 
 	template <class T, typename InternalType>
 	void setStringVariableValue(ComponentVariableId const varId, T const& varValueOut);
@@ -322,7 +322,7 @@ protected:
 	eastl::unordered_map<ComponentVariableId, void*> m_ComponentVarReferences;
 	eastl::unordered_map<ComponentVariableId, eastl::unordered_map<eastl::string, void*> > m_ComponentMetadata;
 
-	// static const eastl::unordered_map<ComponentVariableId, ComponentVarRepresentation>	*ComponentClass*_varRepresentations;	
+	// static const eastl::unordered_map<ComponentVariableId, ComponentVarRepresentation>	*ComponentClass*_varRepresentations;
 };
 
 template <class T, typename InternalType>
@@ -355,15 +355,15 @@ void ComponentRepresentation::getVariableValue(ComponentVariableId const varId, 
 	eastl::unordered_map<ComponentVariableId, void*>::const_iterator iter = m_ComponentVarReferences.find(varId);
 	ASSERT(iter != m_ComponentVarReferences.end()); // var not found!
 
-	varValueOut.setValueFromComponent(iter->second);	
+	varValueOut.setValueFromComponent(iter->second);
 }
 
 
 // Example of how the event metadata will be structures
 /*
 template <class T> // must derive CompVarType
-struct EventModComponent 
-{	
+struct EventModComponent
+{
 	entityid entId;
 	componentid compId;
 	varid varid;
@@ -480,7 +480,7 @@ public:
 #define FORGE_REGISTER_COMPONENT_VAR(varName) \
 	static const ComponentVariableId varName;
 
-#define FORGE_END_GENERATE_COMPONENT_REPRESENTATION }; 
+#define FORGE_END_GENERATE_COMPONENT_REPRESENTATION };
 
 
 ///////// In .cpp //////////////////////////////////////////////////////////////////////////////////////
@@ -530,7 +530,7 @@ FCR::VarRepresentationsAndOrderedIds componentClass##Representation::componentCl
 
 #define FORGE_START_VAR_REFERENCES( componentClass ) \
 	void componentClass##Representation::associateComponent(componentClass* const component) \
-	{ 
+	{
 
 /* EX:	componentClass = CameraComponent
  *		varName = EnableDebugDraw which was registered with REGISTER_COMPONENT_VAR
@@ -546,7 +546,7 @@ FCR::VarRepresentationsAndOrderedIds componentClass##Representation::componentCl
 
 #define FORGE_START_RESOURCE_VAR_REFERENCES( componentClass, resourceClass ) \
 	void componentClass##Representation::associateResource(resourceClass* const resource) \
-			 { 
+			 {
 
 #define FORGE_ADD_RESOURCE_VAR_REF(componentClass, varName, varAccess) \
 	m_ComponentVarReferences[componentClass##Representation::varName] = static_cast<void*>(&(resource->varAccess)); \

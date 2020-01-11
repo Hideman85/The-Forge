@@ -28,7 +28,7 @@
 #ifndef OZZ_OZZ_BASE_CONTAINERS_VECTOR_H_
 #define OZZ_OZZ_BASE_CONTAINERS_VECTOR_H_
 
-#include "../../../../../EASTL/vector.h"
+#include <EASTL/vector.h>
 #include "../platform.h"
 
 namespace ozz {

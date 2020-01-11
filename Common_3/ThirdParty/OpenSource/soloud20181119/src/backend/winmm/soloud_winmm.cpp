@@ -39,7 +39,7 @@ namespace SoLoud
 
 #include <windows.h>
 #include <mmsystem.h>
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 
 #ifdef _MSC_VER
@@ -66,20 +66,20 @@ namespace SoLoud
     static void winMMThread(LPVOID aParam)
     {
         SoLoudWinMMData *data = static_cast<SoLoudWinMMData*>(aParam);
-        while (WAIT_OBJECT_0 != WaitForSingleObject(data->audioProcessingDoneEvent, 0)) 
+        while (WAIT_OBJECT_0 != WaitForSingleObject(data->audioProcessingDoneEvent, 0))
         {
-            for (int i=0;i<BUFFER_COUNT;++i) 
+            for (int i=0;i<BUFFER_COUNT;++i)
             {
-                if (0 != (data->header[i].dwFlags & WHDR_INQUEUE)) 
+                if (0 != (data->header[i].dwFlags & WHDR_INQUEUE))
                 {
                     continue;
                 }
                 short *tgtBuf = data->sampleBuffer[i];
-				
+
 				data->soloud->mixSigned16(tgtBuf, data->samples);
 
-				if (MMSYSERR_NOERROR != waveOutWrite(data->waveOut, &data->header[i], 
-                                                     sizeof(WAVEHDR))) 
+				if (MMSYSERR_NOERROR != waveOutWrite(data->waveOut, &data->header[i],
+                                                     sizeof(WAVEHDR)))
                 {
                     return;
                 }
@@ -98,11 +98,11 @@ namespace SoLoud
         SetEvent(data->audioProcessingDoneEvent);
         SetEvent(data->bufferEndEvent);
 		if (data->threadHandle)
-		{			
+		{
 			Thread::release(data->threadHandle);
 		}
         waveOutReset(data->waveOut);
-        for (int i=0;i<BUFFER_COUNT;++i) 
+        for (int i=0;i<BUFFER_COUNT;++i)
         {
             waveOutUnprepareHeader(data->waveOut, &data->header[i], sizeof(WAVEHDR));
             if (0 != data->sampleBuffer[i])
@@ -143,20 +143,20 @@ namespace SoLoud
         format.wBitsPerSample = sizeof(short)*8;
         format.nBlockAlign = (format.nChannels*format.wBitsPerSample)/8;
         format.nAvgBytesPerSec = format.nSamplesPerSec*format.nBlockAlign;
-        if (MMSYSERR_NOERROR != waveOutOpen(&data->waveOut, WAVE_MAPPER, &format, 
-                            reinterpret_cast<DWORD_PTR>(data->bufferEndEvent), 0, CALLBACK_EVENT)) 
+        if (MMSYSERR_NOERROR != waveOutOpen(&data->waveOut, WAVE_MAPPER, &format,
+                            reinterpret_cast<DWORD_PTR>(data->bufferEndEvent), 0, CALLBACK_EVENT))
         {
             return UNKNOWN_ERROR;
         }
         data->buffer.init(data->samples*format.nChannels);
-        for (int i=0;i<BUFFER_COUNT;++i) 
+        for (int i=0;i<BUFFER_COUNT;++i)
         {
             data->sampleBuffer[i] = (short*)conf_malloc(sizeof(short)*data->samples*format.nChannels);
             ZeroMemory(&data->header[i], sizeof(WAVEHDR));
             data->header[i].dwBufferLength = data->samples*sizeof(short)*format.nChannels;
             data->header[i].lpData = reinterpret_cast<LPSTR>(data->sampleBuffer[i]);
-            if (MMSYSERR_NOERROR != waveOutPrepareHeader(data->waveOut, &data->header[i], 
-                                                         sizeof(WAVEHDR))) 
+            if (MMSYSERR_NOERROR != waveOutPrepareHeader(data->waveOut, &data->header[i],
+                                                         sizeof(WAVEHDR)))
             {
                 return UNKNOWN_ERROR;
             }

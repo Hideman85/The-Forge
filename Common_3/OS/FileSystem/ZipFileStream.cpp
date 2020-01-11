@@ -22,7 +22,7 @@
  * under the License.
 */
 
-#include "../../ThirdParty/OpenSource/libzip/zip.h"
+#include <zip.h>
 
 #include "ZipFileStream.h"
 
@@ -73,7 +73,7 @@ size_t ZipFileStream::Print(const char* format, va_list args)
 bool ZipFileStream::Seek(SeekBaseOffset baseOffset, ssize_t seekOffset)
 {
 	int origin = SEEK_SET;
-	
+
 	switch (baseOffset)
 	{
 		case SBO_START_OF_FILE: origin = SEEK_SET; break;
@@ -174,7 +174,7 @@ size_t ZipSourceStream::Print(const char* format, va_list args)
 bool ZipSourceStream::Seek(SeekBaseOffset baseOffset, ssize_t seekOffset)
 {
     int origin = SEEK_SET;
-    
+
     switch (baseOffset)
     {
         case SBO_START_OF_FILE: origin = SEEK_SET; break;
@@ -185,10 +185,10 @@ bool ZipSourceStream::Seek(SeekBaseOffset baseOffset, ssize_t seekOffset)
     int status = 0;
     if (mMode & (FM_WRITE | FM_APPEND))
         status = zip_source_seek_write(pSource, seekOffset, origin);
-    
+
     if (mMode & FM_READ)
         status = zip_source_seek(pSource, seekOffset, origin);
-    
+
     if (status != 0)
     {
         zip_error_t* error = zip_source_error(pSource);
@@ -204,7 +204,7 @@ ssize_t ZipSourceStream::GetSeekPosition() const
     {
         return (ssize_t)zip_source_tell_write(pSource);
     }
-    
+
     return (ssize_t)zip_source_tell(pSource);
 }
 
@@ -213,7 +213,7 @@ ssize_t ZipSourceStream::GetFileSize() const
     zip_stat_t stats;
     zip_stat_init(&stats);
     zip_source_stat(pSource, &stats);
-    
+
     return stats.size;
 }
 
@@ -239,7 +239,7 @@ bool ZipSourceStream::Close()
         status = zip_source_commit_write(pSource);
     else
         status = zip_source_close(pSource);
-    
+
     bool success = status == 0;
     if (!success)
     {
@@ -248,7 +248,7 @@ bool ZipSourceStream::Close()
         success = false;
     }
     zip_source_free(pSource);
-    
+
     conf_delete(this);
     return success;
 }

@@ -1,7 +1,7 @@
 #include <math.h>
 #include "resonator.h"
 
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #ifndef PI
 #define PI 3.1415926535897932384626433832795f
@@ -15,11 +15,11 @@ void resonator::initResonator(
 	int aSamplerate)
 {
 	float arg = (-PI / aSamplerate) * aBandwidth;
-	float r = (float)exp(arg);  
-	mC = -(r * r);             
+	float r = (float)exp(arg);
+	mC = -(r * r);
 	arg = (-2.0f * PI / aSamplerate) * aFrequency;
-	mB = r * (float)cos(arg) * 2.0f;   
-	mA = 1.0f - mB - mC;    
+	mB = r * (float)cos(arg) * 2.0f;
+	mA = 1.0f - mB - mC;
 }
 
 /* Convert formant freqencies and bandwidth into anti-resonator difference equation constants

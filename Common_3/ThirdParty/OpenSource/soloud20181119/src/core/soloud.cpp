@@ -39,7 +39,7 @@ freely, subject to the following restrictions:
 #include <float.h>
 #endif
 
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 
 #if !defined(WITH_SDL2) && !defined(WITH_SDL1) && !defined(WITH_PORTAUDIO) && \
@@ -581,7 +581,7 @@ namespace SoLoud
 			m3dSpeakerPosition[1 * 3 + 1] = 0;
 			m3dSpeakerPosition[1 * 3 + 2] = 1;
 
-			// center and subwoofer. 
+			// center and subwoofer.
 			m3dSpeakerPosition[2 * 3 + 0] = 0;
 			m3dSpeakerPosition[2 * 3 + 1] = 0;
 			m3dSpeakerPosition[2 * 3 + 2] = 1;
@@ -607,7 +607,7 @@ namespace SoLoud
 			m3dSpeakerPosition[1 * 3 + 1] = 0;
 			m3dSpeakerPosition[1 * 3 + 2] = 1;
 
-			// center and subwoofer. 
+			// center and subwoofer.
 			m3dSpeakerPosition[2 * 3 + 0] = 0;
 			m3dSpeakerPosition[2 * 3 + 1] = 0;
 			m3dSpeakerPosition[2 * 3 + 2] = 1;
@@ -1370,7 +1370,7 @@ namespace SoLoud
 			}
 		}
 
-		// Accumulate sound sources		
+		// Accumulate sound sources
 		for (i = 0; i < mActiveVoiceCount; i++)
 		{
 			AudioSourceInstance *voice = mVoice[mActiveVoice[i]];
@@ -1830,7 +1830,7 @@ namespace SoLoud
 				mVoice[i]->mStreamPosition += buffertime;
 
 				// TODO: this is actually unstable, because mStreamTime depends on the relative
-				// play speed. 
+				// play speed.
 				if (mVoice[i]->mRelativePlaySpeedFader.mActive > 0)
 				{
 					float speed = mVoice[i]->mRelativePlaySpeedFader.get(mVoice[i]->mStreamTime);

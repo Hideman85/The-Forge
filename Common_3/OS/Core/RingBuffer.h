@@ -29,7 +29,7 @@
 #include "../Interfaces/ILog.h"
 
 #define IMEMORY_FROM_HEADER
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 /************************************************************************/
 /* RING BUFFER MANAGEMENT											  */

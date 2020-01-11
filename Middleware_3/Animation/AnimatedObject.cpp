@@ -23,8 +23,8 @@
 */
 
 #include "AnimatedObject.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/ik_aim_job.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/ik_two_bone_job.h"
+#include <ozz/animation/runtime/ik_aim_job.h>
+#include <ozz/animation/runtime/ik_two_bone_job.h>
 
 namespace {
 void MultiplySoATransformQuaternion(int _index, const Quat& _quat, ozz::Range<SoaTransform>& _transforms)

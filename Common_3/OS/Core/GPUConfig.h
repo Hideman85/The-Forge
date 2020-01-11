@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef TARGET_IOS
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/string.h>
 #include "../Interfaces/ILog.h"
 #include "../Interfaces/IFileSystem.h"
 #include "../../Renderer/IRenderer.h"

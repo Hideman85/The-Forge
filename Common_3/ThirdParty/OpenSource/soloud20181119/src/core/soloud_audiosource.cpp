@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -68,7 +68,7 @@ namespace SoLoud
 		// Default all volumes to 1.0 so sound behind N mix busses isn't super quiet.
 		int i;
 		for (i = 0; i < MAX_CHANNELS; i++)
-			mChannelVolume[i] = 1.0f;		
+			mChannelVolume[i] = 1.0f;
 		mSetVolume = 1.0f;
 		mBaseSamplerate = 44100.0f;
 		mSamplerate = 44100.0f;
@@ -102,9 +102,9 @@ namespace SoLoud
 	{
 		int i;
 		for (i = 0; i < FILTERS_PER_STREAM; i++)
-		{		
+		{
 			conf_delete(mFilter[i]);
-		}		
+		}
 	}
 
 	void AudioSourceInstance::init(AudioSource &aSource, int aPlayIndex)
@@ -171,15 +171,15 @@ namespace SoLoud
 	}
 
 
-	AudioSource::AudioSource() 
-	{ 
+	AudioSource::AudioSource()
+	{
 		int i;
 		for (i = 0; i < FILTERS_PER_STREAM; i++)
 		{
 			mFilter[i] = 0;
 		}
-		mFlags = 0; 
-		mBaseSamplerate = 44100; 
+		mFlags = 0;
+		mBaseSamplerate = 44100;
 		mAudioSourceID = 0;
 		mSoloud = 0;
 		mChannels = 1;
@@ -195,7 +195,7 @@ namespace SoLoud
 		mLoopPoint = 0;
 	}
 
-	AudioSource::~AudioSource() 
+	AudioSource::~AudioSource()
 	{
 		stop();
 	}

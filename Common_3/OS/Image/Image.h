@@ -29,14 +29,14 @@ static_assert(false, "Image.h can only be included by ResourceLoader.cpp and Ima
 #ifndef COMMON_3_OS_IMAGE_IMAGE_H_
 #define COMMON_3_OS_IMAGE_IMAGE_H_
 
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_query.h>
 #include "../Interfaces/IFileSystem.h"
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/string.h>
 
 #ifndef IMAGE_DISABLE_GOOGLE_BASIS
 //Google basis Transcoder
-#include "../../ThirdParty/OpenSource/basis_universal/transcoder/basisu_transcoder.h"
+#include <basisu_transcoder.h>
 #endif
 #define ALL_MIPLEVELS 127
 
@@ -154,7 +154,7 @@ protected:
 	// is memory (mipmaps*w*h*d)*s or
 	// mipmaps * (w*h*d*s) with s being constant for all mipmaps
 	bool				 mMipsAfterSlices;
-	
+
 	static void Init();
 	static void Exit();
 

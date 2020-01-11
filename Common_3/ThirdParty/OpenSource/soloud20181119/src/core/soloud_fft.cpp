@@ -27,14 +27,14 @@ freely, subject to the following restrictions:
 #include "soloud.h"
 #include "soloud_fft.h"
 #include <string.h>
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace fftimpl
 {
 // Based on http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
-// "Copyright Takuya OOURA, 1996-2001 
-//  You may use, copy, modify and distribute this code for any purpose 
-//  (include commercial use) and without fee. Please refer to this package 
+// "Copyright Takuya OOURA, 1996-2001
+//  You may use, copy, modify and distribute this code for any purpose
+//  (include commercial use) and without fee. Please refer to this package
 //  when you modify this code."
 
 
@@ -2446,14 +2446,14 @@ namespace SoLoud
     {
         void fft1024(float *aBuffer)
         {
-			fft(aBuffer, 1024);			
-        }    
+			fft(aBuffer, 1024);
+        }
 
         void fft256(float *aBuffer)
         {
 			fft(aBuffer, 256);
         }
-        
+
         void ifft256(float *aBuffer)
         {
 			ifft(aBuffer, 256);

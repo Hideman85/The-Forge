@@ -32,21 +32,21 @@
 
 // include Fontstash (should be after MemoryTracking so that it also detects memory free/remove in fontstash)
 #define FONTSTASH_IMPLEMENTATION
-#include "../../Common_3/ThirdParty/OpenSource/Fontstash/src/fontstash.h"
+#include <fontstash.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../Common_3/OS/Core/RingBuffer.h"
-#include "../../Common_3/Renderer/IRenderer.h"
-#include "../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Core/RingBuffer.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../Common_3/ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <EASTL/vector.h>
+#include <tinyimageformat_query.h>
 
-#include "../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 ResourceDirectory RD_MIDDLEWARE_TEXT = RD_MIDDLEWARE_0;
 
@@ -358,18 +358,18 @@ void Fontstash::unload()
 int Fontstash::defineFont(const char* identification, const char* filename, ResourceDirectory root)
 {
 	FONScontext* fs = impl->pContext;
-	
+
     PathHandle filePath = fsCopyPathInResourceDirectory(root, filename);
     FileStream* fh = fsOpenFile(filePath, FM_READ_BINARY);
     ssize_t bytes = fsGetStreamFileSize(fh);
 	void*    buffer = conf_malloc(bytes);
     fsReadFromStream(fh, buffer, bytes);
-    
+
 	// add buffer to font buffers for cleanup
 	impl->mFontBuffers.emplace_back(buffer);
 	impl->mFontBufferSizes.emplace_back((uint32_t)bytes);
 	impl->mFontNames.emplace_back(fsPathComponentToString(fsGetPathFileName(filePath)));
-    
+
     fsCloseStream(fh);
 
 	return fonsAddFontMem(fs, identification, (unsigned char*)buffer, (int)bytes, 0);

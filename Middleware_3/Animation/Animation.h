@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/blending_job.h"
+#include <ozz/animation/runtime/blending_job.h>
 
 #include <vector>
 

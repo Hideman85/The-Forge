@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
+cmake_policy(SET CMP0077 NEW) # for option overriding
 project(TheForge)
 
 ##########################################
@@ -16,34 +17,51 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 ##########################################
 ##      Turn on/off verbose
 ##########################################
-#set(CMAKE_VERBOSE_MAKEFILE FALSE)
-set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_VERBOSE_MAKEFILE FALSE)
+#set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 ##########################################
 ##      Compilation options
 ##########################################
-OPTION(USE_ASSIMP "Build package with assimp support." ON)
-OPTION(USE_LUA "Build package with lua support." OFF)
-OPTION(COMPILE_UNIT_TESTS "Build unit tests." ON)
-OPTION(COMPILE_SAMPLE "Build visibility buffer sample." ON)
+option(USE_ASSIMP "Build package with assimp support." ON)
+option(USE_LUA "Build package with lua support." OFF)
+option(COMPILE_UNIT_TESTS "Build unit tests." ON)
+option(COMPILE_SAMPLE "Build visibility buffer sample." ON)
 
 ##########################################
 ##      Include TheForge dirs
 ##########################################
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Common_3 ${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3)
+macro(copy_headers SRC_DIR DST_DIR)
+    file(GLOB_RECURSE HEADERS "${SRC_DIR}/*.h" "${SRC_DIR}/*.hpp" "${SRC_DIR}/*.inl")
+    foreach(SRC_FILE ${HEADERS})
+        string(REPLACE ${SRC_DIR} ${DST_DIR} DST_FILE ${SRC_FILE})
+        get_filename_component(DST_DIR2 ${DST_FILE} DIRECTORY)
+        file(COPY ${SRC_FILE} DESTINATION ${DST_DIR2})
+    endforeach()
+endmacro()
+
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/include")
+    file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/TheForge")
+    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/OS" "${CMAKE_SOURCE_DIR}/include/TheForge/OS")
+    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Renderer" "${CMAKE_SOURCE_DIR}/include/TheForge/Renderer")
+    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Tools" "${CMAKE_SOURCE_DIR}/include/TheForge/Tools")
+    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3" "${CMAKE_SOURCE_DIR}/include/TheForge")
+endif()
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 ##########################################
 ##      System deps
 ##########################################
 find_package(Vulkan REQUIRED)
-include_directories(${Vulkan_INCLUDE_DIR})
-link_libraries(${Vulkan_LIBRARIES})
+#include_directories(${Vulkan_INCLUDE_DIR})
+#link_libraries(${Vulkan_LIBRARIES})
 
 if (UNIX)
     find_package(X11 REQUIRED)
     find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
-    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
-    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} -pthread -ldl -lz)
+#    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
+#    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} -pthread)
+    link_libraries(-lX11 -lvulkan -pthread)
 endif()
 #link_libraries(-lvulkan -lX11 -pthread -ldl -lz -lasound)
 
@@ -70,7 +88,6 @@ add_subdirectory(Common_3/ThirdParty/OpenSource)
 
 get_directory_property(THE_FORGE_LIBS DIRECTORY Common_3/ThirdParty/OpenSource DEFINITION THE_FORGE_LIBS)
 get_directory_property(THE_FORGE_SHARED_LIBS DIRECTORY Common_3/ThirdParty/OpenSource DEFINITION THE_FORGE_SHARED_LIBS)
-get_directory_property(THE_FORGE_LIBS_INCLUDES DIRECTORY Common_3/ThirdParty/OpenSource DEFINITION THE_FORGE_LIBS_INCLUDES)
 
 ##########################################
 ##      Make sources
@@ -264,7 +281,6 @@ add_library(TheForge STATIC IMPORTED)
 set_target_properties(TheForge PROPERTIES IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/${THE_FORGE_LIB})
 add_dependencies(TheForge ${THE_FORGE_LIB})
 link_libraries(TheForge)
-include_directories(${THE_FORGE_LIBS_INCLUDES})
 
 ##########################################
 ##      Unit tests & Samples

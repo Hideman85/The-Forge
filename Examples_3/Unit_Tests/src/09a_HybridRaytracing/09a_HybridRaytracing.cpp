@@ -28,8 +28,8 @@
 // based on https://interplayoflight.wordpress.com/2018/07/04/hybrid-raytraced-shadows-and-reflections/
 
 //EASTL includes
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -848,7 +848,7 @@ class HybridRaytracing: public IApp
 		{
 			PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/09a_HybridRaytracing");
 			fsSetResourceDirectoryRootPath(resourceDirRoot);
-			
+
 			fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../../../Art/Sponza/Textures");
 			fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../../../Art/Sponza/Meshes");
 			fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -856,7 +856,7 @@ class HybridRaytracing: public IApp
 			fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
 			fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
 		}
-		
+
 		// window and renderer setup
 		RendererDesc settings = { 0 };
 		initRenderer(GetName(), &settings, &pRenderer);
@@ -2286,7 +2286,7 @@ void prepareDescriptorSets()
 		updateDescriptorSet(pRenderer, 0, RenderPasses[RenderPass::GBuffer]->pDescriptorSets[0], 2, params);
 #else
         updateDescriptorSet(pRenderer, 0, RenderPasses[RenderPass::GBuffer]->pDescriptorSets[0], 1, params);
-		
+
 
 		for (uint32_t i = 0; i < (uint32_t)SponzaProp.MeshBatches.size(); ++i)
 		{
@@ -2307,7 +2307,7 @@ void prepareDescriptorSets()
 			//one descriptor param if using bindless textures
 			updateDescriptorSet(pRenderer, i, RenderPasses[RenderPass::GBuffer]->pDescriptorSets[2], 1, params);
 		}
-		
+
 #endif
 		for (uint32_t i = 0; i < gImageCount; ++i)
 		{

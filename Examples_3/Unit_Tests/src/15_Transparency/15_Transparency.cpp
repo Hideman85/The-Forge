@@ -43,9 +43,9 @@
 #define PT_USE_CAUSTICS (0 & USE_SHADOWS)
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/sort.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/sort.h>
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -676,7 +676,7 @@ class Transparency: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/15_Transparency");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -684,7 +684,7 @@ class Transparency: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
         }
-        
+
 		RendererDesc settings = { NULL };
 		initRenderer(GetName(), &settings, &pRenderer);
 

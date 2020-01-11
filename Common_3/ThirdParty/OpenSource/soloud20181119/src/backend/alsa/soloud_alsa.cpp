@@ -43,7 +43,7 @@ namespace SoLoud
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 
 namespace SoLoud
@@ -63,21 +63,21 @@ namespace SoLoud
 
     static void alsaThread(void *aParam)
     {
-        
+
         ALSAData *data = static_cast<ALSAData*>(aParam);
-        while (!data->audioProcessingDone) 
-        {            
-            data->soloud->mix(data->buffer, data->samples);            
+        while (!data->audioProcessingDone)
+        {
+            data->soloud->mix(data->buffer, data->samples);
             for (int i=0;i<data->samples*data->channels;++i)
             {
-                data->sampleBuffer[i] = static_cast<short>(floor(data->buffer[i] 
+                data->sampleBuffer[i] = static_cast<short>(floor(data->buffer[i]
                                                           * static_cast<float>(0x7fff)));
             }
             if (snd_pcm_writei(data->alsaDeviceHandle, data->sampleBuffer, data->samples) == -EPIPE)
                 snd_pcm_prepare(data->alsaDeviceHandle);
-                
+
         }
-        
+
     }
 
     static void alsaCleanup(Soloud *aSoloud)
@@ -89,7 +89,7 @@ namespace SoLoud
         ALSAData *data = static_cast<ALSAData*>(aSoloud->mBackendData);
         data->audioProcessingDone = true;
         if (data->threadHandle)
-        {            
+        {
             Thread::release(data->threadHandle);
         }
         snd_pcm_drain(data->alsaDeviceHandle);
@@ -123,9 +123,9 @@ namespace SoLoud
         {
             return UNKNOWN_ERROR;
         }
-        
+
         data->alsaDeviceHandle = handle;
-        
+
         snd_pcm_hw_params_t *params;
         snd_pcm_hw_params_alloca(&params);
         snd_pcm_hw_params_any(handle, params);
@@ -134,7 +134,7 @@ namespace SoLoud
         snd_pcm_hw_params_set_format(handle, params, SND_PCM_FORMAT_S16_LE);
         snd_pcm_hw_params_set_channels(handle, params, 2);
         snd_pcm_hw_params_set_buffer_size(handle, params, aBuffer);
-        
+
         unsigned int val = aSamplerate;
         int dir = 0;
         rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
@@ -144,7 +144,7 @@ namespace SoLoud
         }
 
         rc = snd_pcm_hw_params(handle, params);
-        if (rc < 0) 
+        if (rc < 0)
         {
             return UNKNOWN_ERROR;
         }

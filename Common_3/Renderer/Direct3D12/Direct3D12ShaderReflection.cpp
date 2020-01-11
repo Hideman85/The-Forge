@@ -24,7 +24,7 @@
 
 #ifdef DIRECT3D12
 #include "../IRenderer.h"
-#include "../../OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
 #ifdef _DURANGO
 #include "../../../Xbox/Common_3/Renderer/XBoxPrivateHeaders.h"
@@ -34,7 +34,7 @@
 extern dxc::DxcDllSupport gDxcDllHelper;
 #endif
 
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 static DescriptorType sD3D12_TO_DESCRIPTOR[] = {
 	DESCRIPTOR_TYPE_UNIFORM_BUFFER,    //D3D_SIT_CBUFFER

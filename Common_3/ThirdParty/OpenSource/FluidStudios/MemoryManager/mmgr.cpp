@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
-//                                                      
-//                                                      
-//  _ __ ___  _ __ ___   __ _ _ __      ___ _ __  _ ___  
+//
+//
+//  _ __ ___  _ __ ___   __ _ _ __      ___ _ __  _ ___
 // | '_ ` _ \| '_ ` _ \ / _` | '__|    / __| '_ \| '_  |
 // | | | | | | | | | | | (_| | |    _ | (__| |_) | |_) |
-// |_| |_| |_|_| |_| |_|\__, |_|   (_) \___| .__/| .__/ 
-//                       __/ |             | |   | |    
-//                      |___/              |_|   |_|    
+// |_| |_| |_|_| |_| |_|\__, |_|   (_) \___| .__/| .__/
+//                       __/ |             | |   | |
+//                      |___/              |_|   |_|
 //
 // Memory manager & tracking software
 //
@@ -59,7 +59,7 @@
 // 5. With MFC applications, you will need to comment out any occurance of "#define new DEBUG_NEW" from all source files.
 //
 // 6. Include file dependencies are _very_important_ for getting the MMGR to integrate nicely into your application. Be careful if
-//    you're including standard includes from within your own project includes; that will break this very specific dependency order. 
+//    you're including standard includes from within your own project includes; that will break this very specific dependency order.
 //    It should look like this:
 //
 //		#include <stdio.h>   // Standard includes MUST come first
@@ -84,8 +84,8 @@
 #include <time.h>
 #include <stdarg.h>
 #include <new>
-#include "../../../../OS/Interfaces/IOperatingSystem.h"
-#include "../../../../OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 
 #if !defined(WIN32) && !defined(DURANGO)
 #include <unistd.h>
@@ -101,7 +101,7 @@
 //
 // Whether this software causes your application to crash, or if it reports errors, you need to be able to TRUST this software. To
 // this end, you are given some very simple debugging tools.
-// 
+//
 // The quickest way to locate problems is to enable the STRESS_TEST macro (below.) This should catch 95% of the crashes before they
 // occur by validating every allocation each time this memory manager performs an allocation function. If that doesn't work, keep
 // reading...
@@ -259,8 +259,8 @@ char* LogToMemory(char* log);
 // 4. Add the mutex initialization function inside CreateMutex() on the bottom of this file.
 // 5. Add the mutex destruction function inside RemoveMutex() on the bottom of this file. (Currently not used)
 
-#include "../../../../OS/Interfaces/IThread.h"
-#include "../../../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IThread.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 typedef Mutex MUTEX;
 #define MUTEX_LOCK(mutex) if (!mutex) {mutex = CreateMutex();} mutex->Acquire();
@@ -557,9 +557,9 @@ static void		dumpLine(FILE* fileToWrite, const char* format, ...)
     va_list args, fileArgs;
     va_start(args, format);
     va_copy(fileArgs, args);
-    
+
     _OutputDebugStringV(format, args);
-    
+
     vfprintf(fileToWrite, format, fileArgs);
     fprintf(fileToWrite, "\n");
     va_end(args);
@@ -596,22 +596,22 @@ static	void	dumpAllocations(FILE* fh)
 static	void	dumpLeakReport()
 {
 	{
-        
+
 		// Open the report file
         // NOTE: we can't use any allocating FileSystem functions here since the FileSystem
 		// may have already been destroyed by the time we get here.
 
         const char *extension = ".memleaks";
-        
+
         char outputFileName[256];
 		strncpy(outputFileName, mmgrExecutableName, 256 - strlen(extension));
-        
+
         // Minimum length check
         if (outputFileName[0] == 0 || outputFileName[1] == 0) {
             strcpy(outputFileName, "MemLeaks");
         }
         strcat(outputFileName, extension);
-        
+
 		char logFilePath[1024];
 		strncpy(logFilePath, mmgrLogFileDirectory, 1024 - strlen(outputFileName) - 1);
 #ifdef _WIN32
@@ -623,7 +623,7 @@ static	void	dumpLeakReport()
 
 		FILE* fh = NULL;
 		fopen_s(&fh, logFilePath, "w+b");
-		
+
 		if (!fh)
 			return;
 
@@ -686,12 +686,12 @@ static	void	dumpLeakReport()
 	}
 }
 
-void mmgrSetLogFileDirectory(const char* directory) 
+void mmgrSetLogFileDirectory(const char* directory)
 {
 	strncpy(mmgrLogFileDirectory, directory, sizeof(mmgrLogFileDirectory) / sizeof(char));
 }
 
-void mmgrSetExecutableName(const char* name, size_t length) 
+void mmgrSetExecutableName(const char* name, size_t length)
 {
 	strncpy(mmgrExecutableName, name, min(sizeof(mmgrExecutableName) / sizeof(char), length));
 }
@@ -1560,11 +1560,11 @@ void	mmgrDumpMemoryReport(const char *filename, const bool overwrite)
 		FILE* fh = nullptr;
 
 		if (overwrite)
-		{ 
+		{
             fopen_s(&fh, filePath, "w+b");
 		}
 		else
-		{ 
+		{
             fopen_s(&fh, filePath, "a+b");
 		}
 
@@ -1583,7 +1583,7 @@ void	mmgrDumpMemoryReport(const char *filename, const bool overwrite)
 #else
 		localtime_s(&t, &tme);
 #endif
-		
+
         fprintf(fh, " ----------------------------------------------------------------------------------------------------------------------------------\n");
         fprintf(fh, "|                                             Memory report for: %02d/%02d/%04d %02d:%02d:%02d                                          |\n", tme.tm_mon + 1, tme.tm_mday, tme.tm_year + 1900, tme.tm_hour, tme.tm_min, tme.tm_sec);
 		fprintf(fh, " ----------------------------------------------------------------------------------------------------------------------------------\n");

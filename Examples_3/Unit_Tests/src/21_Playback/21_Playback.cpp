@@ -54,8 +54,8 @@
 
 #include "../../../../Middleware_3/UI/AppUI.h"
 // tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 // Math
 #include "../../../../Common_3/OS/Math/MathTypes.h"
@@ -204,7 +204,7 @@ class Playback: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/21_Playback");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,		"../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES, 			"../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS, 	"../../UnitTestResources/Fonts");
@@ -212,7 +212,7 @@ class Playback: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT, 	"../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI, 	"../../../../Middleware_3/UI");
         }
-        
+
 		// WINDOW AND RENDERER SETUP
 		//
 		RendererDesc settings = { 0 };
@@ -561,7 +561,7 @@ class Playback: public IApp
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		for (uint32_t i = 0; i < gImageCount; ++i)
 		{

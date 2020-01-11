@@ -29,21 +29,21 @@
 
 
 //Interfaces
-#include <OS/Interfaces/ICameraController.h>
-#include <OS/Interfaces/IApp.h>
-#include <OS/Interfaces/ILog.h>
-#include <OS/Interfaces/IInput.h>
-#include <OS/Interfaces/IFileSystem.h>
-#include <OS/Interfaces/ITime.h>
-#include <OS/Interfaces/IProfiler.h>
-#include <UI/AppUI.h>
-#include <Renderer/IRenderer.h>
-#include <Renderer/ResourceLoader.h>
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/IApp.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IInput.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ITime.h>
+#include <TheForge/OS/Interfaces/IProfiler.h>
+#include <TheForge/UI/AppUI.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
 //Math
-#include <OS/Math/MathTypes.h>
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include <OS/Interfaces/IMemory.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 /// Demo structures
 struct PlanetInfoStruct

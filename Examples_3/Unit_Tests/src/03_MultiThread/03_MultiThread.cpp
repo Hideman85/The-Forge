@@ -25,10 +25,10 @@
 #define _USE_MATH_DEFINES
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
-#include "../../../../Common_3/ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <tinyimageformat_query.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -232,7 +232,7 @@ class MultiThread: public IApp
 		mSettings.mContentScaleFactor = 1.f;
 #endif
 	}
-	
+
 	bool Init()
 	{
         // FILE PATHS
@@ -241,7 +241,7 @@ class MultiThread: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/03_MultiThread");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,             "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,     "../../UnitTestResources/Fonts");
@@ -249,7 +249,7 @@ class MultiThread: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,     "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,     "../../../../Middleware_3/UI");
         }
-        
+
 		InitCpuUsage();
 
 		gThreadCount = gCoresCount - 1;
@@ -582,7 +582,7 @@ class MultiThread: public IApp
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		DescriptorData params[7] = {};
 		params[0].pName = "RightText";

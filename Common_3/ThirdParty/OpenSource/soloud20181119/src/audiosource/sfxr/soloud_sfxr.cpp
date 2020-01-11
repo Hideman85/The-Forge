@@ -28,13 +28,13 @@ freely, subject to the following restrictions:
 #include <math.h>
 #include "soloud_sfxr.h"
 #include "soloud_file.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
 
 	Prg::Prg()
-	{		
+	{
 	}
 
 	void Prg::srand(int aSeed)
@@ -121,7 +121,7 @@ namespace SoLoud
 			if (period < 8) period = 8;
 			square_duty += square_slide;
 			if (square_duty < 0.0f) square_duty = 0.0f;
-			if (square_duty > 0.5f) square_duty = 0.5f;		
+			if (square_duty > 0.5f) square_duty = 0.5f;
 			// volume envelope
 			env_time++;
 			if (env_time > env_length[env_stage])
@@ -502,7 +502,7 @@ namespace SoLoud
 		}
 		return 0;
 	}
-	
+
 	void Sfxr::resetParams()
 	{
 		mParams.wave_type=0;
@@ -529,7 +529,7 @@ namespace SoLoud
 		mParams.p_lpf_ramp=0.0f;
 		mParams.p_hpf_freq=0.0f;
 		mParams.p_hpf_ramp=0.0f;
-	
+
 		mParams.p_pha_offset=0.0f;
 		mParams.p_pha_ramp=0.0f;
 
@@ -599,7 +599,7 @@ namespace SoLoud
 		aFile->read((unsigned char*)&mParams.p_lpf_ramp, sizeof(float));
 		aFile->read((unsigned char*)&mParams.p_hpf_freq, sizeof(float));
 		aFile->read((unsigned char*)&mParams.p_hpf_ramp, sizeof(float));
-	
+
 		aFile->read((unsigned char*)&mParams.p_pha_offset, sizeof(float));
 		aFile->read((unsigned char*)&mParams.p_pha_ramp, sizeof(float));
 
@@ -626,7 +626,7 @@ namespace SoLoud
 	}
 
 
-	AudioSourceInstance * Sfxr::createInstance() 
+	AudioSourceInstance * Sfxr::createInstance()
 	{
 		return conf_new(SfxrInstance, this);
 	}

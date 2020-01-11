@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
-#include "../../OS/Interfaces/IThread.h"
-#include "../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IThread.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 #ifndef FILENAME_NAME_LENGTH_LOG
 #define FILENAME_NAME_LENGTH_LOG 23
@@ -127,7 +127,7 @@ private:
 			, mFlush(flush)
 			, mLevel(level)
 		 { }
-		
+
 		eastl::string mID;
 		void * mUserData;
 		log_callback_t mCallback;

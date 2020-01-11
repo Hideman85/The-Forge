@@ -28,8 +28,8 @@ distribution.
 #include <new>
 #include <cstddef>
 
-#include "OS/Interfaces/IFileSystem.h"
-#include "OS/Interfaces/IMemory.h" //NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/IMemory.h> //NOTE: this should be the last include in a .cpp
 
 namespace tinyxml2
 {

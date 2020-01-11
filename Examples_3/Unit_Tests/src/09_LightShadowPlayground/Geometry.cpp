@@ -24,7 +24,7 @@
 
 #include "Geometry.h"
 
-//#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/unordered_set.h"
+//#include <EASTL/unordered_set.h>
 
 #include "../../../../Common_3/OS/Interfaces/IFileSystem.h"
 #include "../../../../Common_3/OS/Interfaces/ILog.h"
@@ -1045,13 +1045,13 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 			scene->totalVertices += (uint32_t)mesh.mPositions.size();
 			scene->totalTriangles += (uint32_t)mesh.mIndices.size() / 3;
 		}
-		
+
 		scene->indices = (uint32_t*)conf_malloc(scene->totalTriangles * 3 * sizeof(uint32_t));
 		scene->positions = (SceneVertexPos*)conf_malloc(scene->totalVertices * sizeof(SceneVertexPos));
 		scene->texCoords = (SceneVertexTexCoord*)conf_malloc(scene->totalVertices * sizeof(SceneVertexTexCoord));
 		scene->normals = (SceneVertexNormal*)conf_malloc(scene->totalVertices * sizeof(SceneVertexNormal));
 		scene->tangents = (SceneVertexTangent*)conf_malloc(scene->totalVertices * sizeof(SceneVertexTangent));
-		
+
 		uint32_t accIndex_ = 0;
 		uint32_t vertex = 0;
 		uint32_t index = 0;
@@ -1070,17 +1070,17 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 				float2 tc;
 				tc.x = mesh.mUvs[j].getX();
 				tc.y = 1.0f - mesh.mUvs[j].getY();
-				
+
 				float3 normal;
 				normal.x = mesh.mNormals[j].getX();
 				normal.y = mesh.mNormals[j].getY();
 				normal.z = mesh.mNormals[j].getZ();
-				
+
 				float3 tangent;
 				tangent.x = mesh.mTangents[j].getX();
 				tangent.y = mesh.mTangents[j].getY();
 				tangent.z = mesh.mTangents[j].getZ();
-				
+
 				scene->positions[vertex] = position;
 #if defined(METAL) || defined(__linux__)
 				scene->normals[vertex].nx = normal.x;
@@ -1098,7 +1098,7 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 				scene->tangents[vertex].tangent = encodeDir(tangent);
 				scene->texCoords[vertex].texCoord = pack2Floats(float2(tc.x, 1.0f - tc.y));
 #endif
-				
+
 				++vertex;
 			}
 
@@ -1170,7 +1170,7 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 	assimpScene.Open(fileName, FileMode::FM_READ_BINARY, ResourceDirectory::RD_Absolute);
 	if (!assimpScene.IsOpen())
 	{
-		LOGF(eERROR, 
+		LOGF(eERROR,
 			"Could not open scene %s.\nPlease make sure you have downloaded the art assets by using the PRE_BUILD command in the root "
 			"directory",
 			fileName);
@@ -1971,7 +1971,7 @@ void loadSDFMeshAlphaTested(ThreadSystem* threadSystem, const Path* filePath, SD
 
 				mesh.mUncompressedTexCoords.push_back(texCoord);
 
-				
+
 				vertices[totalVertexCount++] = { transformedV , subMesh.mNormals[j] };
 				mesh.mPositions.push_back(SceneVertexPos{ transformedV.getX(), transformedV.getY(), transformedV.getZ() });
 				mesh.mUncompressedNormals.push_back(f3Tov3(subMesh.mNormals[j]));
@@ -2007,7 +2007,7 @@ void loadSDFMeshAlphaTested(ThreadSystem* threadSystem, const Path* filePath, SD
 			}
 			accIndex_ += (uint32_t)subMesh.mPositions.size();
 
-		
+
 		}
 		else
 		{
@@ -2122,7 +2122,7 @@ void loadSDFMeshAlphaTested(ThreadSystem* threadSystem, const Path* filePath, SD
 					SDF_DOUBLE_MAX_VOXEL_ONE_DIMENSION_Y,
 					SDF_DOUBLE_MAX_VOXEL_ONE_DIMENSION_Z);
 			}
-			
+
             PathHandle meshPath = fsCopyPathInResourceDirectory(RD_OTHER_FILES, customSubMesh.mMeshName.c_str());
 			(*generateVolumeDataFromFileFunc)(&volumeData, meshPath, customSubMesh.mMeshName, customSubMesh.mTwoSidedWorldSpaceBias);
 
@@ -2134,7 +2134,7 @@ void loadSDFMeshAlphaTested(ThreadSystem* threadSystem, const Path* filePath, SD
 				++mesh.mTotalGeneratedSDFMeshes;
 			}
 			++mesh.mTotalSDFMeshes;
-			
+
 		}
 
 		customSubMesh.m_PSubMesh = NULL;
@@ -2144,7 +2144,7 @@ void loadSDFMeshAlphaTested(ThreadSystem* threadSystem, const Path* filePath, SD
 	if (totalVertexCount == 0 || totalIndexCount == 0)
 	{
 		return;
-	}	
+	}
 	conf_free(vertices);
 	conf_free(indices);
 }
@@ -2162,7 +2162,7 @@ void loadSDFMesh(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outM
 		return;
 	}
 
-			
+
 	uint32_t meshCount = (uint32_t)model.mMeshArray.size();
 
 	SDFMesh& mesh = *outMesh;
@@ -2233,16 +2233,16 @@ void loadSDFMesh(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outM
 
 			mesh.mUncompressedTexCoords.push_back(texCoord);
 
-			
+
 			vertices[totalVertexCount++] = { transformedV , subMesh.mNormals[j] };
 			mesh.mPositions.push_back(SceneVertexPos{ transformedV.getX(), transformedV.getY(), transformedV.getZ() });
 			mesh.mUncompressedNormals.push_back(f3Tov3(subMesh.mNormals[j]));
 
-		
+
 			adjustAABB(&mesh.mMeshInstances[i].mLocalBoundingBox, f3Tov3(transformedV));
 			adjustAABB(&overallBoundingBox, vec3(transformedV.x,
 				transformedV.y, transformedV.z));
-			
+
 		}
 
 		uint32_t accIndex_ = 0;
@@ -2281,7 +2281,7 @@ void loadSDFMesh(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outM
 					SDF_DOUBLE_MAX_VOXEL_ONE_DIMENSION_Y,
 					SDF_DOUBLE_MAX_VOXEL_ONE_DIMENSION_Z);
 			}
-            
+
 			PathHandle meshPath = fsCopyPathInResourceDirectory(RD_OTHER_FILES, customSubMesh.mMeshName.c_str());
 			(*generateVolumeDataFromFileFunc)(&volumeData, meshPath, customSubMesh.mMeshName, customSubMesh.mTwoSidedWorldSpaceBias);
 
@@ -2293,7 +2293,7 @@ void loadSDFMesh(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outM
 				++mesh.mTotalGeneratedSDFMeshes;
 			}
 			++mesh.mTotalSDFMeshes;
-			
+
 		}
 		customSubMesh.m_PSubMesh = NULL;
 		mesh.mCustomSubMeshDataList.push_back(customSubMesh);
@@ -2312,18 +2312,18 @@ void loadSDFMesh(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outM
 
 void adjustAABB(AABB* ownerAABB, const vec3& point)
 {
-	ownerAABB->minBounds.setX(fmin(point.getX(), 
+	ownerAABB->minBounds.setX(fmin(point.getX(),
 		ownerAABB->minBounds.getX()));
-	ownerAABB->minBounds.setY(fmin(point.getY(), 
+	ownerAABB->minBounds.setY(fmin(point.getY(),
 		ownerAABB->minBounds.getY()));
 	ownerAABB->minBounds.setZ(fmin(point.getZ(),
 		ownerAABB->minBounds.getZ()));
 
-	ownerAABB->maxBounds.setX(fmax(point.getX(), 
+	ownerAABB->maxBounds.setX(fmax(point.getX(),
 		ownerAABB->maxBounds.getX()));
 	ownerAABB->maxBounds.setY(fmax(point.getY(),
 		ownerAABB->maxBounds.getY()));
-	ownerAABB->maxBounds.setZ(fmax(point.getZ(), 
+	ownerAABB->maxBounds.setZ(fmax(point.getZ(),
 		ownerAABB->maxBounds.getZ()));
 }
 void adjustAABB(AABB* ownerAABB, const AABB& otherAABB)

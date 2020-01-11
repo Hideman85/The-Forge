@@ -26,8 +26,8 @@
 #define AssimpIOSystem_h
 
 #include "FileSystemInternal.h"
-#include "../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/IOSystem.hpp"
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
+#include <assimp/IOSystem.hpp>
+#include <EASTL/vector.h>
 
 class AssimpIOSystem: public Assimp::IOSystem
 {

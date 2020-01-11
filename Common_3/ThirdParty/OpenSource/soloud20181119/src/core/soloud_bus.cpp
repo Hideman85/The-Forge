@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 
 #include "soloud.h"
 #include "soloud_fft.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -34,11 +34,11 @@ namespace SoLoud
 		mScratchSize = 0;
 		mFlags |= PROTECTED | INAUDIBLE_TICK;
 	}
-	
+
 	unsigned int BusInstance::getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize)
 	{
 		int handle = mParent->mChannelHandle;
-		if (handle == 0) 
+		if (handle == 0)
 		{
 			// Avoid reuse of scratch data if this bus hasn't played anything yet
 			unsigned int i;
@@ -46,14 +46,14 @@ namespace SoLoud
 				aBuffer[i] = 0;
 			return aSamplesToRead;
 		}
-		
+
 		Soloud *s = mParent->mSoloud;
 		if (s->mScratchNeeded != mScratchSize)
 		{
 			mScratchSize = s->mScratchNeeded;
 			mScratch.init(mScratchSize * MAX_CHANNELS);
 		}
-		
+
 		s->mixBus(aBuffer, aSamplesToRead, aBufferSize, mScratch.mData, handle, mSamplerate, mChannels);
 
 		int i;
@@ -124,7 +124,7 @@ namespace SoLoud
 		mInstance = 0;
 		mChannels = 2;
 	}
-	
+
 	BusInstance * Bus::createInstance()
 	{
 		if (mChannelHandle)
@@ -167,7 +167,7 @@ namespace SoLoud
 			return 0;
 		}
 		return mSoloud->play(aSound, aVolume, aPan, aPaused, mChannelHandle);
-	}	
+	}
 
 
 	handle Bus::playClocked(time aSoundTime, AudioSource &aSound, float aVolume, float aPan)
@@ -185,7 +185,7 @@ namespace SoLoud
 		}
 
 		return mSoloud->playClocked(aSoundTime, aSound, aVolume, aPan, mChannelHandle);
-	}	
+	}
 
 	handle Bus::play3d(AudioSource &aSound, float aPosX, float aPosY, float aPosZ, float aVelX, float aVelY, float aVelZ, float aVolume, bool aPaused)
 	{
@@ -232,7 +232,7 @@ namespace SoLoud
 			mSoloud->lockAudioMutex();
 			conf_delete(mInstance->mFilter[aFilterId]);
 			mInstance->mFilter[aFilterId] = 0;
-		
+
 			if (aFilter)
 			{
 				mInstance->mFilter[aFilterId] = mFilter[aFilterId]->createInstance();
@@ -260,7 +260,7 @@ namespace SoLoud
 			mFlags &= ~AudioSource::VISUALIZATION_DATA;
 		}
 	}
-		
+
 	float * Bus::calcFFT()
 	{
 		if (mInstance && mSoloud)

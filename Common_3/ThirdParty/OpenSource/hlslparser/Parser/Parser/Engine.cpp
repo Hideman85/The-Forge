@@ -5,7 +5,7 @@
 #include <string.h> // strcmp, strcasecmp
 #include <stdlib.h>	// strtod, strtol
 
-#include "../../../../../OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
 void PARSER_ENGINE_ASSERT()
 {
@@ -94,7 +94,7 @@ void ftoa(float n, char *res)
 	// convert integer part to string
 	int i = intToStr(ipart, res, 0);
 
-	
+
 
 	int afterpoint = 0;
 	//from back, remove serial 0s
@@ -155,7 +155,7 @@ int String_PrintfNew(char * buffer, int size, const char * format, float value) 
 
 int String_FormatFloat(char * buffer, int size, float value) {
 
-	if ( value != 0.0  &&  (abs(value) < 1.0e-6 || abs(value) > 1.0e+6))	
+	if ( value != 0.0  &&  (abs(value) < 1.0e-6 || abs(value) > 1.0e+6))
 		return String_Printf(buffer, size, "%e", value);
 	else
 		return String_PrintfNew(buffer, size, "%f", value);

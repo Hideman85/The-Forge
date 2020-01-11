@@ -54,8 +54,8 @@
 
 #include "../../../../Middleware_3/UI/AppUI.h"
 // tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 // Math
 #include "../../../../Common_3/OS/Math/MathTypes.h"

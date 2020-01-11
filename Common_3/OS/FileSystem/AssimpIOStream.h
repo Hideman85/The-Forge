@@ -26,7 +26,7 @@
 #define AssimpIOStream_h
 
 #include "FileSystemInternal.h"
-#include "../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/IOStream.hpp"
+#include <assimp/IOStream.hpp>
 
 class AssimpIOStream: public Assimp::IOStream
 {

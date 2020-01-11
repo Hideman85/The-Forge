@@ -301,7 +301,7 @@ void drmp3_free(void* p);
 #endif
 #endif  // dr_mp3_h
 
-#include "../../../../../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 
 /////////////////////////////////////////////////////
@@ -2111,8 +2111,8 @@ void drmp3dec_f32_to_s16(const float *in, drmp3_int16 *out, int num_samples)
 #define DR_MP3_DEFAULT_SAMPLE_RATE   44100
 #endif
 
-#include "../../../../OS/Interfaces/ILog.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Standard library stuff.
 #ifndef DRMP3_ASSERT
@@ -2443,7 +2443,7 @@ static drmp3_uint32 drmp3_decode_next_frame_ex(drmp3* pMP3, drmp3d_sample_t* pPC
             for (size_t i = 0; i < leftoverDataSize; ++i) {
                 pMP3->pData[i] = pMP3->pData[i + (size_t)info.frame_bytes];
             }
-                
+
             pMP3->dataSize = leftoverDataSize;
             pMP3->pcmFramesConsumedInMP3Frame = 0;
             pMP3->pcmFramesRemainingInMP3Frame = pcmFramesRead;
@@ -2631,7 +2631,7 @@ drmp3_bool32 drmp3_init_internal(drmp3* pMP3, drmp3_read_proc onRead, drmp3_seek
         drmp3_uninit(pMP3);
         return DRMP3_FALSE;
     }
-    
+
     // Decode the first frame to confirm that it is indeed a valid MP3 stream.
     if (!drmp3_decode_next_frame(pMP3)) {
         drmp3_uninit(pMP3);
@@ -2757,7 +2757,7 @@ void drmp3_uninit(drmp3* pMP3)
     if (pMP3 == NULL) {
         return;
     }
-    
+
 #ifndef DR_MP3_NO_STDIO
     if (pMP3->onRead == drmp3__on_read_stdio) {
         fclose((FILE*)pMP3->pUserData);
@@ -2900,7 +2900,7 @@ drmp3_uint64 drmp3_get_pcm_frame_count(drmp3* pMP3)
 
     // We'll need to seek back to where we were, so grab the PCM frame we're currently sitting on so we can restore later.
     drmp3_uint64 currentPCMFrame = pMP3->currentPCMFrame;
-    
+
     if (!drmp3_seek_to_start_of_stream(pMP3)) {
         return 0;
     }
@@ -2949,7 +2949,7 @@ drmp3_uint64 drmp3_get_mp3_frame_count(drmp3* pMP3)
 
     // We'll need to seek back to where we were, so grab the PCM frame we're currently sitting on so we can restore later.
     drmp3_uint64 currentPCMFrame = pMP3->currentPCMFrame;
-    
+
     if (!drmp3_seek_to_start_of_stream(pMP3)) {
         return 0;
     }

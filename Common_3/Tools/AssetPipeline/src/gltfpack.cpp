@@ -24,17 +24,17 @@
 #define _CRT_NONeastlC_NO_WARNINGS
 #endif
 
-#include "../../../ThirdParty/OpenSource/meshoptimizer/src/meshoptimizer.h"
+#include <meshoptimizer.h>
 
 // Used for Obj loading
 //#include <algorithm>
 
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 #include "gltfpack.h"
 
-#include "../../../OS/Interfaces/IMemory.h"    //NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IMemory.h>    //NOTE: this should be the last include in a .cpp
 
 struct NodeInfo
 {
@@ -404,7 +404,7 @@ void reindexMesh(Mesh& mesh)
 void stripifyMesh(Mesh& mesh)
 {
 	size_t vertIndex = 0;
-	
+
 	for (size_t i = 0; i < mesh.streams.size(); ++i)
 	{
 		if (mesh.streams[i].type == cgltf_attribute_type::cgltf_attribute_type_position)
@@ -2722,7 +2722,7 @@ int gltfpack(int argc, const char** argv)
 
 	cgltf_data* data = 0;
 	eastl::vector<Mesh> meshes;
-    
+
     PathHandle workingDirectory = fsCopyWorkingDirectoryPath();
     PathHandle filePath = fsAppendPathComponent(workingDirectory, input);
 
@@ -2730,12 +2730,12 @@ int gltfpack(int argc, const char** argv)
 
 	if (iext && (strcmp(iext, "gltf") == 0 || strcmp(iext, "GLTF") == 0 || strcmp(iext, "glb") == 0 || strcmp(iext, "GLB") == 0))
 	{
-        
+
 		cgltf_options options = {};
 		cgltf_result result = parse_gltf_file(&options, filePath, &data);
 		result = (result == cgltf_result_success) ? cgltf_validate(data) : result;
 		result = (result == cgltf_result_success) ? load_gltf_buffers(&options, data, filePath) : result;
-        
+
 		if (result != cgltf_result_success)
 		{
 			fprintf(stderr, "Error loading %s: %s\n", input, getError(result));
@@ -2778,7 +2778,7 @@ int gltfpack(int argc, const char** argv)
 
         FileStream* fhJSON = fsOpenFile(outJSONPath, FM_WRITE_BINARY);
         FileStream* fhBinary = fsOpenFile(outBinaryPath, FM_WRITE_BINARY);
-		
+
 		if (!fhJSON || !fhBinary)
 		{
 			fprintf(stderr, "Error saving %s\n", output);
@@ -2794,10 +2794,10 @@ int gltfpack(int argc, const char** argv)
 		eastl::string binSize = bin;
 		memset(&binSize[0], 0, binSize.size());
 		sprintf(&binSize[0], "%zu", bin.size());
-        
+
         fsWriteToStreamString(fhJSON, binSize.c_str());
         fsWriteToStreamString(fhJSON, "}],");
-        
+
         fsWriteToStream(fhJSON, json.c_str(), json.size());
         fsWriteToStreamString(fhJSON, "}");
 
@@ -2832,15 +2832,15 @@ int gltfpack(int argc, const char** argv)
         fsWriteToStreamUInt32(fhOut, 0x46546C67);
         fsWriteToStreamUInt32(fhOut, 2);
         fsWriteToStreamUInt32(fhOut, uint32_t(12 + 8 + json.size() + 8 + bin.size()));
-        
+
         fsWriteToStreamUInt32(fhOut, uint32_t(json.size()));
         fsWriteToStreamUInt32(fhOut, 0x4E4F534A);
         fsWriteToStream(fhOut, json.c_str(), json.size());
-        
+
         fsWriteToStreamUInt32(fhOut, uint32_t(bin.size()));
         fsWriteToStreamUInt32(fhOut, 0x004E4942);
         fsWriteToStream(fhOut, bin.c_str(), bin.size());
-        
+
         fsCloseStream(fhOut);
 	}
 	else

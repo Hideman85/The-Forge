@@ -24,19 +24,19 @@
 
 #include "AppUI.h"
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
-#include "../../Common_3/Renderer/GpuProfiler.h"
-#include "../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/Renderer/GpuProfiler.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/unordered_map.h>
+#include <EASTL/vector.h>
 
 #include "../../Middleware_3/Text/Fontstash.h"
-#include "../../Common_3/ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <tinyimageformat_query.h>
 
-#include "../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace PlatformEvents {
 }
@@ -467,7 +467,7 @@ void UIApp::Exit()
 }
 
 bool UIApp::Load(RenderTarget** rts, uint32_t count)
-{ 
+{
 	ASSERT(rts && rts[0]);
 	mWidth = (float)rts[0]->mDesc.mWidth;
 	mHeight = (float)rts[0]->mDesc.mHeight;
@@ -706,7 +706,7 @@ bool VirtualJoystickUI::Init(Renderer* renderer, const char* pJoystickTexture, u
 	loadDesc.ppTexture = &pTexture;
 	loadDesc.mCreationFlag = TEXTURE_CREATION_FLAG_OWN_MEMORY_BIT;
 	addResource(&loadDesc);
-    
+
 	if (!pTexture)
 	{
 		LOGF(LogLevel::eERROR, "Error loading texture file: %s", pJoystickTexture);

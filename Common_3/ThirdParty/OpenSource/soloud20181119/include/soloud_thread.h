@@ -25,13 +25,13 @@ freely, subject to the following restrictions:
 #ifndef SOLOUD_THREAD_H
 #define SOLOUD_THREAD_H
 
-#include "../../../../OS/Interfaces/IThread.h"
+#include <TheForge/OS/Interfaces/IThread.h>
 #include "soloud.h"
 
 namespace SoLoud
 {
 	namespace Thread
-	{		
+	{
 		void * createMutex();
 		void destroyMutex(void *aHandle);
 		void lockMutex(void *aHandle);
@@ -39,7 +39,7 @@ namespace SoLoud
 
 		ThreadHandle createThread(ThreadFunction aThreadFunction, void *aParameter);
 
-		void sleep(int aMSec);       
+		void sleep(int aMSec);
         void release(ThreadHandle aThreadHandle);
 	}
 }

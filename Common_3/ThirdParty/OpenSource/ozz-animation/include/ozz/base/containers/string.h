@@ -28,7 +28,7 @@
 #ifndef OZZ_OZZ_BASE_CONTAINERS_STRING_H_
 #define OZZ_OZZ_BASE_CONTAINERS_STRING_H_
 
-#include "../../../../../EASTL/string.h"
+#include <EASTL/string.h>
 
 namespace ozz {
 struct String {

@@ -58,23 +58,23 @@
 
 #include "../IRenderer.h"
 
-#include "../../ThirdParty/OpenSource/EASTL/functional.h"
-#include "../../ThirdParty/OpenSource/EASTL/sort.h"
-#include "../../ThirdParty/OpenSource/EASTL/string_hash_map.h"
+#include <EASTL/functional.h>
+#include <EASTL/sort.h>
+#include <EASTL/string_hash_map.h>
 
-#include "../../OS/Interfaces/ILog.h"
-#include "../../ThirdParty/OpenSource/VulkanMemoryAllocator/VulkanMemoryAllocator.h"
-#include "../../OS/Core/Atomics.h"
-#include "../../OS/Core/GPUConfig.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
-#include "VulkanCapsBuilder.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <VulkanMemoryAllocator.h>
+#include <TheForge/OS/Core/Atomics.h>
+#include <TheForge/OS/Core/GPUConfig.h>
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_query.h"
+#include "VulkanCapsBuilder.h>
 
 #if defined(VK_USE_DISPATCH_TABLES)
-#include "../../../Common_3/ThirdParty/OpenSource/volk/volkForgeExt.h"
+#include <volkForgeExt.h>
 #endif
 
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 extern void vk_createShaderReflection(const uint8_t* shaderCode, uint32_t shaderSize, ShaderStage shaderStage, ShaderReflection* pOutReflection);
 extern long vk_createBuffer(
@@ -284,7 +284,7 @@ static const VkFormat gVkFormatTranslator[] =
 	VK_FORMAT_ASTC_12x12_UNORM_BLOCK,
 };
 
-VkAttachmentLoadOp gVkAttachmentLoadOpTranslator[LoadActionType::MAX_LOAD_ACTION] = 
+VkAttachmentLoadOp gVkAttachmentLoadOpTranslator[LoadActionType::MAX_LOAD_ACTION] =
 {
 	VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 	VK_ATTACHMENT_LOAD_OP_LOAD,
@@ -459,7 +459,7 @@ API_INTERFACE void FORGE_CALLCONV cmdUpdateSubresource(Cmd* pCmd, Texture* pText
 // clang-format on
 
 //+1 for Acceleration Structure because it is not counted by VK_DESCRIPTOR_TYPE_RANGE_SIZE
-#define CONF_DESCRIPTOR_TYPE_RANGE_SIZE (VK_DESCRIPTOR_TYPE_RANGE_SIZE + 1)	
+#define CONF_DESCRIPTOR_TYPE_RANGE_SIZE (VK_DESCRIPTOR_TYPE_RANGE_SIZE + 1)
 static uint32_t gDescriptorTypeRangeSize = VK_DESCRIPTOR_TYPE_RANGE_SIZE;
 
 /************************************************************************/
@@ -1010,7 +1010,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL internal_debug_report_callback(
 	{
 		LOGF(LogLevel::eERROR, "[%s] : %s (%i)", pLayerPrefix, pMessage, messageCode);
 	}
-	
+
 	return VK_FALSE;
 }
 #endif
@@ -3369,7 +3369,7 @@ VirtualTexturePage* addPage(Renderer* pRenderer, Texture* pTexture, VkOffset3D o
 	newPage.size = size;
 	newPage.mipLevel = mipLevel;
 	newPage.layer = layer;
-	newPage.index = static_cast<uint32_t>(pPageTable->size());	
+	newPage.index = static_cast<uint32_t>(pPageTable->size());
 
 	pPageTable->push_back(newPage);
 
@@ -4357,7 +4357,7 @@ void cmdBindPushConstants(Cmd* pCmd, RootSignature* pRootSignature, const char* 
 	ASSERT(pConstants);
 	ASSERT(pRootSignature);
 	ASSERT(pName);
-	
+
 	const DescriptorInfo* pDesc = get_descriptor(pRootSignature, pName);
 	ASSERT(pDesc);
 	ASSERT(DESCRIPTOR_TYPE_ROOT_CONSTANT == pDesc->mDesc.type);
@@ -6605,7 +6605,7 @@ void updateSparseBindInfo(Texture* pTexture, Queue* pQueue)
 	// Update sparse bind info
 	pTexture->mBindSparseInfo = {};
 	pTexture->mBindSparseInfo.sType = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO;
-	
+
 	// Image memory binds
 	pTexture->mImageMemoryBindInfo = {};
 	pTexture->mImageMemoryBindInfo.image = pTexture->pVkImage;
@@ -6637,12 +6637,12 @@ void releasePage(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture)
 		return;
 
 	eastl::vector<uint32_t> RemovePageTable;
-	RemovePageTable.resize(removePageCount);	
+	RemovePageTable.resize(removePageCount);
 
 	memcpy(RemovePageTable.data(), pTexture->mRemovePage->pCpuMappedAddress, sizeof(uint));
 
 	for (int i = 0; i < (int)removePageCount; ++i)
-	{		
+	{
 		uint32_t RemoveIndex = RemovePageTable[i];
 		releaseVirtualPage(pRenderer, (*pPageTable)[RemoveIndex], false);
 	}
@@ -6681,13 +6681,13 @@ void fillVirtualTexture(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, Fence
 
 			memcpy(pPage->pIntermediateBuffer->pCpuMappedAddress, pData, pPage->size);
 
-			//Copy image to VkImage	
+			//Copy image to VkImage
 			VkBufferImageCopy region = {};
 			region.bufferOffset = 0;
 			region.bufferRowLength = 0;
 			region.bufferImageHeight = 0;
 			region.imageSubresource.mipLevel = pPage->mipLevel;
-			region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;		
+			region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 			region.imageSubresource.baseArrayLayer = 0;
 			region.imageSubresource.layerCount = 1;
 
@@ -6704,7 +6704,7 @@ void fillVirtualTexture(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, Fence
 
 			// Update list of memory-backed sparse image memory binds
 			pImageMemory->push_back(pPage->imageMemoryBind);
-		}		
+		}
 	}
 
 	// Update sparse bind info
@@ -6759,7 +6759,7 @@ void fillVirtualTextureLevel(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, 
 				//CPU to GPU
 				memcpy(pPage->pIntermediateBuffer->pCpuMappedAddress, pData, pPage->size);
 
-				//Copy image to VkImage	
+				//Copy image to VkImage
 				VkBufferImageCopy region = {};
 				region.bufferOffset = 0;
 				region.bufferRowLength = 0;
@@ -6780,7 +6780,7 @@ void fillVirtualTextureLevel(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, 
 					VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 					1,
 					&region);
-			}			
+			}
 			// Update list of memory-backed sparse image memory binds
 			pImageMemory->push_back(pPage->imageMemoryBind);
 		}
@@ -6861,9 +6861,9 @@ void addVirtualTexture(Renderer * pRenderer, const TextureDesc * pDesc, Texture 
 	add_info.tiling = VK_IMAGE_TILING_OPTIMAL;
 	add_info.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 	add_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	add_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;	
+	add_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
-	VkResult vk_res = (VkResult)vkCreateImage(pRenderer->pVkDevice, &add_info, nullptr, &pTexture->pVkImage);	
+	VkResult vk_res = (VkResult)vkCreateImage(pRenderer->pVkDevice, &add_info, nullptr, &pTexture->pVkImage);
 	assert(vk_res == VK_SUCCESS);
 
 	// Get memory requirements
@@ -6883,7 +6883,7 @@ void addVirtualTexture(Renderer * pRenderer, const TextureDesc * pDesc, Texture 
 	uint32_t sparseMemoryReqsCount = 32;
 	eastl::vector<VkSparseImageMemoryRequirements> sparseMemoryReqs(sparseMemoryReqsCount);
 	vkGetImageSparseMemoryRequirements(pRenderer->pVkDevice, pTexture->pVkImage, &sparseMemoryReqsCount, sparseMemoryReqs.data());
-	
+
 	if (sparseMemoryReqsCount == 0)
 	{
 		LOGF(LogLevel::eERROR, "No memory requirements for the sparse image!");
@@ -6979,7 +6979,7 @@ void addVirtualTexture(Renderer * pRenderer, const TextureDesc * pDesc, Texture 
 				{
 					for (uint32_t x = 0; x < sparseBindCounts.getX(); x++)
 					{
-						// Offset 
+						// Offset
 						VkOffset3D offset;
 						offset.x = x * imageGranularity.width;
 						offset.y = y * imageGranularity.height;
@@ -7095,7 +7095,7 @@ void updateVirtualTexture(Renderer* pRenderer, Queue* pQueue, Texture* pTexture)
 {
 	if (pTexture->mVisibility)
 	{
-		// Create command buffer to transition resources to the correct state		
+		// Create command buffer to transition resources to the correct state
 		CmdPool* cmdPool = NULL;
 		Cmd*     cmd = NULL;
 
@@ -7106,7 +7106,7 @@ void updateVirtualTexture(Renderer* pRenderer, Queue* pQueue, Texture* pTexture)
 		beginCmd(cmd);
 
 		releasePage(cmd, pRenderer, pTexture);
-		fillVirtualTexture(cmd, pRenderer, pTexture, NULL);		
+		fillVirtualTexture(cmd, pRenderer, pTexture, NULL);
 
 		endCmd(cmd);
 
@@ -7115,12 +7115,12 @@ void updateVirtualTexture(Renderer* pRenderer, Queue* pQueue, Texture* pTexture)
 
 		// Delete command buffer
 		removeCmd(cmdPool, cmd);
-		removeCmdPool(pRenderer, cmdPool);	
+		removeCmdPool(pRenderer, cmdPool);
 
 		uint alivePageCount[4] = { 0, 0, 0, 0 };
 		memcpy(pTexture->mAlivePageCount->pCpuMappedAddress, alivePageCount, sizeof(uint) * 4);
 		memcpy(pTexture->mRemovePageCount->pCpuMappedAddress, alivePageCount, sizeof(uint) * 4);
-	}	
+	}
 }
 
 #endif

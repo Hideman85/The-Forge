@@ -22,8 +22,8 @@
  * under the License.
 */
 
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 #include "../../../../Common_3/Renderer/IRenderer.h"
 #include "../../../../Common_3/Renderer/ResourceLoader.h"
@@ -94,7 +94,7 @@ class SphereTracing: public IApp
 		mSettings.mContentScaleFactor = 1.f;
 #endif
 	}
-	
+
 	bool Init()
 	{
         // FILE PATHS
@@ -103,7 +103,7 @@ class SphereTracing: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/16a_SphereTracing");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -111,7 +111,7 @@ class SphereTracing: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
         }
-        
+
 		// window and renderer setup
 		RendererDesc settings = { 0 };
 		initRenderer(GetName(), &settings, &pRenderer);
@@ -240,7 +240,7 @@ class SphereTracing: public IApp
 			params[0].ppBuffers = &pUniformBuffer[i];
 			updateDescriptorSet(pRenderer, i, pDescriptorSetUniforms, 1, params);
 		}
-		
+
 		return true;
 	}
 

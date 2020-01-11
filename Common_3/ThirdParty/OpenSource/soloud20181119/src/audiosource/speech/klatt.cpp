@@ -4,7 +4,7 @@
 #include "darray.h"
 #include "resonator.h"
 
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #ifndef PI
 #define PI 3.1415926535897932384626433832795f
@@ -27,14 +27,14 @@ public:
 
 enum Eparm_e
 {
-  ELM_FN, ELM_F1, ELM_F2, ELM_F3, 
-  ELM_B1, ELM_B2, ELM_B3, ELM_AN, 
-  ELM_A1, ELM_A2, ELM_A3, ELM_A4, 
-  ELM_A5, ELM_A6, ELM_AB, ELM_AV, 
-  ELM_AVC, ELM_ASP, ELM_AF, 
+  ELM_FN, ELM_F1, ELM_F2, ELM_F3,
+  ELM_B1, ELM_B2, ELM_B3, ELM_AN,
+  ELM_A1, ELM_A2, ELM_A3, ELM_A4,
+  ELM_A5, ELM_A6, ELM_AB, ELM_AV,
+  ELM_AVC, ELM_ASP, ELM_AF,
   ELM_COUNT
 };
- 
+
 class Element
 {
 public:
@@ -82,12 +82,12 @@ enum ELEMENT_FEATURES
 	ELM_FEATURE_VWL = 0x10000000
 };
 
-enum ELEMENTS 
+enum ELEMENTS
 {
-	ELM_END = 0,	
-	ELM_Q,	ELM_P,	ELM_PY,	ELM_PZ,	ELM_T,	ELM_TY,	
-	ELM_TZ,	ELM_K,	ELM_KY,	ELM_KZ,	ELM_B,	ELM_BY,	ELM_BZ,	
-	ELM_D,	ELM_DY,	ELM_DZ,	ELM_G,	ELM_GY,	ELM_GZ,	ELM_M,	
+	ELM_END = 0,
+	ELM_Q,	ELM_P,	ELM_PY,	ELM_PZ,	ELM_T,	ELM_TY,
+	ELM_TZ,	ELM_K,	ELM_KY,	ELM_KZ,	ELM_B,	ELM_BY,	ELM_BZ,
+	ELM_D,	ELM_DY,	ELM_DZ,	ELM_G,	ELM_GY,	ELM_GZ,	ELM_M,
 	ELM_N,	ELM_NG,	ELM_F,	ELM_TH,	ELM_S,	ELM_SH,	ELM_X,
 	ELM_H,	ELM_V,	ELM_QQ,	ELM_DH,	ELM_DI,	ELM_Z,	ELM_ZZ,
 	ELM_ZH,	ELM_CH,	ELM_CI,	ELM_J,	ELM_JY,	ELM_L,	ELM_LL,
@@ -104,7 +104,7 @@ enum ELEMENTS
 
 
 
-class PhonemeToElements 
+class PhonemeToElements
 {
 public:
 	int mKey;
@@ -113,7 +113,7 @@ public:
 
 /* Order is important - 2 byte phonemes first, otherwise
    the search function will fail*/
-static PhonemeToElements phoneme_to_elements[PHONEME_COUNT] = 
+static PhonemeToElements phoneme_to_elements[PHONEME_COUNT] =
 {
 	/* mKey, count, 0-7 elements */
 /* tS */ 0x5374, 2, ELM_CH, ELM_CI, 0, 0, 0, 0, 0,
@@ -251,36 +251,36 @@ static float DBtoLIN(int dB)
 
 
 klatt_frame::klatt_frame() :
-	mF0FundamentalFreq(1330),	mVoicingAmpdb(60),				mFormant1Freq(500),  
+	mF0FundamentalFreq(1330),	mVoicingAmpdb(60),				mFormant1Freq(500),
 	mFormant1Bandwidth(60),		mFormant2Freq(1500),			mFormant2Bandwidth(90),
-	mFormant3Freq(2800),		mFormant3Bandwidth(150),		mFormant4Freq(3250), 
-	mFormant4Bandwidth(200),	mFormant5Freq(3700),			mFormant5Bandwidth(200),  
-	mFormant6Freq(4990),		mFormant6Bandwidth(500),		mNasalZeroFreq(270),  
-	mNasalZeroBandwidth(100),	mNasalPoleFreq(270),			mNasalPoleBandwidth(100), 
-	mAspirationAmpdb(0),		mNoSamplesInOpenPeriod(30),		mVoicingBreathiness(0),      
-	mVoicingSpectralTiltdb(10), mFricationAmpdb(0),				mSkewnessOfAlternatePeriods(0),   
-	mFormant1Ampdb(0),			mFormant1ParallelBandwidth(80), mFormant2Ampdb(0),      
+	mFormant3Freq(2800),		mFormant3Bandwidth(150),		mFormant4Freq(3250),
+	mFormant4Bandwidth(200),	mFormant5Freq(3700),			mFormant5Bandwidth(200),
+	mFormant6Freq(4990),		mFormant6Bandwidth(500),		mNasalZeroFreq(270),
+	mNasalZeroBandwidth(100),	mNasalPoleFreq(270),			mNasalPoleBandwidth(100),
+	mAspirationAmpdb(0),		mNoSamplesInOpenPeriod(30),		mVoicingBreathiness(0),
+	mVoicingSpectralTiltdb(10), mFricationAmpdb(0),				mSkewnessOfAlternatePeriods(0),
+	mFormant1Ampdb(0),			mFormant1ParallelBandwidth(80), mFormant2Ampdb(0),
 	mFormant2ParallelBandwidth(200), mFormant3Ampdb(0),			mFormant3ParallelBandwidth(350),
-	mFormant4Ampdb(0),			mFormant4ParallelBandwidth(500), mFormant5Ampdb(0),      
-	mFormant5ParallelBandwidth(600), mFormant6Ampdb(0),			mFormant6ParallelBandwidth(800),    
-	mParallelNasalPoleAmpdb(0), mBypassFricationAmpdb(0),       mPalallelVoicingAmpdb(0),   
-	mOverallGaindb(62)  
+	mFormant4Ampdb(0),			mFormant4ParallelBandwidth(500), mFormant5Ampdb(0),
+	mFormant5ParallelBandwidth(600), mFormant6Ampdb(0),			mFormant6ParallelBandwidth(800),
+	mParallelNasalPoleAmpdb(0), mBypassFricationAmpdb(0),       mPalallelVoicingAmpdb(0),
+	mOverallGaindb(62)
 {
 };
 
 
-klatt::klatt() : 
+klatt::klatt() :
 	mBaseF0(1330),
 	mBaseSpeed(10.0f),
 	mBaseDeclination(0.5f),
 	mBaseWaveform(KW_SAW),
-	mF0Flutter(0), 
-	mSampleRate(0), 
+	mF0Flutter(0),
+	mSampleRate(0),
 	mNspFr(0),
 	mF0FundamentalFreq(0),
 	mVoicingAmpdb(0),
 	mSkewnessOfAlternatePeriods(0),
-	mTimeCount(0), 
+	mTimeCount(0),
 	mNPer(0),
 	mT0(0),
 	mNOpen(0),
@@ -334,7 +334,7 @@ spectral zero around 800 Hz, magic constants a,b reset pitch-synch
 
 float klatt::natural_source(int aNper)
 {
-	// See if glottis open 
+	// See if glottis open
 	if (aNper < mNOpen)
 	{
 		switch (mBaseWaveform)
@@ -354,20 +354,20 @@ float klatt::natural_source(int aNper)
 		case KW_SAW: // fallthrough
 		default:
 			return (abs((aNper % 200) - 100) - 50) * 163.84f; // saw
-		}	
+		}
 	}
 	else
 	{
-		// Glottis closed 
+		// Glottis closed
 		return (0.0);
 	}
-	
+
 }
 
 /* Reset selected parameters pitch-synchronously */
 
 void klatt::pitch_synch_par_reset(int ns)
-{	
+{
 	if (mF0FundamentalFreq > 0)
 	{
 		mT0 = (40 * mSampleRate) / mF0FundamentalFreq;
@@ -508,12 +508,12 @@ void klatt::frame_init()
 	amp_parFN = DBtoLIN(mFrame.mParallelNasalPoleAmpdb) * 0.6f;	/* -4.44 dB */
 	mAmpBypas = DBtoLIN(mFrame.mBypassFricationAmpdb) * 0.05f;	/* -26.0 db */
 
-	// Set coeficients of nasal resonator and zero antiresonator 
+	// Set coeficients of nasal resonator and zero antiresonator
 	mNasalPole.initResonator(mFrame.mNasalPoleFreq, mFrame.mNasalPoleBandwidth, mSampleRate);
 
 	mNasalZero.initAntiresonator(mFrame.mNasalZeroFreq, mFrame.mNasalZeroBandwidth, mSampleRate);
 
-	// Set coefficients of parallel resonators, and amplitude of outputs 
+	// Set coefficients of parallel resonators, and amplitude of outputs
 	mParallelFormant1.initResonator(mFrame.mFormant1Freq, mFrame.mFormant1ParallelBandwidth, mSampleRate);
 	mParallelFormant1.setGain(amp_parF1);
 
@@ -680,7 +680,7 @@ void klatt::parwave(short int *jwave)
 		*/
 		par_glotout = mNasalZero.antiresonate(par_glotout);
 		par_glotout = mNasalPole.resonate(par_glotout);
-		/* And just use mParallelFormant1 NOT mParallelResoNasalPole */		
+		/* And just use mParallelFormant1 NOT mParallelResoNasalPole */
 		float out = mParallelFormant1.resonate(par_glotout);
 		/* Sound sourc for other parallel resonators is frication
 		plus first difference of voicing waveform.
@@ -863,7 +863,7 @@ static float interpolate(Slope *aStartSlope, Slope *aEndSlope, float aMidValue, 
 		if (aTime <= steadyTime)
 		{
 			// still at steady state
-			return aMidValue;  
+			return aMidValue;
 		}
 
 		// interpolate to the end
@@ -898,7 +898,7 @@ void klatt::initsynth(int aElementCount,unsigned char *aElement)
 	mFrame.mFormant3ParallelBandwidth = mFrame.mFormant3Bandwidth = 150;
 //	mFrame.mFormant4ParallelBandwidth = (default)
 
-	// Set stress attack/decay slope 
+	// Set stress attack/decay slope
 	mStressS.mTime = 40;
 	mStressE.mTime = 40;
 	mStressE.mValue = 0.0;
@@ -913,8 +913,8 @@ int klatt::synth(int aSampleCount, short *aSamplePointer)
 
 	Element * currentElement = &gElement[mElement[mElementIndex++]];
 	int dur = mElement[mElementIndex++];
-	mElementIndex++; // skip stress 
-	
+	mElementIndex++; // skip stress
+
 	if (currentElement->mRK == 31) // "END"
 	{
 		// Reset the fundamental frequency top
@@ -923,7 +923,7 @@ int klatt::synth(int aSampleCount, short *aSamplePointer)
 	}
 
 	// Skip zero length elements which are only there to affect
-	// boundary values of adjacent elements		
+	// boundary values of adjacent elements
 
 	if (dur > 0)
 	{
@@ -935,28 +935,28 @@ int klatt::synth(int aSampleCount, short *aSamplePointer)
 		if (currentElement->mRK > mLastElement->mRK)
 		{
 			set_trans(start, currentElement, mLastElement, 0, 's');
-			// we dominate last 
+			// we dominate last
 		}
 		else
 		{
 			set_trans(start, mLastElement, currentElement, 1, 's');
-			// last dominates us 
+			// last dominates us
 		}
 
 		if (ne->mRK > currentElement->mRK)
 		{
 			set_trans(end, ne, currentElement, 1, 'e');
-			// next dominates us 
+			// next dominates us
 		}
 		else
 		{
 			set_trans(end, currentElement, ne, 0, 'e');
-			// we dominate next 
+			// we dominate next
 		}
 
 		for (t = 0; t < dur; t++, mTStress++)
 		{
-			float base = mTop * 0.8f; // 3 * top / 5 
+			float base = mTop * 0.8f; // 3 * top / 5
 			float tp[ELM_COUNT];
 			int j;
 
@@ -1005,7 +1005,7 @@ int klatt::synth(int aSampleCount, short *aSamplePointer)
 				tp[j] = interpolate(&start[j], &end[j], (float) currentElement->mInterpolator[j].mSteady, t, dur);
 			}
 
-			// Now call the synth for each frame 
+			// Now call the synth for each frame
 
 			mFrame.mF0FundamentalFreq = (int)(base + (mTop - base) * interpolate(&mStressS, &mStressE, (float)0, mTStress, mNTStress));
 			mFrame.mVoicingAmpdb = mFrame.mPalallelVoicingAmpdb = (int)tp[ELM_AV];
@@ -1021,10 +1021,10 @@ int klatt::synth(int aSampleCount, short *aSamplePointer)
 			mFrame.mFormant3Freq = (int)tp[ELM_F3];
 
 			// AMP_ADJ + is a kludge to get amplitudes up to klatt-compatible levels
-				
-				
+
+
 			//pars.mParallelNasalPoleAmpdb  = AMP_ADJ + tp[ELM_AN];
-				
+
 			mFrame.mBypassFricationAmpdb = AMP_ADJ + (int)tp[ELM_AB];
 			mFrame.mFormant5Ampdb = AMP_ADJ + (int)tp[ELM_A5];
 			mFrame.mFormant6Ampdb = AMP_ADJ + (int)tp[ELM_A6];
@@ -1037,7 +1037,7 @@ int klatt::synth(int aSampleCount, short *aSamplePointer)
 
 			samp += mNspFr;
 
-			// Declination of f0 envelope 0.25Hz / cS 
+			// Declination of f0 envelope 0.25Hz / cS
 			mTop -= mBaseDeclination;// 0.5;
 		}
 	}
@@ -1062,7 +1062,7 @@ void klatt::init(int aBaseFrequency, float aBaseSpeed, float aBaseDeclination, i
 
 	int FLPhz = (950 * mSampleRate) / 10000;
 	int BLPhz = (630 * mSampleRate) / 10000;
-	mNspFr = (int)(mSampleRate * mBaseSpeed) / 1000; 
+	mNspFr = (int)(mSampleRate * mBaseSpeed) / 1000;
 
 	mDownSampLowPassFilter.initResonator(FLPhz, BLPhz, mSampleRate);
 

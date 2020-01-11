@@ -26,12 +26,12 @@
 //
 
 
-#include "../../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../OS/Interfaces/ILog.h"
+#include <EASTL/vector.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 
 #include "TressFXAsset.h"
 #include <math.h>
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define AMD_TRESSFX_V4 4
 #define AMD_TRESSFX_V3 3
@@ -210,7 +210,7 @@ bool TressFXAsset::LoadV4(TressFXTFXFileHeader* header, FileStream* fh)
 		Clear();
 		return false;
 	}
-    
+
     fsReadFromStream(fh, m_strandUV, numStrandsInFile * sizeof(float2));
 
 	// Fill up the last empty space
@@ -279,7 +279,7 @@ bool TressFXAsset::LoadV3(TressFXFileObject* header, FileStream* fh)
 		Clear();
 		return false;
 	}
-    
+
     fsSeekStream(fh, SBO_START_OF_FILE, header->verticesOffset);
     fsReadFromStream(fh, vertexData, numStrandsInFile * m_numVerticesPerStrand * sizeof(float3));
     // note that the position data in io stream contains only guide hairs. If we call GenerateFollowHairs

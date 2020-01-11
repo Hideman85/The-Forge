@@ -2,9 +2,9 @@
 #define STRING_LIBRARY_H
 
 
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
-#include "../../../EASTL/hash_set.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
+#include <EASTL/hash_set.h>
 
 class StringLibrary
 {

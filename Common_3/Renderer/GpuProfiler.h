@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "../OS/Math/MathTypes.h"
-#include "../ThirdParty/OpenSource/EASTL/string.h"
-#include "../ThirdParty/OpenSource/EASTL/string_hash_map.h"
-#include "../ThirdParty/OpenSource/EASTL/vector.h"
+#include <TheForge/OS/Math/MathTypes.h>
+#include <EASTL/string.h>
+#include <EASTL/string_hash_map.h>
+#include <EASTL/vector.h>
 
 #include <stdint.h>
 

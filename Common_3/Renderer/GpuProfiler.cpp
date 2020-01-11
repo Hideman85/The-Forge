@@ -26,17 +26,17 @@
 #include "IRenderer.h"
 #include "ResourceLoader.h"
 #if (PROFILE_ENABLED)
-#include "../ThirdParty/OpenSource/MicroProfile/ProfilerBase.h"
+#include <ProfilerBase.h>
 #endif
-#include "../OS/Interfaces/IThread.h"
-#include "../OS/Interfaces/ILog.h"
-#include "../OS/Interfaces/ITime.h"
+#include <TheForge/OS/Interfaces/IThread.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/ITime.h>
 
 #if __linux__
 #include <linux/limits.h>    //PATH_MAX declaration
 #define MAX_PATH PATH_MAX
 #endif
-#include "../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 extern void mapBuffer(Renderer* pRenderer, Buffer* pBuffer, ReadRange* pRange);
 extern void unmapBuffer(Renderer* pRenderer, Buffer* pBuffer);
@@ -65,7 +65,7 @@ static void calculateTimes(Cmd* pCmd, GpuProfiler* pGpuProfiler, GpuTimerTree* p
 	{
         int64_t  elapsedTime = 0;
 		const uint32_t historyIndex = pRoot->mGpuTimer.mHistoryIndex;
-        
+
 #if defined(DIRECT3D12) || defined(VULKAN) || defined(DIRECT3D11) || defined(METAL)
 		const uint32_t id = pRoot->mGpuTimer.mIndex;
 		const uint64_t timeStamp1 = pGpuProfiler->pTimeStamp[id * 2];

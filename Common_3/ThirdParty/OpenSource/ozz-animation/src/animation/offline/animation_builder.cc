@@ -27,9 +27,9 @@
 
 #include "ozz/animation/offline/animation_builder.h"
 
-#include "../../EASTL/algorithm.h"
-#include "../../EASTL/numeric_limits.h"
-#include "../../EASTL/sort.h"
+#include <EASTL/algorithm.h>
+#include <EASTL/numeric_limits.h>
+#include <EASTL/sort.h>
 
 #include <cassert>
 #include <cstddef>
@@ -38,7 +38,7 @@
 #include "ozz/base/containers/vector.h"
 #include "ozz/base/memory/allocator.h"
 
-#include "../../EASTL/sort.h"
+#include <EASTL/sort.h>
 
 //#include "ozz/base/maths/simd_math.h" //CONFFX_BEGIN
 

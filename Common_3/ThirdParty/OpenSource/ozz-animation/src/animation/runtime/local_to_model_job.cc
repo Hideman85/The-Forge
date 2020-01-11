@@ -30,7 +30,7 @@
 #include "../../../include/ozz/animation/runtime/skeleton.h"
 #include "../../../include/ozz/base/maths/math_ex.h"
 #include <cassert>
-#include "../../../../../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 //CONFFX_END
 
 namespace ozz {

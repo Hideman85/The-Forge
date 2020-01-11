@@ -29,8 +29,8 @@
 #include "../../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -540,7 +540,7 @@ class PixelProjectedReflections: public IApp
 		mSettings.mContentScaleFactor = 1.f;
 #endif
 	}
-	
+
 	bool Init()
 	{
 		// FILE PATHS
@@ -550,7 +550,7 @@ class PixelProjectedReflections: public IApp
 		{
 			PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/10_PixelProjectedReflections");
 			fsSetResourceDirectoryRootPath(resourceDirRoot);
-			
+
 			fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../../../Art/Sponza/Textures");
 			fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../../../Art/Sponza/Meshes");
 			fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -559,7 +559,7 @@ class PixelProjectedReflections: public IApp
 			fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
 			fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
 		}
-		
+
 		initThreadSystem(&pIOThreads);
 
 		RendererDesc settings = { 0 };
@@ -571,7 +571,7 @@ class PixelProjectedReflections: public IApp
 #ifdef TARGET_IOS
 		gUseTexturesFallback = (pRenderer->mGpuSettings[0].mArgumentBufferMaxTextures < TOTAL_IMGS);
 #endif
-		
+
 		QueueDesc queueDesc = {};
 		queueDesc.mType = CMD_POOL_DIRECT;
 		addQueue(pRenderer, &queueDesc, &pGraphicsQueue);
@@ -637,7 +637,7 @@ class PixelProjectedReflections: public IApp
 		ShaderMacro    totalImagesShaderMacro = { "TOTAL_IMGS", totalImagesShaderMacroBuffer };
 		ShaderLoadDesc gBuffersShaderDesc = {};
 		gBuffersShaderDesc.mStages[0] = { "fillGbuffers.vert", NULL, 0, RD_SHADER_SOURCES };
-		
+
 		if (!gUseTexturesFallback)
 		{
 			gBuffersShaderDesc.mStages[1] = { "fillGbuffers.frag", &totalImagesShaderMacro, 1, RD_SHADER_SOURCES };
@@ -1036,7 +1036,7 @@ class PixelProjectedReflections: public IApp
 
 		pQueueMutex = conf_new(Mutex);
 		pQueueMutex->Init();
-		
+
 		// In case copy queue should be externally synchronized(e.g. Vulkan with 1 queueu)
 		// do resource streaming after resource loading completed.
 		// Shared queue won't be used concurrently,
@@ -1084,7 +1084,7 @@ class PixelProjectedReflections: public IApp
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		DescriptorData skyParams[1] = {};
 		skyParams[0].pName = "skyboxTex";
@@ -1538,7 +1538,7 @@ class PixelProjectedReflections: public IApp
 				max(1u, (gSpecularSize >> i) / pThreadGroupSize[1]), 6);
 		}
 #endif
-		
+
 		/************************************************************************/
 		/************************************************************************/
 		TextureBarrier srvBarriers2[2] = { { pIrradianceMap, RESOURCE_STATE_SHADER_RESOURCE },
@@ -2164,7 +2164,7 @@ class PixelProjectedReflections: public IApp
 			{
 				uint mapIDs[5];
 			} data;
-			
+
 			const uint32_t meshCount = (uint32_t)sponzaMesh.cmdArray.size();
 
 			if (gUseTexturesFallback)
@@ -2173,12 +2173,12 @@ class PixelProjectedReflections: public IApp
 				cmdBindDescriptorSet(cmd, gFrameIndex, pDescriptorSetGbuffers[1]);
 				cmdBindDescriptorSet(cmd, 0, pDescriptorSetGbuffers[2]);
 				DescriptorData params[8] = {};
-				
+
 				for (uint32_t i = 0; i < meshCount; ++i)
 				{
 					int materialID = sponzaMesh.materialID[i];
 					materialID *= 5;    //because it uses 5 basic textures for redering BRDF
-					
+
 					for (int j = 0; j < 5; ++j)
 					{
 						params[j].pName = pTextureName[j];
@@ -2186,7 +2186,7 @@ class PixelProjectedReflections: public IApp
 					}
 					updateDescriptorSet(pRenderer, i, pDescriptorSetGbuffers[0], 5, params);
 					cmdBindDescriptorSet(cmd, i, pDescriptorSetGbuffers[0]);
-					
+
 					Mesh::CmdParam& cmdData = sponzaMesh.cmdArray[i];
 					cmdDrawIndexed(cmd, cmdData.indexCount, cmdData.startIndex, cmdData.startVertex);
 				}
@@ -2220,7 +2220,7 @@ class PixelProjectedReflections: public IApp
 			if (gUseTexturesFallback)
 			{
 				DescriptorData params[5] = {};
-				
+
 				params[0].pName = pTextureName[0];
 				params[0].ppTextures = &pMaterialTextures[81];
 
@@ -2235,7 +2235,7 @@ class PixelProjectedReflections: public IApp
 
 				params[4].pName = pTextureName[4];
 				params[4].ppTextures = &pMaterialTextures[0];
-				
+
 				updateDescriptorSet(pRenderer, meshCount + 1, pDescriptorSetGbuffers[0], 5, params);
 				cmdBindDescriptorSet(cmd, meshCount + 1, pDescriptorSetGbuffers[0]);
 			}
@@ -2249,9 +2249,9 @@ class PixelProjectedReflections: public IApp
 
 				cmdBindPushConstants(cmd, pRootSigGbuffers, "cbTextureRootConstants", &data);
 			}
-			
+
 			cmdBindDescriptorSet(cmd, 1, pDescriptorSetGbuffers[2]);
-			
+
 			Buffer* pLionVertexBuffers[] = { lionMesh.pVertexBuffer };
 			cmdBindVertexBuffer(cmd, 1, pLionVertexBuffers, NULL);
 			cmdBindIndexBuffer(cmd, lionMesh.pIndexBuffer, 0);
@@ -2447,7 +2447,7 @@ class PixelProjectedReflections: public IApp
 		// GBuffer
 		{
 			DescriptorData params[8] = {};
-			
+
 			if (!gUseTexturesFallback && dataLoaded)
 			{
 				params[0].pName = "textureMaps";

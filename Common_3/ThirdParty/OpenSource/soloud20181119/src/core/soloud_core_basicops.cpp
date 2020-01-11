@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 
 #include <string.h>
 #include "soloud_internal.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Core "basic" operations - play, stop, etc
 
@@ -45,7 +45,7 @@ namespace SoLoud
 
 		lockAudioMutex();
 		int ch = findFreeVoice();
-		if (ch < 0) 
+		if (ch < 0)
 		{
 			unlockAudioMutex();
 			conf_delete(instance);
@@ -65,7 +65,7 @@ namespace SoLoud
 		mPlayIndex++;
 
 		// 20 bits, skip the last one (top bits full = voice group)
-		if (mPlayIndex == 0xfffff) 
+		if (mPlayIndex == 0xfffff)
 		{
 			mPlayIndex = 0;
 		}
@@ -85,7 +85,7 @@ namespace SoLoud
 			setVoiceVolume(ch, aVolume);
 		}
 
-		// Fix initial voice volume ramp up		
+		// Fix initial voice volume ramp up
 		int i;
 		for (i = 0; i < MAX_CHANNELS; i++)
 		{
@@ -93,7 +93,7 @@ namespace SoLoud
 		}
 
 		setVoiceRelativePlaySpeed(ch, 1);
-		
+
 		for (i = 0; i < FILTERS_PER_STREAM; i++)
 		{
 			if (aSound.mFilter[i])
@@ -115,7 +115,7 @@ namespace SoLoud
 		handle h = play(aSound, aVolume, aPan, 1, aBus);
 		lockAudioMutex();
 		time lasttime = mLastClockedTime;
-		if (lasttime == 0) 
+		if (lasttime == 0)
 			mLastClockedTime = aSoundTime;
 		unlockAudioMutex();
 		int samples = 0;
@@ -160,7 +160,7 @@ namespace SoLoud
 		if (aSound.mAudioSourceID)
 		{
 			lockAudioMutex();
-			
+
 			int i;
 			for (i = 0; i < (signed)mHighestVoice; i++)
 			{

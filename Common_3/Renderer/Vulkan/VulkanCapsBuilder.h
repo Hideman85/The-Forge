@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_apis.h"
+#include <tinyimageformat_apis.h>
 
 inline void utils_caps_builder(Renderer* pRenderer) {
 	memset(pRenderer->capBits.canShaderReadFrom, 0, sizeof(pRenderer->capBits.canShaderReadFrom));
@@ -18,7 +18,7 @@ inline void utils_caps_builder(Renderer* pRenderer) {
 		pRenderer->capBits.canShaderWriteTo[i] =
 				(formatSupport.optimalTilingFeatures & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) != 0;
 		pRenderer->capBits.canRenderTargetWriteTo[i] =
-				(formatSupport.optimalTilingFeatures & 
+				(formatSupport.optimalTilingFeatures &
 					(VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)) != 0;
 	}
 

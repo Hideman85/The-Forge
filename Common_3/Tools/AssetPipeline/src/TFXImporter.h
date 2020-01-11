@@ -22,10 +22,10 @@
 *THE SOFTWARE.
 */
 
-#include "../../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../OS/Math/MathTypes.h"
-#include "../../../OS/Interfaces/IFileSystem.h"
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
+#include <TheForge/OS/Math/MathTypes.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 struct TFXAsset
 {

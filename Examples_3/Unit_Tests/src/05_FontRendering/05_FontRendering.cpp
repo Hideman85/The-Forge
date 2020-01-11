@@ -31,8 +31,8 @@
 *********************************************************************************************************/
 
 // tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 // Interfaces
 #include "../../../../Common_3/OS/Interfaces/ILog.h"
@@ -254,7 +254,7 @@ class FontRendering: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/05_FontRendering");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,             "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,     "../../UnitTestResources/Fonts");
@@ -262,7 +262,7 @@ class FontRendering: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,     "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,     "../../../../Middleware_3/UI");
         }
-        
+
 		// window and renderer setup
 		RendererDesc rendererDesc = { 0 };
 		initRenderer(GetName(), &rendererDesc, &pRenderer);

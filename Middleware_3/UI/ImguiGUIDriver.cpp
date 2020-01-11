@@ -27,19 +27,19 @@
 #include "Shaders/Compiled/imgui.frag.h"
 #endif
 
-#include "../../Common_3/ThirdParty/OpenSource/imgui/imgui.h"
-#include "../../Common_3/ThirdParty/OpenSource/imgui/imgui_internal.h"
-#include "../../Common_3/ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <tinyimageformat_query.h>
 
 #include "AppUI.h"
 
-#include "../../Common_3/OS/Interfaces/IOperatingSystem.h"
-#include "../../Common_3/OS/Interfaces/IInput.h"
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/Renderer/IRenderer.h"
-#include "../../Common_3/Renderer/ResourceLoader.h"
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
+#include <TheForge/OS/Interfaces/IInput.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
 
-#include "../../Common_3/OS/Interfaces/IMemory.h"    //NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IMemory.h>    //NOTE: this should be the last include in a .cpp
 
 #define LABELID(prop) eastl::string().sprintf("##%llu", (uint64_t)(prop.pData)).c_str()
 #define LABELID1(prop) eastl::string().sprintf("##%llu", (uint64_t)(prop)).c_str()
@@ -133,13 +133,13 @@ class ImguiGUIDriver: public GUIDriver
 
 	bool update(GUIUpdate* pGuiUpdate);
 	void draw(Cmd* q);
-	
+
 	bool onButton(uint32_t button, bool press, const float2* vec)
 	{
 		ImGui::SetCurrentContext(context);
 		ImGuiIO& io = ImGui::GetIO();
 		pMovePosition = vec;
-		
+
 		switch (button)
 		{
 		case InputBindings::BUTTON_DPAD_LEFT: mNavInputs[ImGuiNavInput_DpadLeft] = (float)press; break;
@@ -179,7 +179,7 @@ class ImguiGUIDriver: public GUIDriver
 				}
 				return true;
 			}
-			
+
 		}
 		default:
 			break;
@@ -219,7 +219,7 @@ class ImguiGUIDriver: public GUIDriver
 
 		return inputState;
 	}
-	
+
 	bool isFocused()
 	{
 		ImGui::SetCurrentContext(context);
@@ -303,10 +303,10 @@ static uint ToUintColor(float4 color)
 void IWidget::ProcessCallbacks()
 {
   mHovered = ImGui::IsItemHovered();
-  
-  if (pOnHover && mHovered) 
+
+  if (pOnHover && mHovered)
     pOnHover();
-  
+
 	if (pOnActive && ImGui::IsItemActive())
 		pOnActive();
 
@@ -380,7 +380,7 @@ void SeparatorWidget::Draw()
 
 void VerticalSeparatorWidget::Draw()
 {
-  for (uint32_t i = 0; i < mLineCount; ++i) 
+  for (uint32_t i = 0; i < mLineCount; ++i)
   {
     ImGui::VerticalSeparator();
   }
@@ -505,7 +505,7 @@ void ColumnWidget::Draw()
   // Test a simple 4 col table.
   ImGui::BeginColumns(mLabel.c_str(), mNumColumns, ImGuiColumnsFlags_NoResize | ImGuiColumnsFlags_NoForceWithinWindow);
 
-  for (uint32_t i = 0; i < mNumColumns; ++i) 
+  for (uint32_t i = 0; i < mNumColumns; ++i)
   {
     mPerColumnWidgets[i]->Draw();
     ImGui::NextColumn();
@@ -549,7 +549,7 @@ void HistogramWidget::Draw()
   ProcessCallbacks();
 }
 
-void PlotLinesWidget::Draw() 
+void PlotLinesWidget::Draw()
 {
   ImGui::PlotLines(mLabel.c_str(), mValues, mNumValues, 0, mTitle->c_str(), *mScaleMin, *mScaleMax, *mPlotScale);
   ProcessCallbacks();
@@ -601,7 +601,7 @@ void DrawTextWidget::Draw()
   ImGuiWindow* window = ImGui::GetCurrentWindow();
   float2 pos = window->Pos - window->Scroll + mPos;
   const float2 line_size = ImGui::CalcTextSize(mLabel.c_str());
-  
+
   ImGui::GetWindowDrawList()->AddText(pos, mColor, mLabel.c_str());
 
   ImRect bounding_box(pos, pos + line_size);
@@ -614,7 +614,7 @@ void DrawTextWidget::Draw()
 
 void DrawTooltipWidget::Draw()
 {
-  if ((*mShowTooltip) == true) 
+  if ((*mShowTooltip) == true)
   {
     ImGui::BeginTooltip();
 
@@ -622,7 +622,7 @@ void DrawTooltipWidget::Draw()
 
     ImGui::EndTooltip();
   }
-  
+
   ProcessCallbacks();
 }
 
@@ -634,21 +634,21 @@ void DrawLineWidget::Draw()
 
   ImGui::GetWindowDrawList()->AddLine(pos1, pos2, mColor);
 
-  if (mAddItem) 
+  if (mAddItem)
   {
     ImRect bounding_box(pos1, pos2);
     ImGui::ItemSize(bounding_box);
     ImGui::ItemAdd(bounding_box, 0);
   }
-  
+
   ProcessCallbacks();
 }
 
 void DrawCurveWidget::Draw()
 {
   ImGuiWindow* window = ImGui::GetCurrentWindow();
-    
-  for (uint32_t i = 0; i < mNumPoints-1; i++) 
+
+  for (uint32_t i = 0; i < mNumPoints-1; i++)
   {
     float2 pos1 = window->Pos - window->Scroll + mPos[i];
     float2 pos2 = window->Pos - window->Scroll + mPos[i+1];
@@ -921,7 +921,7 @@ bool ImguiGUIDriver::addFont(void* pFontBuffer, uint32_t fontBufferSize, void* p
 bool ImguiGUIDriver::load(RenderTarget** ppRts, uint32_t count)
 {
 	UNREF_PARAM(count);
-	
+
 	PipelineDesc desc = {};
 	desc.mType = PIPELINE_TYPE_GRAPHICS;
 	GraphicsPipelineDesc& pipelineDesc = desc.mGraphicsDesc;
@@ -962,9 +962,9 @@ bool ImguiGUIDriver::update(GUIUpdate* pGuiUpdate)
 	io.DeltaTime = pGuiUpdate->deltaTime;
 	if (pMovePosition)
 		io.MousePos = *pMovePosition;
-	
+
 	memcpy(io.NavInputs, mNavInputs, sizeof(mNavInputs));
-	
+
 	ImGui::NewFrame();
 
 	bool ret = false;
@@ -1083,7 +1083,7 @@ bool ImguiGUIDriver::update(GUIUpdate* pGuiUpdate)
 		}
 	}
 	ImGui::EndFrame();
-		
+
 	if (!io.MouseDown[0])
 	{
 		io.MousePos = float2(-FLT_MAX);

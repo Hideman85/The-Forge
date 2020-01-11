@@ -23,8 +23,8 @@
 */
 
 #pragma once
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/animation.h"
-#include "../../Common_3/OS/Math/MathTypes.h"
+#include <ozz/animation/runtime/animation.h>
+#include <TheForge/OS/Math/MathTypes.h>
 
 // Utility class that helps with controlling animation playback time. Time is
 // computed every update according to the dt given by the caller, playback speed

@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 #include <string.h>
 #include "soloud.h"
 #include "soloud_flangerfilter.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -98,7 +98,7 @@ namespace SoLoud
 
 		mDelay = aDelay;
 		mFreq = aFreq;
-		
+
 		return 0;
 	}
 

@@ -47,10 +47,10 @@ void toggleProfiler();
 //bool onProfilerButton(bool press, float2* pPos, bool delta);
 
 // Check this file for how to CPU profile
-#include "../../ThirdParty/OpenSource/MicroProfile/ProfilerBase.h"
+#include <ProfilerBase.h>
 
 // Check this file for how to GPU profile
 #include "../../Renderer/GpuProfiler.h"
 
 // Check this for widget profiler UI.
-#include "../../ThirdParty/OpenSource/MicroProfile/ProfilerWidgetsUI.h"
+#include <ProfilerWidgetsUI.h>

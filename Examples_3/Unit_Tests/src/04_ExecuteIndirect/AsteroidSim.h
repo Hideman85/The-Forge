@@ -50,7 +50,7 @@
 
 #pragma once
 
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 #include "../../../../Common_3/OS/Math/MathTypes.h"
 #include <cstdint>
 

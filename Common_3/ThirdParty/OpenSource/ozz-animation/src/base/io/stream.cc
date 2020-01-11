@@ -34,9 +34,8 @@
 
 #include "ozz/base/maths/math_ex.h"
 #include "ozz/base/memory/allocator.h"
-#include "../../../../../Common_3/OS/Interfaces/IFileSystem.h"
-
-#include "../../EASTL/numeric_limits.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <EASTL/numeric_limits.h>
 
 
 namespace ozz {
@@ -56,7 +55,7 @@ namespace ozz {
             PathHandle filePath = fsCreatePath(fsGetSystemFileSystem(), _filename);
             file_ = fsOpenFile(filePath, fsFileModeFromString(_mode));
         }
-    
+
         File::File(const Path* _filePath, FileMode _mode)
         {
             file_ = fsOpenFile(_filePath, _mode);
@@ -75,32 +74,32 @@ namespace ozz {
           return false;
         }
 
-        bool File::opened() const 
-		{ 
+        bool File::opened() const
+		{
 			return file_ != NULL;
 		}
 
-        size_t File::Read(void* _buffer, size_t _size) 
+        size_t File::Read(void* _buffer, size_t _size)
 		{
             return fsReadFromStream((FileStream *)file_, _buffer, _size);
         }
 
-        size_t File::Write(const void* _buffer, size_t _size) 
+        size_t File::Write(const void* _buffer, size_t _size)
 		{
             return fsWriteToStream((FileStream *)file_, _buffer, _size);
         }
 
-        int File::Seek(int _offset, Origin _origin) 
+        int File::Seek(int _offset, Origin _origin)
 		{
           SeekBaseOffset origins[] = {SBO_CURRENT_POSITION, SBO_END_OF_FILE, SBO_START_OF_FILE};
-          if (_origin >= static_cast<int>(OZZ_ARRAY_SIZE(origins))) 
+          if (_origin >= static_cast<int>(OZZ_ARRAY_SIZE(origins)))
 		  {
             return -1;
           }
             return fsSeekStream((FileStream *)file_, origins[_origin], _offset);
         }
 
-        int File::FileTell() 
+        int File::FileTell()
 		{
             return (int)fsGetStreamSeekPosition((const FileStream *)file_);
         }

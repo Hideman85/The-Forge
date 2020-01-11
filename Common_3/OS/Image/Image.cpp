@@ -27,14 +27,14 @@
 #define MAX_PATH PATH_MAX
 #endif
 
-#include "../../ThirdParty/OpenSource/EASTL/functional.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/functional.h>
+#include <EASTL/unordered_map.h>
 
 #define IMAGE_CLASS_ALLOWED
 #include "Image.h"
 #include "../Interfaces/ILog.h"
 #ifndef IMAGE_DISABLE_TINYEXR
-#include "../../ThirdParty/OpenSource/TinyEXR/tinyexr.h"
+#include <tinyexr.h>
 #endif
 
 #ifndef IMAGE_DISABLE_STB
@@ -47,28 +47,28 @@
 #if defined(__ANDROID__)
 #define STBI_NO_SIMD
 #endif
-#include "../../ThirdParty/OpenSource/Nothings/stb_image.h"
+#include <stb_image.h>
 //stb_image_write
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBIW_MALLOC conf_malloc
 #define STBIW_REALLOC conf_realloc
 #define STBIW_FREE conf_free
 #define STBIW_ASSERT ASSERT
-#include "../../ThirdParty/OpenSource/Nothings/stb_image_write.h"
+#include <stb_image_write.h>
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
-#include "../../ThirdParty/OpenSource/Nothings/stb_image_resize.h"
+#include <stb_image_resize.h>
 #endif
 
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_bits.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_decode.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_encode.h"
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_query.h>
+#include <tinyimageformat_bits.h>
+#include <tinyimageformat_decode.h>
+#include <tinyimageformat_encode.h>
 #define TINYDDS_IMPLEMENTATION
-#include "../../ThirdParty/OpenSource/tinydds/tinydds.h"
+#include <tinydds.h>
 #ifndef IMAGE_DISABLE_KTX
 #define TINYKTX_IMPLEMENTATION
-#include "../../ThirdParty/OpenSource/tinyktx/tinyktx.h"
+#include <tinyktx.h>
 #endif
 #include "ImageHelper.h"
 
@@ -357,7 +357,7 @@ void Image::Destroy()
     {
         mLoadFilePath = NULL;
     }
-    
+
 	if (pData && mOwnsMemory)
 	{
 		conf_free(pData);
@@ -401,7 +401,7 @@ unsigned char* Image::GetPixels(const uint mipMapLevel, const uint arraySlice) c
 {
 	if (mipMapLevel >= mMipMapCount || arraySlice >= mArrayCount)
 		return NULL;
-    
+
     // two ways of storing slices and mipmaps
     // 1. Old Image way. memory slices * ((w*h*d)*mipmaps)
     // 2. Mips after slices way. There are w*h*d*s*mipmaps where slices stays constant(doesn't reduce)
@@ -674,7 +674,7 @@ uint32_t Image::GetMipMappedSize(const uint firstMipMapLevel, uint32_t nMipMapLe
 
 	if (srcFormat == TinyImageFormat_UNDEFINED)
 		srcFormat = mFormat;
-	
+
 	// PVR formats get special case
 	uint64_t const tifname = (TinyImageFormat_Code(mFormat) & TinyImageFormat_NAMESPACE_REQUIRED_BITS);
 	if( tifname == TinyImageFormat_NAMESPACE_PVRTC)
@@ -686,40 +686,40 @@ uint32_t Image::GetMipMappedSize(const uint firstMipMapLevel, uint32_t nMipMapLe
 		uint32_t sizeY = h;
 		uint32_t sizeD = d;
 		int level = nMipMapLevels;
-		
+
 		uint minWidth = 8;
 		uint minHeight = 8;
 		uint minDepth = 1;
 		int bpp = 4;
-		
+
 		if (srcFormat == TinyImageFormat_PVRTC1_2BPP_UNORM || srcFormat == TinyImageFormat_PVRTC1_2BPP_SRGB)
 		{
 			minWidth = 16;
 			minHeight = 8;
 			bpp = 2;
 		}
-		
+
 		while (level > 0)
 		{
 			// If pixel format is compressed, the dimensions need to be padded.
 			uint paddedWidth = sizeX + ((-1 * sizeX) % minWidth);
 			uint paddedHeight = sizeY + ((-1 * sizeY) % minHeight);
 			uint paddedDepth = sizeD + ((-1 * sizeD) % minDepth);
-			
+
 			int mipSize = paddedWidth * paddedHeight * paddedDepth * bpp / 8;
-			
+
 			totalSize += mipSize;
-			
+
 			unsigned int MinimumSize = 1;
 			sizeX = max(sizeX / 2, MinimumSize);
 			sizeY = max(sizeY / 2, MinimumSize);
 			sizeD = max(sizeD / 2, MinimumSize);
 			level--;
 		}
-		
+
 		return totalSize;
 	}
-	
+
 	uint32_t size = 0;
 	while (nMipMapLevels)
 	{
@@ -851,7 +851,7 @@ bool iLoadDDSFromMemory(Image* pImage,
 
 	TinyDDS_DestroyContext(ctx);
     fsCloseStream(fh);
-    
+
 	return true;
 }
 
@@ -861,16 +861,16 @@ bool iLoadPVRFromMemory(Image* pImage, const char* memory, uint32_t size, memory
 	LOGF(LogLevel::eERROR, "Load PVR failed: Only supported on iOS targets.");
 	return false;
 #else
-	
+
 	// TODO: Image
 	// - no support for PVRTC2 at the moment since it isn't supported on iOS devices.
 	// - only new PVR header V3 is supported at the moment.  Should we add legacy for V2 and V1?
 	// - metadata is ignored for now.  Might be useful to implement it if the need for metadata arises (eg. padding, atlas coordinates, orientations, border data, etc...).
 	// - flags are also ignored for now.  Currently a flag of 0x02 means that the color have been pre-multiplied byt the alpha values.
-	
+
 	// Assumptions:
 	// - it's assumed that the texture is already twiddled (ie. Morton).  This should always be the case for PVRTC V3.
-	
+
 	PVR_Texture_Header* psPVRHeader = (PVR_Texture_Header*)memory;
 
 	if (psPVRHeader->mVersion != gPvrtexV3HeaderVersion)
@@ -878,13 +878,13 @@ bool iLoadPVRFromMemory(Image* pImage, const char* memory, uint32_t size, memory
 		LOGF(LogLevel::eERROR, "Load PVR failed: Not a valid PVR V3 header.");
 		return 0;
 	}
-	
+
 	if (psPVRHeader->mPixelFormat > 3)
 	{
 		LOGF(LogLevel::eERROR, "Load PVR failed: Not a supported PVR pixel format.  Only PVRTC is supported at the moment.");
 		return 0;
 	}
-	
+
 	if (psPVRHeader->mNumSurfaces > 1 && psPVRHeader->mNumFaces > 1)
 	{
 		LOGF(LogLevel::eERROR, "Load PVR failed: Loading arrays of cubemaps isn't supported.");
@@ -992,7 +992,7 @@ bool iLoadKTXFromMemory(Image* pImage, const char* memory, uint32_t memSize, mem
 	{
 		pImage->SetPixels((uint8_t*)conf_malloc(sizeof(uint8_t) * size), true);
 	}
-    
+
     for (uint mipMapLevel = 0; mipMapLevel < pImage->GetMipMapCount(); mipMapLevel++)
     {
         uint8_t const* src = (uint8_t const*) TinyKtx_ImageRawData(ctx, mipMapLevel);
@@ -1464,7 +1464,7 @@ bool Image::LoadFromFile(const Path* filePath, memoryAllocationFunc pAllocator, 
 	}
 
     const char *extension;
-    
+
     PathHandle loadFilePath = NULL;
 	// For loading basis file, it should have its extension
 	if (extensionComponent.length == 0)
@@ -1486,17 +1486,17 @@ bool Image::LoadFromFile(const Path* filePath, memoryAllocationFunc pAllocator, 
         extension = extensionComponent.buffer;
         loadFilePath = fsCopyPath(filePath);
     }
-		
+
     FileStream* fh = fsOpenFile(loadFilePath, FM_READ_BINARY);
-	
+
 	if (!fh)
 	{
 		LOGF(LogLevel::eERROR, "\"%s\": Image file not found.", fsGetPathAsNativeString(loadFilePath));
 		return false;
 	}
-	
+
 	// load file into memory
-	
+
     ssize_t length = fsGetStreamFileSize(fh);
 	if (length <= 0)
 	{
@@ -1504,7 +1504,7 @@ bool Image::LoadFromFile(const Path* filePath, memoryAllocationFunc pAllocator, 
         fsCloseStream(fh);
 		return false;
 	}
-	
+
 	// read and close file.
 	char* data = (char*)conf_malloc(length * sizeof(char));
     fsReadFromStream(fh, data, length);
@@ -1730,7 +1730,7 @@ bool Image::iSaveDDS(const Path* filePath) {
 		true,
 		mipmapsizes,
 		mipmaps);
-    
+
     fsCloseStream(fh);
     return result;
 }
@@ -1747,12 +1747,12 @@ bool Image::iSaveKTX(const Path* filePath) {
 	TinyKtx_Format fmt = TinyImageFormat_ToTinyKtxFormat(mFormat);
 	if (fmt == TKTX_UNDEFINED)
 		return convertAndSaveImage(*this, &Image::iSaveKTX, filePath);
-    
+
     FileStream* fh = fsOpenFile(filePath, FM_WRITE_BINARY);
-    
+
 	if (!fh)
 		return false;
-	
+
 	uint32_t mipmapsizes[TINYKTX_MAX_MIPMAPLEVELS];
 	void const* mipmaps[TINYKTX_MAX_MIPMAPLEVELS];
 	memset(mipmapsizes, 0, sizeof(uint32_t) * TINYKTX_MAX_MIPMAPLEVELS);
@@ -1774,7 +1774,7 @@ bool Image::iSaveKTX(const Path* filePath) {
 		mDepth == 0,
 		mipmapsizes,
 		mipmaps);
-    
+
     fsCloseStream(fh);
     return result;
 }

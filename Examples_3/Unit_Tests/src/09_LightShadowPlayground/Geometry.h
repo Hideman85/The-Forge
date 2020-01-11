@@ -4,7 +4,7 @@
 
 #include "../../../../Common_3/OS/Math/MathTypes.h"
 //EA stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 #include "../../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
 #include "../../../../Common_3/Renderer/IRenderer.h"
 #include "../../../../Common_3/Renderer/ResourceLoader.h"
@@ -227,7 +227,7 @@ typedef eastl::vector<SDFCustomSubMeshData> CustomSDFSubMeshDataList;
 struct SDFMesh
 {
 	eastl::vector<SceneVertexPos>      mPositions;
-	
+
 	eastl::vector<vec2> mUncompressedTexCoords;
 	eastl::vector<vec3> mUncompressedNormals;
 	eastl::vector<uint32_t> mIndices;
@@ -267,7 +267,7 @@ void alignAABB(AABB* ownerAABB, float alignment);
 
 void destroyClusters(MeshIn* pMesh);
 Scene* loadScene(const Path* fileName, float scale, float offsetX, float offsetY, float offsetZ);
-	
+
 void   removeScene(Scene* scene);
 
 void   createAABB(const Scene* scene, MeshIn* subMesh);
@@ -278,7 +278,7 @@ Path* GetSDFBakedFilePath(const eastl::string& fileName);
 
 void loadSDFMeshAlphaTested(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outMesh, float scale,
 	float offsetX, bool generateSDFVolumeData,
-	BakedSDFVolumeInstances& sdfMeshInstances, 
+	BakedSDFVolumeInstances& sdfMeshInstances,
 	GenerateVolumeDataFromFileFunc generateVolumeDataFromFileFunc);
 
 void loadSDFMesh(ThreadSystem* threadSystem, const Path* filePath, SDFMesh* outMesh, float scale,

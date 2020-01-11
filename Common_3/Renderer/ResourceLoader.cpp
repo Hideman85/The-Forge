@@ -29,13 +29,13 @@
 #include "../../Xbox/Common_3/Renderer/XBoxPrivateHeaders.h"
 #endif
 
-#include "../ThirdParty/OpenSource/EASTL/deque.h"
+#include <EASTL/deque.h>
 
 #include "IRenderer.h"
 #include "ResourceLoader.h"
-#include "../OS/Interfaces/ILog.h"
-#include "../OS/Interfaces/IThread.h"
-#include "../OS/Image/Image.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IThread.h>
+#include <TheForge/OS/Image/Image.h>
 
 //this is needed for unix as PATH_MAX is defined instead of MAX_PATH
 #ifndef _WIN32
@@ -48,7 +48,7 @@
 #endif
 #define MAX_PATH PATH_MAX
 #endif
-#include "../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 extern void addBuffer(Renderer* pRenderer, const BufferDesc* desc, Buffer** pp_buffer);
 extern void removeBuffer(Renderer* pRenderer, Buffer* p_buffer);
@@ -164,7 +164,7 @@ static void cleanupCopyEngine(Renderer* pRenderer, CopyEngine* pCopyEngine)
 
 		removeFence(pRenderer, resourceSet.pFence);
 	}
-	
+
 	conf_free(pCopyEngine->resourceSets);
 
 	removeCmdPool(pRenderer, pCopyEngine->pCmdPool);
@@ -375,13 +375,13 @@ public:
 	static Image* CreateImage(const Path* filePath, memoryAllocationFunc pAllocator, void* pUserData)
 	{
 		Image* pImage = AllocImage();
-        
+
 		if (!pImage->LoadFromFile(filePath, pAllocator, pUserData))
 		{
 			DestroyImage(pImage);
 			return NULL;
 		}
-        
+
 		return pImage;
 	}
 
@@ -684,7 +684,7 @@ static bool updateTexture(Renderer* pRenderer, CopyEngine* pCopyEngine, size_t a
 	{
 		pTexture->mCurrentState = util_determine_resource_start_state(pTexture->mDesc.mDescriptors);
 	}
-	
+
 	if (texUpdateDesc.mFreeImage)
 	{
 		ResourceLoader::DestroyImage(texUpdateDesc.pImage);
@@ -716,7 +716,7 @@ static bool updateBuffer(Renderer* pRenderer, CopyEngine* pCopyEngine, size_t ac
 #else
 	Cmd* pCmd = aquireCmd(pCopyEngine, activeSet);
 #endif
-	
+
 	MappedMemoryRange range = allocateStagingMemory(pRenderer, pCopyEngine, activeSet, dataToCopy, RESOURCE_BUFFER_ALIGNMENT);
 
 	// TODO: should not happed, resolve, simplify
@@ -873,21 +873,21 @@ static void streamerThreadFunc(void* pThreadData)
 				maxToken[activeSet] = updateState[i].mRequest.mToken;
 			}
 		}
-		
+
 		if (getSystemTime() > nextTimeslot || completionMask == 0)
 		{
 			for (uint32_t i = 0; i < linkedGPUCount; ++i)
 			{
 				streamerFlush(&pCopyEngines[i], activeSet);
 			}
-			
+
 			activeSet = (activeSet + 1) % pLoader->mDesc.mBufferCount;
 			for (uint32_t i = 0; i < linkedGPUCount; ++i)
 			{
 				waitCopyEngineSet(pLoader->pRenderer, &pCopyEngines[i], activeSet);
 				resetCopyEngineSet(pLoader->pRenderer, &pCopyEngines[i], activeSet);
 			}
-			
+
 			SyncToken nextToken = maxToken[activeSet];
 			SyncToken prevToken = tfrg_atomic64_load_relaxed(&pLoader->mTokenCompleted);
 			// As the only writer atomicity is preserved
@@ -920,7 +920,7 @@ static void addResourceLoader(Renderer* pRenderer, ResourceLoaderDesc* pDesc, Re
 	pLoader->mTokenMutex.Init();
 	pLoader->mQueueCond.Init();
 	pLoader->mTokenCond.Init();
-	
+
 	pLoader->mThreadDesc.pFunc = streamerThreadFunc;
 	pLoader->mThreadDesc.pData = pLoader;
 
@@ -1103,13 +1103,13 @@ void addResource(TextureLoadDesc* pTextureDesc, SyncToken* token)
 
 	bool freeImage = false;
 	Image* pImage = NULL;
-	
+
 	if (pTextureDesc->pFilePath)
 	{
 		pImage = ResourceLoader::CreateImage(pTextureDesc->pFilePath, NULL, NULL);
 #if !defined(METAL) && !defined(DIRECT3D11)
 		PathComponent component = fsGetPathExtension(pTextureDesc->pFilePath);
-		
+
 		bool isSparseVirtualTexture = (component.length > 0 && strcmp(component.buffer, "svt") == 0) ? true : false;
 
 		if (isSparseVirtualTexture)
@@ -1149,7 +1149,7 @@ void addResource(TextureLoadDesc* pTextureDesc, SyncToken* token)
 			visDesc.mDesc.mElementCount = (uint64_t)pPageTable->size();
 			visDesc.mDesc.mSize = visDesc.mDesc.mStructStride * visDesc.mDesc.mElementCount;
 			visDesc.mDesc.pDebugName = L"Vis Buffer for Sparse Texture";
-			visDesc.ppBuffer = &(*pTextureDesc->ppTexture)->mVisibility;			
+			visDesc.ppBuffer = &(*pTextureDesc->ppTexture)->mVisibility;
 			addResource(&visDesc);
 
 			BufferLoadDesc prevVisDesc = {};
@@ -1237,7 +1237,7 @@ void addResource(TextureLoadDesc* pTextureDesc, SyncToken* token)
 			if (!pImage)
 			{
 				return;
-			}			
+			}
 		}
 #else
 		if (!pImage)
@@ -1306,12 +1306,12 @@ void addResource(TextureLoadDesc* pTextureDesc, SyncToken* token)
 
 	wchar_t debugName[MAX_PATH] = {};
 	desc.pDebugName = debugName;
-	
+
 	if (const Path *path = pImage->GetPath()) {
 		PathComponent fileName = fsGetPathFileName(path);
 		mbstowcs(debugName, fileName.buffer, min((size_t)MAX_PATH, fileName.length));
 	}
-   
+
 	addTexture(pResourceLoader->pRenderer, &desc, pTextureDesc->ppTexture);
 
 	TextureUpdateDescInternal updateDesc = { *pTextureDesc->ppTexture, pImage, freeImage };
@@ -1363,7 +1363,7 @@ void updateResource(BufferUpdateDesc* pBufferUpdate, SyncToken* token)
 }
 
 void updateResource(TextureUpdateDesc* pTextureUpdate, SyncToken* token)
-{	
+{
 	TextureUpdateDescInternal desc;
 	desc.pTexture = pTextureUpdate->pTexture;
 	if (pTextureUpdate->pRawImageData)
@@ -1371,7 +1371,7 @@ void updateResource(TextureUpdateDesc* pTextureUpdate, SyncToken* token)
 		Image* pImage = ResourceLoader::CreateImage(pTextureUpdate->pRawImageData->mFormat, pTextureUpdate->pRawImageData->mWidth, pTextureUpdate->pRawImageData->mHeight,
 			pTextureUpdate->pRawImageData->mDepth, pTextureUpdate->pRawImageData->mMipLevels, pTextureUpdate->pRawImageData->mArraySize,
 			pTextureUpdate->pRawImageData->pRawData);
-		pImage->SetMipsAfterSlices(pTextureUpdate->pRawImageData->mMipsAfterSlices);			
+		pImage->SetMipsAfterSlices(pTextureUpdate->pRawImageData->mMipsAfterSlices);
 		desc.mFreeImage = true;
 		desc.pImage = pImage;
 	}
@@ -1522,14 +1522,14 @@ void vk_compileShader(
 	{
 		// Add command to compile from Vulkan GLSL to Spirv
 		commandLine.append_sprintf(
-			"\"%s\" -V \"%s\" -o \"%s\"", 
-			fsGetPathAsNativeString(configFilePath), 
-			fsGetPathAsNativeString(filePath), 
+			"\"%s\" -V \"%s\" -o \"%s\"",
+			fsGetPathAsNativeString(configFilePath),
+			fsGetPathAsNativeString(filePath),
 			fsGetPathAsNativeString(outFilePath));
 	}
 	else
 	{
-		commandLine.append_sprintf("-V \"%s\" -o \"%s\"", 
+		commandLine.append_sprintf("-V \"%s\" -o \"%s\"",
 			fsGetPathAsNativeString(filePath),
 			fsGetPathAsNativeString(outFilePath));
 	}
@@ -1563,12 +1563,12 @@ void vk_compileShader(
 		glslangValidator = "/usr/bin/glslangValidator";
 
 	const char* args[1] = { commandLine.c_str() };
-	
+
 	eastl::string fileName = fsPathComponentToString(fsGetPathFileName(outFilePath));
 	eastl::string logFileName = fileName + "_compile.log";
 	PathHandle logFilePath = fsAppendPathComponent(parentDirectory, logFileName.c_str());
 	if (systemRun(glslangValidator.c_str(), args, 1, logFilePath) == 0)
-	{		
+	{
 		FileStream* fh = fsOpenFile(outFilePath, FM_READ_BINARY);
 		//Check if the File Handle exists
 		ASSERT(fh);
@@ -1600,7 +1600,7 @@ void mtl_compileShader(
 	Renderer* pRenderer, const Path* sourcePath, const Path* outFilePath, uint32_t macroCount, ShaderMacro* pMacros,
 	eastl::vector<char>* pByteCode, const char* /*pEntryPoint*/)
 {
-    
+
     PathHandle outFileDirectory = fsCopyParentPath(outFilePath);
 	if (!fsFileExists(outFileDirectory))
     {
@@ -1608,7 +1608,7 @@ void mtl_compileShader(
     }
 
     PathHandle intermediateFile = fsAppendPathExtension(outFilePath, "air");
-    
+
     const char *xcrun = "/usr/bin/xcrun";
 	eastl::vector<eastl::string> args;
 	eastl::string tmpArg = "";
@@ -1627,19 +1627,19 @@ void mtl_compileShader(
 	//args.push_back("-gline-tables-only");
 	args.push_back("-D");
 	args.push_back("MTL_SHADER=1");    // Add MTL_SHADER macro to differentiate structs in headers shared by app/shader code.
-    
+
 	// Add user defined macros to the command line
 	for (uint32_t i = 0; i < macroCount; ++i)
 	{
 		args.push_back("-D");
 		args.push_back(eastl::string(pMacros[i].definition) + "=" + pMacros[i].value);
 	}
-    
+
     eastl::vector<const char*> cArgs;
     for (eastl::string& arg : args) {
         cArgs.push_back(arg.c_str());
     }
-    
+
 	if (systemRun(xcrun, &cArgs[0], cArgs.size(), NULL) == 0)
 	{
 		// Create a .metallib file from the .air file.
@@ -1656,12 +1656,12 @@ void mtl_compileShader(
 			"",
 			fsGetPathAsNativeString(outFilePath));
 		args.push_back(tmpArg);
-        
+
         cArgs.clear();
         for (eastl::string& arg : args) {
             cArgs.push_back(arg.c_str());
         }
-        
+
 		if (systemRun(xcrun, &cArgs[0], cArgs.size(), NULL) == 0)
 		{
 			// Remove the temp .air file.
@@ -1670,7 +1670,7 @@ void mtl_compileShader(
 
 			// Store the compiled bytecode.
 			FileStream* fHandle = fsOpenFile(outFilePath, FM_READ_BINARY);
-			
+
 			ASSERT(fHandle);
 			pByteCode->resize(fsGetStreamFileSize(fHandle));
             fsReadFromStream(fHandle, pByteCode->data(), pByteCode->size());
@@ -1708,14 +1708,14 @@ static bool process_source_file(FileStream* original, const Path* filePath, File
     {
         return true; // The source file is missing, but we may still be able to use the shader binary.
     }
-    
+
     PathHandle fileDirectory = fsCopyParentPath(filePath);
 
 	const eastl::string pIncludeDirective = "#include";
 	while (!fsStreamAtEnd(file))
 	{
         eastl::string line = fsReadFromStreamSTLLine(file);
-        
+
 		size_t        filePos = line.find(pIncludeDirective, 0);
 		const size_t  commentPosCpp = line.find("//", 0);
 		const size_t  commentPosC = line.find("/*", 0);
@@ -1748,10 +1748,10 @@ static bool process_source_file(FileStream* original, const Path* filePath, File
 
 			// get the include file path
 			//TODO: Remove Comments
-            
+
             if (fileName.at(0) == '<')    // disregard bracketsauthop
                 continue;
-            
+
             PathHandle includeFilePath = fsAppendPathComponent(fileDirectory, fileName.c_str());
 
 			// open the include file
@@ -1816,12 +1816,12 @@ bool check_for_byte_code(const Path* binaryShaderPath, time_t sourceTimeStamp, e
 		LOGF(LogLevel::eERROR, (eastl::string(fsGetPathAsNativeString(binaryShaderPath)) + " is not a valid shader bytecode file").c_str());
 		return false;
 	}
-    
+
     ssize_t size = fsGetStreamFileSize(fh);
 	byteCode.resize(fsGetStreamFileSize(fh));
     fsReadFromStream(fh, byteCode.data(), size);
     fsCloseStream(fh);
-    
+
 	return true;
 }
 
@@ -1833,9 +1833,9 @@ bool save_byte_code(const Path* binaryShaderPath, const eastl::vector<char>& byt
     {
         fsCreateDirectory(parentDirectory);
     }
-    
+
     FileStream* fh = fsOpenFile(binaryShaderPath, FM_WRITE_BINARY);
-    
+
 	if (!fh)
 		return false;
 
@@ -1904,7 +1904,7 @@ bool load_shader_stage_byte_code(
     eastl::string binaryShaderComponent = fsPathComponentToString(fileName) +
 									 eastl::string().sprintf("_%zu", eastl::string_hash<eastl::string>()(shaderDefines)) + fsPathComponentToString(extension) +
 									 eastl::string().sprintf("%u", target) + ".bin";
-    
+
     PathHandle binaryShaderPath = fsCopyPathInResourceDirectory(RD_SHADER_BINARIES, binaryShaderComponent.c_str());
 
 	// Shader source is newer than binary
@@ -1916,7 +1916,7 @@ bool load_shader_stage_byte_code(
             fsCloseStream(sourceFileStream);
             return false;
         }
-        
+
 		if (pRenderer->mSettings.mApi == RENDERER_API_METAL || pRenderer->mSettings.mApi == RENDERER_API_VULKAN)
 		{
 #if defined(VULKAN)
@@ -1956,7 +1956,7 @@ bool load_shader_stage_byte_code(
 			return false;
 		}
 	}
-	
+
     fsCloseStream(sourceFileStream);
 	return true;
 }
@@ -2067,7 +2067,7 @@ void addShader(Renderer* pRenderer, const ShaderLoadDesc* pDesc, Shader** ppShad
 	}
 
 #ifndef TARGET_IOS
-    
+
 	BinaryShaderDesc      binaryDesc = {};
 	eastl::vector<char> byteCodes[SHADER_STAGE_COUNT] = {};
 #if defined(METAL)
@@ -2078,13 +2078,13 @@ void addShader(Renderer* pRenderer, const ShaderLoadDesc* pDesc, Shader** ppShad
 		if (pDesc->mStages[i].pFileName && strlen(pDesc->mStages[i].pFileName) != 0)
 		{
             ResourceDirectory resourceDir = pDesc->mStages[i].mRoot;
-			
+
 			PathHandle resourceDirBasePath = fsCopyPathForResourceDirectory(resourceDir);
-            
+
             if (resourceDir != RD_SHADER_SOURCES && resourceDir != RD_ROOT) {
 				resourceDirBasePath = fsAppendPathComponent(resourceDirBasePath, fsGetDefaultRelativePathForResourceDirectory(RD_SHADER_SOURCES));
             }
-			
+
             PathHandle filePath = fsAppendPathComponent(resourceDirBasePath, pDesc->mStages[i].pFileName);
 
 			ShaderStage            stage;
@@ -2113,7 +2113,7 @@ void addShader(Renderer* pRenderer, const ShaderLoadDesc* pDesc, Shader** ppShad
                     pStage->pEntryPoint = "stageMain";
 
                 PathHandle metalFilePath = fsAppendPathExtension(filePath, "metal");
-                
+
                 FileStream* fh = fsOpenFile(metalFilePath, FM_READ_BINARY);
                 size_t metalFileSize = fsGetStreamFileSize(fh);
                 pSources[i] = (char*)conf_malloc(metalFileSize + 1);
@@ -2133,7 +2133,7 @@ void addShader(Renderer* pRenderer, const ShaderLoadDesc* pDesc, Shader** ppShad
 	}
 
 	addShaderBinary(pRenderer, &binaryDesc, ppShader);
-	
+
 #if defined(METAL)
 	for (uint32_t i = 0; i < SHADER_STAGE_COUNT; ++i)
 	{
@@ -2151,13 +2151,13 @@ void addShader(Renderer* pRenderer, const ShaderLoadDesc* pDesc, Shader** ppShad
 		if (pDesc->mStages[i].pFileName && strlen(pDesc->mStages[i].pFileName))
 		{
             ResourceDirectory resourceDir = pDesc->mStages[i].mRoot;
-            
+
             PathHandle resourceDirBasePath = fsCopyPathForResourceDirectory(resourceDir);
-            
+
             if (resourceDir != RD_SHADER_SOURCES && resourceDir != RD_ROOT) {
                 resourceDirBasePath = fsAppendPathComponent(resourceDirBasePath, fsGetDefaultRelativePathForResourceDirectory(RD_SHADER_SOURCES));
             }
-            
+
             PathHandle filePath = fsAppendPathComponent(resourceDirBasePath, pDesc->mStages[i].pFileName);
 
 			ShaderStage stage;

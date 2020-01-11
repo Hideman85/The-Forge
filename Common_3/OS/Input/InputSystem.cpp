@@ -22,16 +22,16 @@
  * under the License.
  */
 
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_set.h"
-#include "../../ThirdParty/OpenSource/EASTL/array.h"
+#include <EASTL/unordered_map.h>
+#include <EASTL/unordered_set.h>
+#include <EASTL/array.h>
 
-#include "../../ThirdParty/OpenSource/gainput/lib/include/gainput/gainput.h"
+#include <gainput/gainput.h>
 #ifdef __APPLE__
 #ifdef TARGET_IOS
-#include "../../ThirdParty/OpenSource/gainput/lib/include/gainput/GainputIos.h"
+#include <gainput/GainputIos.h>
 #else
-#include "../../ThirdParty/OpenSource/gainput/lib/include/gainput/GainputMac.h"
+#include <gainput/GainputMac.h>
 #endif
 #endif
 
@@ -109,7 +109,7 @@ struct InputSystemImpl : public gainput::InputListener
 		CONTROL_COMPOSITE,
 		CONTROL_COMBO,
 	};
-	
+
 	enum InputAreaType
 	{
 		AREA_LEFT = 0,
@@ -191,7 +191,7 @@ struct InputSystemImpl : public gainput::InputListener
 		uint8_t  mInitialized;
 		uint8_t  mActive;
 	};
-	
+
 	struct ComboControl : public IControl
 	{
 		uint16_t mPressButton;
@@ -262,7 +262,7 @@ struct InputSystemImpl : public gainput::InputListener
 	/// List of controls which need to be canceled at the end of the frame
 	eastl::unordered_set<FloatControl*>      mFloatDeltaControlCancelQueue;
 	eastl::unordered_set<IControl*>          mButtonControlPerformQueue;
-	
+
 	eastl::vector<InputAction>               mActions;
 	eastl::vector<IControl*>                 mControlPool;
 #if TOUCH_INPUT
@@ -349,7 +349,7 @@ struct InputSystemImpl : public gainput::InputListener
 
 		for (decltype(mKeyMap)::const_iterator it = mKeyMap.begin(); it != mKeyMap.end(); ++it)
 			mControlMapReverse[mKeyboardDeviceID][it->second] = it->first;
-		
+
 		// Every touch can map to the same button
 		for (uint32_t i = 0; i < gainput::TouchCount_; ++i)
 			mControlMapReverse[mTouchDeviceID][i] = InputBindings::BUTTON_SOUTH;
@@ -365,21 +365,21 @@ struct InputSystemImpl : public gainput::InputListener
 			for (decltype(mGamepadMap)::const_iterator it = mGamepadMap.begin(); it != mGamepadMap.end(); ++it)
 				mControlMapReverse[deviceId][it->second] = it->first;
 		}
-		
+
 		mActions.reserve(MAX_INPUT_ACTIONS);
 
 		pInputManager->AddListener(this);
-		
+
 		return InitSubView();
 	}
 
 	void Exit()
 	{
 		ASSERT(pInputManager);
-		
+
 		for (uint32_t i = 0; i < (uint32_t)mControlPool.size(); ++i)
 			conf_free(mControlPool[i]);
-		
+
 		conf_free(pGamepadDeviceIDs);
 		conf_free(pDeviceTypes);
 
@@ -411,7 +411,7 @@ struct InputSystemImpl : public gainput::InputListener
 				pControl->pAction->mDesc.pFunction(&ctx);
 			}
 		}
-		
+
 #if TOUCH_INPUT
 		for (IControl* pControl : mButtonControlPerformQueue)
 		{
@@ -426,7 +426,7 @@ struct InputSystemImpl : public gainput::InputListener
 			pControl->pAction->mDesc.pFunction(&ctx);
 		}
 #endif
-		
+
 		mButtonControlPerformQueue.clear();
 		mFloatDeltaControlCancelQueue.clear();
 
@@ -452,7 +452,7 @@ struct InputSystemImpl : public gainput::InputListener
 		// update gainput manager
 		pInputManager->SetDisplaySize(width, height);
 		pInputManager->Update();
-		
+
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(GAINPUT_PLATFORM_GGP)
 		//this needs to be done before updating the events
 		//that way current frame data will be delta after resetting mouse position
@@ -471,7 +471,7 @@ struct InputSystemImpl : public gainput::InputListener
 		}
 #endif
 	}
-	
+
 	template<typename T>
 	T* AllocateControl()
 	{
@@ -489,7 +489,7 @@ struct InputSystemImpl : public gainput::InputListener
 		ASSERT(pAction);
 
 		pAction->mDesc = *pDesc;
-		
+
 #if defined(TARGET_IOS)
 		if (pGainputView && InputBindings::GESTURE_BINDINGS_BEGIN <= pDesc->mBinding && InputBindings::GESTURE_BINDINGS_END >= pDesc->mBinding)
 		{
@@ -615,7 +615,7 @@ struct InputSystemImpl : public gainput::InputListener
 				{
 					VirtualJoystickControl* pControl = AllocateControl<VirtualJoystickControl>();
 					ASSERT(pControl);
-					
+
 					pControl->mType = CONTROL_VIRTUAL_JOYSTICK;
 					pControl->pAction = pAction;
 					pControl->mOutsideRadius = pDesc->mOutsideRadius;
@@ -653,7 +653,7 @@ struct InputSystemImpl : public gainput::InputListener
 					pControl->pAction = pAction;
 
                     gainput::DeviceId deviceId = ((pControl->mDelta >> 1) & 0x1) ? mRawMouseDeviceID : mMouseDeviceID;
-                    
+
 					for (uint32_t i = 0; i < axisCount; ++i)
 						mControls[deviceId][pControl->mStartButton + i].emplace_back(pControl);
 				}
@@ -667,14 +667,14 @@ struct InputSystemImpl : public gainput::InputListener
 	void RemoveInputAction(InputAction* pAction)
 	{
 		ASSERT(pAction);
-		
+
 		decltype(mGestureControls)::const_iterator it = eastl::find(mGestureControls.begin(), mGestureControls.end(), pAction);
 		if (it != mGestureControls.end())
 			mGestureControls.erase(it);
 
 		conf_free(pAction);
 	}
-	
+
 	bool InitSubView()
 	{
 #ifdef __APPLE__
@@ -707,10 +707,10 @@ struct InputSystemImpl : public gainput::InputListener
 			pGainputView = (__bridge void*)newView;
 		}
 #endif
-		
+
 		return true;
 	}
-	
+
 	void ShutdownSubView()
 	{
 #ifdef __APPLE__
@@ -739,7 +739,7 @@ struct InputSystemImpl : public gainput::InputListener
 #if defined(_WIN32) && !defined(_DURANGO)
 		static int32_t lastCursorPosX = 0;
 		static int32_t lastCursorPosY = 0;
-		
+
 		if (enable != mInputCaptured)
 		{
 			if (enable)
@@ -798,7 +798,7 @@ struct InputSystemImpl : public gainput::InputListener
 			}
 #endif
 			mInputCaptured = enable;
-			
+
 			return true;
 		}
 #elif defined(__linux__) && !defined(__ANDROID__) && !defined(GAINPUT_PLATFORM_GGP)
@@ -826,9 +826,9 @@ struct InputSystemImpl : public gainput::InputListener
 			{
 				XUngrabPointer(pWindow->handle.display, CurrentTime);
 			}
-			
+
 			mInputCaptured = enable;
-			
+
 			return true;
 		}
 #elif defined(__ANDROID__)
@@ -871,7 +871,7 @@ struct InputSystemImpl : public gainput::InputListener
 	{
 		if (oldValue == newValue)
 			return false;
-		
+
 		if (mControls[device].size())
 		{
 			InputActionContext ctx = {};
@@ -1040,7 +1040,7 @@ struct InputSystemImpl : public gainput::InputListener
 							pControl->mStarted = 0x3;
 							pControl->mTouchIndex = touchIndex;
 							pControl->mCurrPos = pControl->mStartPos;
-							
+
 							if (pDesc->pFunction)
 							{
 								ctx.mPhase = INPUT_ACTION_PHASE_STARTED;
@@ -1113,7 +1113,7 @@ struct InputSystemImpl : public gainput::InputListener
 			mMousePosition[1] = pMouse->GetFloat(gainput::MouseAxisY);
 		}
 #endif
-		
+
 		if (mControls[device].size())
 		{
 			bool executeNext = true;
@@ -1130,7 +1130,7 @@ struct InputSystemImpl : public gainput::InputListener
 				ctx.mDeviceType = pDeviceTypes[device];
 				ctx.pUserData = pDesc->pUserData;
 				ctx.pCaptured = IsPointerType(device) ? &mInputCaptured : &mDefaultCapture;
-				
+
 				switch (type)
 				{
 				case CONTROL_FLOAT:
@@ -1239,12 +1239,12 @@ struct InputSystemImpl : public gainput::InputListener
 				case CONTROL_VIRTUAL_JOYSTICK:
 				{
 					VirtualJoystickControl* pControl = (VirtualJoystickControl*)control;
-					
+
 					const uint32_t axis = TOUCH_AXIS(deviceButton);
-					
+
 					if (!pControl->mStarted || TOUCH_USER(deviceButton) != pControl->mTouchIndex)
 						continue;
-					
+
 					pControl->mPerformed |= (1 << axis);
 					pControl->mCurrPos[axis] = newValue;
 					if (pControl->mPerformed == 0x3)
@@ -1254,7 +1254,7 @@ struct InputSystemImpl : public gainput::InputListener
 						float halfRad = (pControl->mOutsideRadius * 0.5f) - pControl->mDeadzone;
 						if (length(delta) > halfRad)
 							pControl->mCurrPos = pControl->mStartPos + halfRad * v2ToF2(normalize(delta));
-						
+
 						ctx.mPhase = INPUT_ACTION_PHASE_PERFORMED;
 						float2 dir = ((pControl->mCurrPos - pControl->mStartPos) / halfRad) * pControl->mScale;
 						ctx.mFloat2 = float2(dir[0], -dir[1]);
@@ -1324,7 +1324,7 @@ static int32_t InputSystemHandleMessage(WindowsDesc* pWindow, void* msg)
 #elif defined(__linux__) && !defined(GAINPUT_PLATFORM_GGP)
 	pInputSystem->pInputManager->HandleEvent(*(XEvent*)msg);
 #endif
-	
+
 	return 0;
 }
 

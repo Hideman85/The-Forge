@@ -11,7 +11,7 @@
 #define VECTORMATH_COMMON_HPP
 
 #define IMEMORY_FROM_HEADER
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace Vectormath
 {
@@ -98,7 +98,7 @@ inline Matrix4 makeShadowMatrix(const Vector4 & plane, const Vector4 & light)
 #endif
 #endif
 
-#include "../../../OS/Core/Compiler.h"
+#include <TheForge/OS/Core/Compiler.h>
 
 /*
 * Copyright (c) 2018-2019 Confetti Interactive Inc.
@@ -147,7 +147,7 @@ static const float piDivTwo = 1.570796326794896619231f;        //!< pi/2 constan
 //----------------------------------------------------------------------------
 inline bool operator == (const Vector2 &u, const Vector2 &v) { return (u.getX() == v.getX() && u.getY() == v.getY()); }
 inline bool operator != (const Vector2 &u, const Vector2 &v) { return !(u == v); }
-inline bool operator == (const Vector3 &u, const Vector3 &v) 
+inline bool operator == (const Vector3 &u, const Vector3 &v)
 {
 	//Compare the X, Y, and Z values
 #if VECTORMATH_MODE_SCALAR
@@ -243,7 +243,7 @@ struct half
 			}
 		}
 
-		
+
 	}
 
 	inline operator float() const
@@ -944,10 +944,10 @@ inline float sqrf(const float x) { return x * x; }
 inline float sincf(const float x) { return (x == 0) ? 1 : sinf(x) / x; }
 //inline float roundf(float x) { return floorf((x)+0.5f); }
 
-template <class T> 
+template <class T>
 inline T clamp(const T& value, const T& minV, const T& maxV){ return min(max(value, minV), maxV); }
 
-inline float intAdjustf(const float x, const float diff = 0.01f) 
+inline float intAdjustf(const float x, const float diff = 0.01f)
 {
 	float f = roundf(x);
 	return (fabsf(f - x) < diff) ? f : x;
@@ -957,7 +957,7 @@ inline float degToRad(float degrees) { 	return (degrees * PI / 180.0f); }
 inline float radToDeg(float radians) { 	return (radians * 180.0f / PI); }
 inline bool isPowerOf2(const int x) { return (x & (x - 1)) == 0; } // Note: returns true for 0
 
-inline unsigned int getClosestPowerOfTwo(const unsigned int x) 
+inline unsigned int getClosestPowerOfTwo(const unsigned int x)
 {
 	unsigned int i = 1;
 	while (i < x) i += i;
@@ -966,7 +966,7 @@ inline unsigned int getClosestPowerOfTwo(const unsigned int x)
 	return i;
 }
 
-inline unsigned int getUpperPowerOfTwo(const unsigned int x) 
+inline unsigned int getUpperPowerOfTwo(const unsigned int x)
 {
 	unsigned int i = 1;
 	while (i < x) i += i;
@@ -974,7 +974,7 @@ inline unsigned int getUpperPowerOfTwo(const unsigned int x)
 	return i;
 }
 
-inline unsigned int getLowerPowerOfTwo(const unsigned int x) 
+inline unsigned int getLowerPowerOfTwo(const unsigned int x)
 {
 	unsigned int i = 1;
 	while (i <= x) i += i;
@@ -1015,7 +1015,7 @@ static inline uint32_t packColorF32(float r, float g, float b, float a)
 static inline uint32_t packColorF32_4(float4 rgba) { return packColorF32(rgba.x, rgba.y, rgba.z, rgba.w); }
 static inline Vector4 unpackColorU32(uint32_t colorValue)
 {
-	return Vector4 ( 
+	return Vector4 (
 		  (float)((colorValue & 0xFF000000) >> 24) / 255.0f
 		, (float)((colorValue & 0x00FF0000) >> 16) / 255.0f
 		, (float)((colorValue & 0x0000FF00) >> 8 ) / 255.0f
@@ -1026,7 +1026,7 @@ static inline Vector4 unpackColorU32(uint32_t colorValue)
 
 inline Vector3 rgbeToRGB(unsigned char *rgbe)
 {
-	if (rgbe[3]) 
+	if (rgbe[3])
 	{
 		return Vector3(rgbe[0], rgbe[1], rgbe[2]) * ldexpf(1.0f, rgbe[3] - (int)(128 + 8));
 	}
@@ -1340,7 +1340,7 @@ inline void generateBonePoints(float **ppPoints, int *pNumberOfPoints, float wid
 	float rightFaceArea = length(cross(boneLength - frontWidth, topWidth - frontWidth));
 	float leftFaceArea = length(cross(frontWidth - origin, topWidth - origin));
 	float maxFaceArea = max(leftFaceArea, rightFaceArea);
-	
+
 	float leftRatio = leftFaceArea / maxFaceArea;
 	float rightRatio = rightFaceArea / maxFaceArea;
 
@@ -1498,8 +1498,8 @@ inline float planeDistance(const Vector4 &plane, const Vector3 &point)
 
 
 struct AABB
-{	// Bounding box 
-	AABB() 
+{	// Bounding box
+	AABB()
 	{
 		minBounds = Vector3(-0.001f, -0.001f, -0.001f);
 		maxBounds = Vector3(0.001f, 0.001f, 0.001f);

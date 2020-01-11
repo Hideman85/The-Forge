@@ -8,8 +8,8 @@
  */
 #pragma once
 
-#include "../../../../OS/Interfaces/ILog.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 /* Version macro; major * 1000 + minor * 10 + patch */
 #define MESHOPTIMIZER_VERSION 110

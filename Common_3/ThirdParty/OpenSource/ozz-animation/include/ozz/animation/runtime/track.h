@@ -32,7 +32,7 @@
 #include "ozz/base/platform.h"
 
 //CONFFX_BEGIN
-#include "../../../../../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 //CONFFX_END
 
 namespace ozz {

@@ -5,8 +5,8 @@
 
 #include <new>
 #include <stdint.h>
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 #include <string.h>
 
@@ -119,7 +119,7 @@ enum HLSLNodeType
     HLSLNodeType_CastingExpression,
     HLSLNodeType_LiteralExpression,
     HLSLNodeType_IdentifierExpression,
-    HLSLNodeType_ConstructorExpression,	
+    HLSLNodeType_ConstructorExpression,
     HLSLNodeType_MemberAccess,
     HLSLNodeType_ArrayAccess,
     HLSLNodeType_FunctionCall,
@@ -158,7 +158,7 @@ enum HLSLBaseType
 	HLSLBaseType_Float4,
 	HLSLBaseType_Float4x2,
 	HLSLBaseType_Float4x3,
-	HLSLBaseType_Float4x4,	
+	HLSLBaseType_Float4x4,
 
 	HLSLBaseType_Half,
 	HLSLBaseType_Half1x2,
@@ -258,13 +258,13 @@ enum HLSLBaseType
 	HLSLBaseType_Uint3x2,
 	HLSLBaseType_Uint3x3,
 	HLSLBaseType_Uint3x4,
-	HLSLBaseType_Uint4,	
+	HLSLBaseType_Uint4,
 	HLSLBaseType_Uint4x2,
 	HLSLBaseType_Uint4x3,
 	HLSLBaseType_Uint4x4,
 	HLSLBaseType_LastInteger = HLSLBaseType_Uint4x4,
 	HLSLBaseType_LastNumeric = HLSLBaseType_Uint4x4,
-	
+
 	HLSLBaseType_InputPatch,
 	HLSLBaseType_OutputPatch,
 
@@ -277,8 +277,8 @@ enum HLSLBaseType
 	HLSLBaseType_Triangle,
 	HLSLBaseType_Lineadj,
 	HLSLBaseType_Triangleadj,
-	
-	
+
+
 
     HLSLBaseType_Texture,
 
@@ -357,8 +357,8 @@ enum HLSLBaseType
 
 	HLSLBaseType_UserMacro,
 	HLSLBaseType_Empty,
-	
-    
+
+
     HLSLBaseType_Count,
     HLSLBaseType_NumericCount = HLSLBaseType_LastNumeric - HLSLBaseType_FirstNumeric + 1
 };
@@ -636,7 +636,7 @@ inline HLSLBaseType GetScalarBaseType(const HLSLBaseType baseType)
 
 enum HLSLBinaryOp
 {
-	//The ordering must fit with _binaryOpPriority 
+	//The ordering must fit with _binaryOpPriority
     HLSLBinaryOp_And,
     HLSLBinaryOp_Or,
     HLSLBinaryOp_Add,
@@ -700,7 +700,7 @@ enum HLSLArgumentModifier
     HLSLArgumentModifier_Uniform,
     HLSLArgumentModifier_Const,
 
-	
+
 	HLSLArgumentModifier_Point,
 	HLSLArgumentModifier_Line,
 	HLSLArgumentModifier_Triangle,
@@ -752,7 +752,7 @@ enum HLSLAttributeType
 	HLSLAttributeType_MaxtessFactor,
 
 	HLSLAttributeType_EarlyDepthStencil,
-	
+
 };
 
 enum NumericType
@@ -833,7 +833,7 @@ struct HLSLMemberAccess;
 struct HLSLType
 {
     explicit HLSLType(HLSLBaseType _baseType = HLSLBaseType_Unknown)
-    { 
+    {
         baseType    = _baseType;
         array       = false;
         flags       = 0;
@@ -919,7 +919,7 @@ inline bool IsTexture(const HLSLType& type)
 			return !type.array;
 		default:
 			return false;
-	}			
+	}
 }
 
 inline bool IsRWTexture(HLSLBaseType type)
@@ -939,7 +939,7 @@ inline bool IsRWTexture(HLSLBaseType type)
 			return true;
 		default:
 			return false;
-	}			
+	}
 }
 
 inline bool IsBuffer(HLSLBaseType type)
@@ -955,7 +955,7 @@ inline bool IsBuffer(HLSLBaseType type)
 			return true;
 		default:
 			return false;
-	}			
+	}
 }
 
 inline bool IsStructuredBuffer(HLSLBaseType type)
@@ -971,7 +971,7 @@ inline bool IsStructuredBuffer(HLSLBaseType type)
 			return true;
 		default:
 			return false;
-	}			
+	}
 }
 
 inline bool IsRWBuffer(HLSLBaseType type)
@@ -984,7 +984,7 @@ inline bool IsRWBuffer(HLSLBaseType type)
 			return true;
 		default:
 			return false;
-	}			
+	}
 }
 
 inline bool IsRasterizerOrderedTexture(HLSLBaseType type)
@@ -1048,9 +1048,9 @@ struct HLSLRoot : public HLSLNode
 
 struct HLSLStatement : public HLSLNode
 {
-    HLSLStatement() 
-    { 
-        nextStatement   = NULL; 
+    HLSLStatement()
+    {
+        nextStatement   = NULL;
         attributes      = NULL;
         hidden          = false;
 	}
@@ -1100,7 +1100,7 @@ struct HLSLAttribute : public HLSLNode
 
 	unsigned int		numGroupX;
 	unsigned int		numGroupY;
-	unsigned int		numGroupZ;	
+	unsigned int		numGroupZ;
 
 	CachedString		numGroupXstr;
 	CachedString		numGroupYstr;
@@ -1226,7 +1226,7 @@ struct HLSLSamplerState : public HLSLDeclaration
 		numStateAssignments = 0;
 		stateAssignments = NULL;
 	}
-	
+
 	int								numStateAssignments;
 	HLSLStateAssignment*			stateAssignments;
 };
@@ -1238,7 +1238,7 @@ struct HLSLTextureState : public HLSLDeclaration
 	{
 		sampleCount = 0;
 	}
-	
+
 	unsigned int		sampleCount;
 	CachedString		sampleIdentifier;
 };
@@ -1247,7 +1247,7 @@ struct HLSLBuffer : public HLSLDeclaration
 {
     static const HLSLNodeType s_type = HLSLNodeType_Buffer;
     HLSLBuffer()
-    {       
+    {
         field           = NULL;
 
 		bAtomic		  = false;
@@ -1361,15 +1361,15 @@ struct HLSLSwitchStatement : public HLSLStatement
 {
 	static const HLSLNodeType s_type = HLSLNodeType_SwitchStatement;
 	HLSLSwitchStatement()
-	{		
+	{
 		condition = NULL;
-		
+
 		caseNumber.clear();
 		caseStatement.clear();
 		caseDefault = NULL;
 		caseDefaultIndex = 0;
 	}
-	
+
 	HLSLExpression*     condition;
 
 	eastl::vector < HLSLExpression* > caseNumber;
@@ -1595,7 +1595,7 @@ struct HLSLPass : public HLSLNode
         stateAssignments = NULL;
         nextPass = NULL;
     }
-    
+
 	CachedString             name;
     int                     numStateAssignments;
     HLSLStateAssignment*    stateAssignments;
@@ -1624,7 +1624,7 @@ struct HLSLPipeline : public HLSLStatement
         numStateAssignments = 0;
         stateAssignments = NULL;
     }
-    
+
 	CachedString             name;
     int                     numStateAssignments;
     HLSLStateAssignment*    stateAssignments;
@@ -1660,7 +1660,7 @@ public:
     /** Adds a string to the string pool used by the tree. */
 	CachedString AddStringCached(const char* string);
 	CachedString AddStringFormatCached(const char* string, ...);
-	
+
 	/** Returns true if the string is contained within the tree. */
     bool GetContainsString(const char* string) const;
 
@@ -1689,7 +1689,7 @@ public:
 		m_allNodes.push_back(node);
 		return static_cast<T*>(node);
 	}
-	
+
 	HLSLFunction * FindFunction(const CachedString & name, int index = 0);
     HLSLDeclaration * FindGlobalDeclaration(const CachedString & name, HLSLBuffer ** buffer_out = NULL);
 	HLSLStruct * FindGlobalStruct(const CachedString & name);
@@ -1708,7 +1708,7 @@ public:
 		eastl::vector < HLSLBaseType > & textureType,
 		eastl::vector < HLSLBaseType > & paramType) const;
 
-	
+
 	bool GetExpressionValue(HLSLExpression * expression, int & value);
     int GetExpressionValue(HLSLExpression * expression, float values[4]);
 

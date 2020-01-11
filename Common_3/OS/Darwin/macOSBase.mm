@@ -30,7 +30,7 @@
 
 #include <ctime>
 
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 
 #include "../Interfaces/IOperatingSystem.h"
 #include "../Interfaces/ILog.h"
@@ -59,7 +59,7 @@ static float2      gRetinaScale = { 1.0f, 1.0f };
 @private
     CVDisplayLinkRef    displayLink;
     CAMetalLayer        *metalLayer;
-    
+
 }
 @property (weak) id<RenderDestinationProvider> delegate;
 
@@ -73,7 +73,7 @@ static float2      gRetinaScale = { 1.0f, 1.0f };
 {
     self = [super initWithFrame:FrameRect];
     self.wantsLayer = YES;
-    
+
     metalLayer = [CAMetalLayer layer];
     metalLayer.device =  device;
     metalLayer.framebufferOnly = YES; //todo: optimized way
@@ -82,9 +82,9 @@ static float2      gRetinaScale = { 1.0f, 1.0f };
     metalLayer.drawableSize = CGSizeMake(self.frame.size.width, self.frame.size.height);
     metalLayer.displaySyncEnabled = vsync;
     self.layer = metalLayer;
-    
+
     [self setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
-    
+
     return self;
 }
 
@@ -95,7 +95,7 @@ static float2      gRetinaScale = { 1.0f, 1.0f };
     dispatch_sync(dispatch_get_main_queue(), ^{
         [self.delegate draw];
     });
-   
+
     return kCVReturnSuccess;
 }
 
@@ -150,18 +150,18 @@ void openWindow(const char* app_name, WindowsDesc* winDesc, id<MTLDevice> device
     [Window setAcceptsMouseMovedEvents:YES];
     [Window setTitle:[NSString stringWithUTF8String:app_name]];
     [Window setMinSize:NSSizeFromCGSize(CGSizeMake(128, 128))];
-    
+
     [Window setOpaque:YES];
     [Window setRestorable:NO];
     [Window invalidateRestorableState];
     [Window makeKeyAndOrderFront: nil];
     [Window makeMainWindow];
     winDesc->handle.window = (void*)CFBridgingRetain(Window);
-    
+
     // Adjust window size to match retina scaling.
     CGFloat scale = [Window backingScaleFactor];
     gRetinaScale = { (float)scale, (float)scale };
-   
+
     ForgeMTLView *View = [[ForgeMTLView alloc] initWithFrame:ViewRect device: device display:0 hdr:NO vsync:NO];
     [Window setContentView: View];
     [Window setDelegate: View];
@@ -323,18 +323,18 @@ int macOSMain(int argc, const char** argv, IApp* app)
 - (id)init
 {
     self = [super init];
-    
+
     _device = MTLCreateSystemDefaultDevice();
     isCaptured = false;
-    
+
     // Kick-off the MetalKitApplication.
     _application = [[MetalKitApplication alloc] initWithMetalDevice:_device renderDestinationProvider:self];
-    
+
     if (!_device)
     {
          NSLog(@"Metal is not supported on this device");
     }
-    
+
     //register terminate callback
     NSApplication* app = [NSApplication sharedApplication];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -398,7 +398,7 @@ uint32_t testingMaxFrameCount = 120;
 		MemAllocInit();
 		fsInitAPI();
 		Log::Init();
-		
+
 		pSettings = &pApp->mSettings;
 
 		if (pSettings->mWidth == -1 || pSettings->mHeight == -1)

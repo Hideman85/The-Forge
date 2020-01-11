@@ -6,10 +6,10 @@
 #include <d3dcompiler.h>
 
 // OS
-#include "../../OS/Interfaces/ILog.h"
-#include "../../ThirdParty/OpenSource/EASTL/hash_set.h"
-#include "../../ThirdParty/OpenSource/EASTL/hash_map.h"
-#include "../../ThirdParty/OpenSource/EASTL/sort.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <EASTL/hash_set.h>
+#include <EASTL/hash_map.h>
+#include <EASTL/sort.h>
 
 // Renderer
 #include "../IRenderer.h"
@@ -17,7 +17,7 @@
 #include "../ResourceLoader.h"
 #include "Direct3D12Hooks.h"
 #include "Direct3D12MemoryAllocator.h"
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 //check if WindowsSDK is used which supports raytracing
 #ifdef ENABLE_RAYTRACING
@@ -342,7 +342,7 @@ void addAccelerationStructure(Raytracing* pRaytracing, const AccelerationStructu
 	uint32_t scratchBottomBufferSize = 0;
 	pAccelerationStructure->mBottomASCount = pDesc->mBottomASDescsCount;
 	pAccelerationStructure->ppBottomAS = createBottomAS(pRaytracing, pDesc, &scratchBottomBufferSize);
-	
+
 	uint32_t scratchTopBufferSize = 0;
 	pAccelerationStructure->mInstanceDescCount = pDesc->mInstancesDescCount;
 	pAccelerationStructure->pASBuffer = createTopAS(pRaytracing, pDesc, pAccelerationStructure->ppBottomAS, &scratchTopBufferSize, &pAccelerationStructure->pInstanceDescBuffer);
@@ -389,7 +389,7 @@ void addRaytracingShader(Raytracing* pRaytracing, const unsigned char* pByteCode
 	ASSERT(byteCodeSize);
 	ASSERT(pName);
 	ASSERT(ppShader);
-	
+
 	RaytracingShader* pShader = (RaytracingShader*)conf_calloc(1, sizeof(*pShader));
 	ASSERT(pShader);
 
@@ -415,7 +415,7 @@ void removeRaytracingShader(Raytracing* pRaytracing, RaytracingShader* pShader)
 
 static const uint64_t gShaderIdentifierSize = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES;
 
-void FillShaderIdentifiers(	const char *const * pRecords, uint32_t shaderCount, 
+void FillShaderIdentifiers(	const char *const * pRecords, uint32_t shaderCount,
 							ID3D12StateObjectProperties* pRtsoProps, uint64_t& maxShaderTableSize,
 							uint32_t& index, RaytracingShaderTable* pTable, Raytracing* pRaytracing)
 {
@@ -574,17 +574,17 @@ void addRaytracingShaderTable(Raytracing* pRaytracing, const RaytracingShaderTab
 	/************************************************************************/
 	ID3D12StateObjectProperties* pRtsoProps = NULL;
 	pDesc->pPipeline->pDxrPipeline->QueryInterface(IID_PPV_ARGS(&pRtsoProps));
-	   
+
 	uint32_t index = 0;
 	FillShaderIdentifiers(	&pDesc->pRayGenShader, 1, pRtsoProps,
 							maxShaderTableSize, index, pTable, pRaytracing);
 
 	pTable->mMissRecordSize = maxShaderTableSize * pDesc->mMissShaderCount;
-	FillShaderIdentifiers(	pDesc->pMissShaders, pDesc->mMissShaderCount, pRtsoProps, 
+	FillShaderIdentifiers(	pDesc->pMissShaders, pDesc->mMissShaderCount, pRtsoProps,
 							maxShaderTableSize, index, pTable, pRaytracing);
 
 	pTable->mHitGroupRecordSize = maxShaderTableSize * pDesc->mHitGroupCount;
-	FillShaderIdentifiers(	pDesc->pHitGroups, pDesc->mHitGroupCount, pRtsoProps, 
+	FillShaderIdentifiers(	pDesc->pHitGroups, pDesc->mHitGroupCount, pRtsoProps,
 							maxShaderTableSize, index, pTable, pRaytracing);
 
 	if (pRtsoProps)
@@ -610,7 +610,7 @@ void removeRaytracingShaderTable(Raytracing* pRaytracing, RaytracingShaderTable*
 // Raytracing Command Buffer Functions Implementation
 /************************************************************************/
 void util_build_acceleration_structure(ID3D12GraphicsCommandList4* pDxrCmd, ID3D12Resource* pScratchBuffer, ID3D12Resource* pASBuffer,
-									D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE ASType, 
+									D3D12_RAYTRACING_ACCELERATION_STRUCTURE_TYPE ASType,
 									D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAGS ASFlags,
 									const D3D12_RAYTRACING_GEOMETRY_DESC * pGeometryDescs,
 									D3D12_GPU_VIRTUAL_ADDRESS pInstanceDescBuffer,

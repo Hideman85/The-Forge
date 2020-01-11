@@ -30,7 +30,7 @@ freely, subject to the following restrictions:
 #endif
 
 #include "soloud.h"
-#include "../../../../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/unordered_map.h>
 #include "soloud_thread.h"
 
 namespace SoLoud
@@ -84,7 +84,7 @@ namespace SoLoud
 		void sleep(int aMSec)
 		{
 			::Thread::Sleep((unsigned)aMSec);
-		}		      
+		}
 
         void release(ThreadHandle aThreadHandle)
         {
@@ -95,6 +95,6 @@ namespace SoLoud
 			gThreadDataToCleanup.erase(it);
 			if (gThreadDataToCleanup.empty())
 				gThreadDataToCleanup.clear(true);
-        }		
+        }
 	}
 }

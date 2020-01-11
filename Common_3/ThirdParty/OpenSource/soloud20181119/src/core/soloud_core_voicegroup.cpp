@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Voice group operations
 
@@ -50,7 +50,7 @@ namespace SoLoud
 				mVoiceGroup[i][1] = 0;
 				unlockAudioMutex();
 				return 0xfffff000 | i;
-			}		
+			}
 		}
 		if (mVoiceGroupCount == 4096)
 		{
@@ -72,7 +72,7 @@ namespace SoLoud
 		}
 		for (i = 0; i < oldcount; i++)
 		{
-			vg[i] = mVoiceGroup[i];			
+			vg[i] = mVoiceGroup[i];
 		}
 
 		for (; i < mVoiceGroupCount; i++)
@@ -95,13 +95,13 @@ namespace SoLoud
 		return 0xfffff000 | i;
 	}
 
-	// Destroy a voice group. 
+	// Destroy a voice group.
 	result Soloud::destroyVoiceGroup(handle aVoiceGroupHandle)
 	{
 		if (!isVoiceGroup(aVoiceGroupHandle))
 			return INVALID_PARAMETER;
 		int c = aVoiceGroupHandle & 0xfff;
-		
+
 		lockAudioMutex();
 		conf_free(mVoiceGroup[c]);
 		mVoiceGroup[c] = NULL;
@@ -114,13 +114,13 @@ namespace SoLoud
 	{
 		if (!isVoiceGroup(aVoiceGroupHandle))
 			return INVALID_PARAMETER;
-		
+
 		// Don't consider adding invalid voice handles as an error, since the voice may just have ended.
 		if (!isValidVoiceHandle(aVoiceHandle))
 			return SO_NO_ERROR;
 
 		trimVoiceGroup(aVoiceGroupHandle);
-		
+
 		int c = aVoiceGroupHandle & 0xfff;
 		unsigned int i;
 
@@ -138,12 +138,12 @@ namespace SoLoud
 			{
 				mVoiceGroup[c][i] = aVoiceHandle;
 				mVoiceGroup[c][i + 1] = 0;
-				
+
 				unlockAudioMutex();
 				return SO_NO_ERROR;
 			}
 		}
-		
+
 		// Full group, allocate more memory
 		unsigned int * n = (unsigned int *)conf_calloc(mVoiceGroup[c][0] * 2 + 1, sizeof(unsigned int));
 		if (n == NULL)
@@ -171,8 +171,8 @@ namespace SoLoud
 		if (c >= mVoiceGroupCount)
 			return 0;
 
-		lockAudioMutex();		
-		bool res = mVoiceGroup[c] != NULL;		
+		lockAudioMutex();
+		bool res = mVoiceGroup[c] != NULL;
 		unlockAudioMutex();
 
 		return res;
@@ -217,7 +217,7 @@ namespace SoLoud
 				unlockAudioMutex();
 				return;
 			}
-			
+
 			unlockAudioMutex();
 			while (!isValidVoiceHandle(mVoiceGroup[c][i])) // function locks mutex, so we need to unlock it before the call
 			{
@@ -229,7 +229,7 @@ namespace SoLoud
 					if (mVoiceGroup[c][j] == 0)
 						break;
 				}
-				mVoiceGroup[c][mVoiceGroup[c][0] - 1] = 0;				
+				mVoiceGroup[c][mVoiceGroup[c][0] - 1] = 0;
 				if (mVoiceGroup[c][i] == 0)
 				{
 					unlockAudioMutex();

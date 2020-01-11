@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../OS/Logging/Log.h"
+#include <EASTL/string.h>
+#include <TheForge/OS/Logging/Log.h>
 #include "ITime.h"
 
 void _FailedAssert(const char* file, int line, const char* statement);

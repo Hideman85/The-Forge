@@ -34,7 +34,7 @@ DOCUMENTATION
   - How can I tell whether to dispatch mouse/keyboard to imgui or to my application?
   - How can I display an image? What is ImTextureID, how does it works?
   - How can I have multiple widgets with the same label or without a label? A primer on labels and the ID Stack.
-  - How can I use my own math types instead of float2/float4? 
+  - How can I use my own math types instead of float2/float4?
   - How can I load a different font than the default?
   - How can I easily use icons in my application?
   - How can I load multiple fonts?
@@ -176,7 +176,7 @@ CODE
          ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
          g_pSwapChain->Present(1, 0);
      }
-     
+
      // Shutdown
      ImGui_ImplDX11_Shutdown();
      ImGui_ImplWin32_Shutdown();
@@ -343,7 +343,7 @@ CODE
  - 2018/07/22 (1.63) - changed ImGui::GetTime() return value from float to double to avoid accumulating floating point imprecisions over time.
  - 2018/07/08 (1.63) - style: renamed ImGuiCol_ModalWindowDarkening to ImGuiCol_ModalWindowDimBg for consistency with other features. Kept redirection enum (will obsolete).
  - 2018/06/06 (1.62) - renamed GetGlyphRangesChinese() to GetGlyphRangesChineseFull() to distinguish other variants and discourage using the full set.
- - 2018/06/06 (1.62) - TreeNodeEx()/TreeNodeBehavior(): the ImGuiTreeNodeFlags_CollapsingHeader helper now include the ImGuiTreeNodeFlags_NoTreePushOnOpen flag. See Changelog for details. 
+ - 2018/06/06 (1.62) - TreeNodeEx()/TreeNodeBehavior(): the ImGuiTreeNodeFlags_CollapsingHeader helper now include the ImGuiTreeNodeFlags_NoTreePushOnOpen flag. See Changelog for details.
  - 2018/05/03 (1.61) - DragInt(): the default compile-time format string has been changed from "%.0f" to "%d", as we are not using integers internally any more.
                        If you used DragInt() with custom format strings, make sure you change them to use %d or an integer-compatible format.
                        To honor backward-compatibility, the DragInt() code will currently parse and modify format strings to replace %*f with %d, giving time to users to upgrade their code.
@@ -522,7 +522,7 @@ CODE
  A: Short explanation:
     - You may use functions such as ImGui::Image(), ImGui::ImageButton() or lower-level ImDrawList::AddImage() to emit draw calls that will use your own textures.
     - Actual textures are identified in a way that is up to the user/engine.
-    - Loading image files from the disk and turning them into a texture is not within the scope of Dear ImGui (for a good reason). 
+    - Loading image files from the disk and turning them into a texture is not within the scope of Dear ImGui (for a good reason).
       Please read documentations or tutorials on your graphics API to understand how to display textures on the screen before moving onward.
 
     Long explanation:
@@ -530,10 +530,10 @@ CODE
       At the end of the frame those meshes (ImDrawList) will be displayed by your rendering function. They are made up of textured polygons and the code
       to render them is generally fairly short (a few dozen lines). In the examples/ folder we provide functions for popular graphics API (OpenGL, DirectX, etc.).
     - Each rendering function decides on a data type to represent "textures". The concept of what is a "texture" is entirely tied to your underlying engine/graphics API.
-      We carry the information to identify a "texture" in the ImTextureID type. 
+      We carry the information to identify a "texture" in the ImTextureID type.
       ImTextureID is nothing more that a void*, aka 4/8 bytes worth of data: just enough to store 1 pointer or 1 integer of your choice.
       Dear ImGui doesn't know or understand what you are storing in ImTextureID, it merely pass ImTextureID values until they reach your rendering function.
-    - In the examples/ bindings, for each graphics API binding we decided on a type that is likely to be a good representation for specifying 
+    - In the examples/ bindings, for each graphics API binding we decided on a type that is likely to be a good representation for specifying
       an image from the end-user perspective. This is what the _examples_ rendering functions are using:
 
          OpenGL:     ImTextureID = GLuint                       (see ImGui_ImplGlfwGL3_RenderDrawData() function in imgui_impl_glfw_gl3.cpp)
@@ -541,13 +541,13 @@ CODE
          DirectX11:  ImTextureID = ID3D11ShaderResourceView*    (see ImGui_ImplDX11_RenderDrawData()    function in imgui_impl_dx11.cpp)
          DirectX12:  ImTextureID = D3D12_GPU_DESCRIPTOR_HANDLE  (see ImGui_ImplDX12_RenderDrawData()    function in imgui_impl_dx12.cpp)
 
-      For example, in the OpenGL example binding we store raw OpenGL texture identifier (GLuint) inside ImTextureID. 
-      Whereas in the DirectX11 example binding we store a pointer to ID3D11ShaderResourceView inside ImTextureID, which is a higher-level structure 
+      For example, in the OpenGL example binding we store raw OpenGL texture identifier (GLuint) inside ImTextureID.
+      Whereas in the DirectX11 example binding we store a pointer to ID3D11ShaderResourceView inside ImTextureID, which is a higher-level structure
       tying together both the texture and information about its format and how to read it.
     - If you have a custom engine built over e.g. OpenGL, instead of passing GLuint around you may decide to use a high-level data type to carry information about
       the texture as well as how to display it (shaders, etc.). The decision of what to use as ImTextureID can always be made better knowing how your codebase
       is designed. If your engine has high-level data types for "textures" and "material" then you may want to use them.
-      If you are starting with OpenGL or DirectX or Vulkan and haven't built much of a rendering engine over them, keeping the default ImTextureID 
+      If you are starting with OpenGL or DirectX or Vulkan and haven't built much of a rendering engine over them, keeping the default ImTextureID
       representation suggested by the example bindings is probably the best choice.
       (Advanced users may also decide to keep a low-level type in ImTextureID, and use ImDrawList callback and pass information to their renderer)
 
@@ -555,7 +555,7 @@ CODE
 
         // Cast our texture type to ImTextureID / void*
         MyTexture* texture = g_CoffeeTableTexture;
-        ImGui::Image((void*)texture, float2(texture->Width, texture->Height)); 
+        ImGui::Image((void*)texture, float2(texture->Width, texture->Height));
 
     The renderer function called after ImGui::Render() will receive that same value that the user code passed:
 
@@ -586,7 +586,7 @@ CODE
         // Now that we have an OpenGL texture, assuming our imgui rendering function (imgui_impl_xxx.cpp file) takes GLuint as ImTextureID, we can display it:
         ImGui::Image((void*)(intptr_t)my_opengl_texture, float2(my_image_width, my_image_height));
 
-    C/C++ tip: a void* is pointer-sized storage. You may safely store any pointer or integer into it by casting your value to ImTexture / void*, and vice-versa. 
+    C/C++ tip: a void* is pointer-sized storage. You may safely store any pointer or integer into it by casting your value to ImTexture / void*, and vice-versa.
     Because both end-points (user code and rendering function) are under your control, you know exactly what is stored inside the ImTexture / void*.
     Examples:
 
@@ -608,7 +608,7 @@ CODE
 
     Dear ImGui internally need to uniquely identify UI elements.
     Elements that are typically not clickable (such as calls to the Text functions) don't need an ID.
-    Interactive widgets (such as calls to Button buttons) need a unique ID. 
+    Interactive widgets (such as calls to Button buttons) need a unique ID.
     Unique ID are used internally to track active widgets and occasionally associate state to widgets.
     Unique ID are implicitly built from the hash of multiple elements that identify the "path" to the UI element.
 
@@ -714,7 +714,7 @@ CODE
       e.g. when displaying a list of objects, using indices or pointers as ID will preserve the
        node open/closed state differently. See what makes more sense in your situation!
 
- Q: How can I use my own math types instead of float2/float4? 
+ Q: How can I use my own math types instead of float2/float4?
  A: You can edit imconfig.h and setup the IM_VEC2_CLASS_EXTRA/IM_VEC4_CLASS_EXTRA macros to add implicit type conversions.
     This way you'll be able to use your own types everywhere, e.g. passsing glm::vec2 to ImGui functions instead of float2.
 
@@ -784,11 +784,11 @@ CODE
     (such as CP-923 for Japanese or CP-1251 for Cyrillic) will NOT work!
     Otherwise you can convert yourself to UTF-8 or load text data from file already saved as UTF-8.
 
-    Text input: it is up to your application to pass the right character code by calling io.AddInputCharacter(). 
-    The applications in examples/ are doing that. 
+    Text input: it is up to your application to pass the right character code by calling io.AddInputCharacter().
+    The applications in examples/ are doing that.
     Windows: you can use the WM_CHAR or WM_UNICHAR or WM_IME_CHAR message (depending if your app is built using Unicode or MultiByte mode).
     You may also use MultiByteToWideChar() or ToUnicode() to retrieve Unicode codepoints from MultiByte characters or keyboard state.
-    Windows: if your language is relying on an Input Method Editor (IME), you copy the HWND of your window to io.ImeWindowHandle in order for 
+    Windows: if your language is relying on an Input Method Editor (IME), you copy the HWND of your window to io.ImeWindowHandle in order for
     the default implementation of io.ImeSetInputScreenPosFn() to set your Microsoft IME position correctly.
 
  Q: How can I use the drawing facilities without an ImGui window? (using ImDrawList API)
@@ -841,8 +841,8 @@ CODE
 #include <stdint.h>     // intptr_t
 #endif
 
-#include "../../../OS/Interfaces/IFileSystem.h"
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define IMGUI_DEBUG_NAV_SCORING     0
 #define IMGUI_DEBUG_NAV_RECTS       0
@@ -968,7 +968,7 @@ ImGuiContext::ImGuiContext(ImFontAtlas* shared_font_atlas) : OverlayDrawList(NUL
 	FontSize = FontBaseSize = 0.0f;
 	FontAtlasOwnedByContext = shared_font_atlas ? false : true;
 	IO.Fonts =shared_font_atlas ? shared_font_atlas : IM_NEW(ImFontAtlas);
-	
+
 	Time = 0.0f;
 	FrameCount = 0;
 	FrameCountEnded = FrameCountRendered = -1;
@@ -998,7 +998,7 @@ ImGuiContext::ImGuiContext(ImFontAtlas* shared_font_atlas) : OverlayDrawList(NUL
 	MovingWindow = NULL;
 	NextTreeNodeOpenVal = false;
 	NextTreeNodeOpenCond = 0;
-	
+
 	NavWindow = NULL;
 	NavId = NavActivateId = NavActivateDownId = NavActivatePressedId = NavInputId = 0;
 	NavJustTabbedId = NavJustMovedToId = NavNextActivateId = 0;
@@ -1023,12 +1023,12 @@ ImGuiContext::ImGuiContext(ImFontAtlas* shared_font_atlas) : OverlayDrawList(NUL
 	NavMoveRequestFlags = 0;
 	NavMoveRequestForward = ImGuiNavForward_None;
 	NavMoveDir = NavMoveDirLast = NavMoveClipDir = ImGuiDir_None;
-	
+
 	DimBgRatio = 0.0f;
 	OverlayDrawList._Data = &DrawListSharedData;
 	OverlayDrawList._OwnerName = "##Overlay"; // Give it a name for debugging
 	MouseCursor = ImGuiMouseCursor_Arrow;
-	
+
 	DragDropActive = DragDropWithinSourceOrTarget = false;
 	DragDropSourceFlags = 0;
 	DragDropSourceFrameCount = -1;
@@ -1039,7 +1039,7 @@ ImGuiContext::ImGuiContext(ImFontAtlas* shared_font_atlas) : OverlayDrawList(NUL
 	DragDropAcceptIdPrev = DragDropAcceptIdCurr = 0;
 	DragDropAcceptFrameCount = -1;
 	memset(DragDropPayloadBufLocal, 0, sizeof(DragDropPayloadBufLocal));
-	
+
 	ScalarAsInputTextId = 0;
 	ColorEditOptions = ImGuiColorEditFlags__OptionsDefault;
 	DragCurrentAccumDirty = false;
@@ -1048,11 +1048,11 @@ ImGuiContext::ImGuiContext(ImFontAtlas* shared_font_atlas) : OverlayDrawList(NUL
 	ScrollbarClickDeltaToGrabCenter = float2(0.0f, 0.0f);
 	TooltipOverrideCount = 0;
 	PlatformImePos = PlatformImeLastPos = float2(FLT_MAX, FLT_MAX);
-	
+
 	LogEnabled = false;
 	LogStartDepth = 0;
 	LogAutoExpandMaxDepth = 2;
-	
+
 	memset(FramerateSecPerFrame, 0, sizeof(FramerateSecPerFrame));
 	FramerateSecPerFrameIdx = 0;
 	FramerateSecPerFrameAccum = 0.0f;
@@ -2520,7 +2520,7 @@ void* ImGui::MemAlloc(size_t size)
 
 void ImGui::MemFree(void* ptr)
 {
-    if (ptr) 
+    if (ptr)
         if (ImGuiContext* ctx = GImGui)
             ctx->IO.MetricsActiveAllocations--;
     return GImAllocatorFreeFunc(ptr, GImAllocatorUserData);
@@ -2871,7 +2871,7 @@ void ImGui::NewFrame()
 	{
         IM_ASSERT(g.IO.KeyMap[ImGuiKey_Space] != -1 && "ImGuiKey_Space is not mapped, required for keyboard navigation.");
 	}
-	
+
     // The beta io.ConfigResizeWindowsFromEdges option requires back-end to honor mouse cursor changes and set the ImGuiBackendFlags_HasMouseCursors flag accordingly.
     if (g.IO.ConfigResizeWindowsFromEdges && !(g.IO.BackendFlags & ImGuiBackendFlags_HasMouseCursors))
         g.IO.ConfigResizeWindowsFromEdges = false;
@@ -3124,7 +3124,7 @@ static void AddDrawListToDrawData(eastl::vector<ImDrawList*>* out_list, ImDrawLi
 	{
         IM_ASSERT(draw_list->_VtxCurrentIdx < (1 << 16) && "Too many vertices in ImDrawList using 16-bit indices. Read comment above");
 	}
-	
+
     out_list->push_back(draw_list);
 }
 
@@ -4473,7 +4473,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 	{
         IM_ASSERT(flags & ImGuiWindowFlags_ChildWindow);
 	}
-	
+
     const int current_frame = g.FrameCount;
     const bool first_begin_of_the_frame = (window->LastFrameActive != current_frame);
     if (first_begin_of_the_frame)
@@ -4980,7 +4980,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         if (g.ActiveId == move_id)
             if (g.IO.KeyCtrl && IsKeyPressedMap(ImGuiKey_C))
                 ImGui::LogToClipboard();
-        */        
+        */
 
         // Inner rectangle
         // We set this up after processing the resize grip so that our clip rectangle doesn't lag by a frame
@@ -6163,7 +6163,7 @@ bool ImGui::SplitterBehavior(const ImRect& bb, ImGuiID id, ImGuiAxis axis, float
 			{
                 IM_ASSERT(*size1 + mouse_delta >= min_size1);
 			}
-			
+
 			if (mouse_delta > 0.0f)
 			{
                IM_ASSERT(*size2 - mouse_delta >= min_size2);
@@ -8195,7 +8195,7 @@ bool ImGui::BeginDragDropSource(ImGuiDragDropFlags flags)
         if (!(flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
         {
             // Target can request the Source to not display its tooltip (we use a dedicated flag to make this request explicit)
-            // We unfortunately can't just modify the source flags and skip the call to BeginTooltip, as caller may be emitting contents. 
+            // We unfortunately can't just modify the source flags and skip the call to BeginTooltip, as caller may be emitting contents.
             BeginTooltip();
             if (g.DragDropActive && g.DragDropAcceptIdPrev && (g.DragDropAcceptFlags & ImGuiDragDropFlags_AcceptNoPreviewTooltip))
             {
@@ -8456,7 +8456,7 @@ void ImGui::LogFinish()
     ImGuiContext& g = *GImGui;
     if (!g.LogEnabled)
         return;
-    
+
     if (g.LogClipboard.size() > 1)
     {
         SetClipboardText(g.LogClipboard.begin());
@@ -8623,10 +8623,10 @@ void ImGui::SaveIniSettingsToDisk(const char* ini_filename)
 
     size_t ini_data_size = 0;
     const char* ini_data = SaveIniSettingsToMemory(&ini_data_size);
-    
+
     PathHandle path = fsCreatePath(fsGetSystemFileSystem(), ini_filename);
     FileStream* fh = fsOpenFile(path, FM_WRITE);
-    
+
 	if (!fh)
 		return;
     fsWriteToStream(fh, ini_data, ini_data_size);
@@ -8681,7 +8681,7 @@ static void SettingsHandlerWindow_WriteAll(ImGuiContext* imgui_ctx, ImGuiSetting
         {
             settings = CreateNewWindowSettings(window->Name);
 			IM_ASSERT(settings >= g.SettingsWindows.data() && settings <= g.SettingsWindows.data() + g.SettingsWindows.size());
-			const ptrdiff_t off = settings - g.SettingsWindows.data(); 
+			const ptrdiff_t off = settings - g.SettingsWindows.data();
 			window->SettingsIdx = (int)off;
         }
         IM_ASSERT(settings->ID == window->ID);

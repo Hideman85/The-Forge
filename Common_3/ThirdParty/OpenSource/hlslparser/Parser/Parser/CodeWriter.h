@@ -11,7 +11,7 @@
 #define CODE_WRITER_H
 
 #include "Engine.h"
-#include "../../../EASTL/string.h"
+#include <EASTL/string.h>
 
 #if defined(__GNUC__)
 #define M4_PRINTF_ATTR(string_index, first_to_check) __attribute__((format(printf, string_index, first_to_check)))
@@ -48,7 +48,7 @@ public:
 private:
 
     eastl::string     m_buffer;
-    
+
     const char*     m_currentFileName;
     int             m_spacesPerIndent;
     bool            m_writeLines;

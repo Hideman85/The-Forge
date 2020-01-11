@@ -25,7 +25,7 @@
 #ifndef Geometry_h
 #define Geometry_h
 
-#include "../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 #include "../../../Common_3/Renderer/IRenderer.h"
 #include "../../../Common_3/Renderer/ResourceLoader.h"
 

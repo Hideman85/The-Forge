@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud_internal.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Core operations related to filters
 
@@ -37,7 +37,7 @@ namespace SoLoud
 		lockAudioMutex();
 		conf_delete(mFilterInstance[aFilterId]);
 		mFilterInstance[aFilterId] = 0;
-		
+
 		mFilter[aFilterId] = aFilter;
 		if (aFilter)
 		{
@@ -54,7 +54,7 @@ namespace SoLoud
 
 		if (aVoiceHandle == 0)
 		{
-			lockAudioMutex();		
+			lockAudioMutex();
 			if (mFilterInstance[aFilterId])
 			{
 				ret = mFilterInstance[aFilterId]->getFilterParameter(aAttributeId);
@@ -64,18 +64,18 @@ namespace SoLoud
 		}
 
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			return ret;
 		}
-		lockAudioMutex();		
+		lockAudioMutex();
 		if (mVoice[ch] &&
 			mVoice[ch]->mFilter[aFilterId])
 		{
 			ret = mVoice[ch]->mFilter[aFilterId]->getFilterParameter(aAttributeId);
 		}
 		unlockAudioMutex();
-		
+
 		return ret;
 	}
 
@@ -86,7 +86,7 @@ namespace SoLoud
 
 		if (aVoiceHandle == 0)
 		{
-			lockAudioMutex();		
+			lockAudioMutex();
 			if (mFilterInstance[aFilterId])
 			{
 				mFilterInstance[aFilterId]->setFilterParameter(aAttributeId, aValue);
@@ -111,7 +111,7 @@ namespace SoLoud
 
 		if (aVoiceHandle == 0)
 		{
-			lockAudioMutex();		
+			lockAudioMutex();
 			if (mFilterInstance[aFilterId])
 			{
 				mFilterInstance[aFilterId]->fadeFilterParameter(aAttributeId, aTo, aTime, mStreamTime);
@@ -136,7 +136,7 @@ namespace SoLoud
 
 		if (aVoiceHandle == 0)
 		{
-			lockAudioMutex();		
+			lockAudioMutex();
 			if (mFilterInstance[aFilterId])
 			{
 				mFilterInstance[aFilterId]->oscillateFilterParameter(aAttributeId, aFrom, aTo, aTime, mStreamTime);

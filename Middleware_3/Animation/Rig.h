@@ -24,17 +24,17 @@
 
 #pragma once
 
-#include "../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/skeleton.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/skeleton_utils.h"
+#include <ozz/animation/runtime/skeleton.h>
+#include <ozz/animation/runtime/skeleton_utils.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/archive.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/base/memory/allocator.h"
+#include <ozz/base/io/archive.h>
+#include <ozz/base/memory/allocator.h>
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
 namespace eastl
 {

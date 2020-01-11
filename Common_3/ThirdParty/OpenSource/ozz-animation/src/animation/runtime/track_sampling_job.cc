@@ -31,7 +31,7 @@
 
 #include <cassert>
 
-#include "../../EASTL/algorithm.h"
+#include <EASTL/algorithm.h>
 
 namespace ozz {
 namespace animation {

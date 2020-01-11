@@ -25,8 +25,8 @@
 // Unit Test to create Bottom and Top Level Acceleration Structures using Raytracing API.
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -236,14 +236,14 @@ struct PropData
 {
     eastl::vector<float3> PositionsData;
     eastl::vector<uint>   IndicesData;
-	
+
     Buffer* pPositionStream;
     Buffer* pNormalStream;
     Buffer* pUVStream;
     Buffer* pIndicesStream;
     Buffer* pMaterialIdStream; // one per primitive
 	Buffer* pMaterialTexturesStream; // 5 per material.
-	
+
     Buffer*                     pConstantBuffer;
 };
 
@@ -478,16 +478,16 @@ bool LoadSponza()
 
 	size_t totalVertexCount = 0;
 	size_t totalPrimitiveCount = 0;
-	
+
 	eastl::vector<float3> normals;
 	eastl::vector<float2> uvs;
 	eastl::vector<uint32_t> materialIds;
-	
+
 	for (size_t i = 0; i < gModel_Sponza.mMeshArray.size(); i += 1)
     {
 		if (i == 4)
 			continue; // Skip the large flag in the middle of the room
-		
+
 		AssimpImporter::Mesh& subMesh = gModel_Sponza.mMeshArray[i];
 		totalVertexCount += subMesh.mPositions.size();
 		totalPrimitiveCount += subMesh.mIndices.size() / 3;
@@ -498,34 +498,34 @@ bool LoadSponza()
 	normals.reserve(totalVertexCount);
 	uvs.reserve(totalVertexCount);
 	materialIds.reserve(totalPrimitiveCount);
-	
+
 	for (size_t i = 0; i < gModel_Sponza.mMeshArray.size(); i += 1)
     {
 		if (i == 4)
 			continue; // Skip the large flag in the middle of the room
-		
+
 		AssimpImporter::Mesh& subMesh = gModel_Sponza.mMeshArray[i];
-		
+
 		uint32_t baseVertex = (uint32_t)SponzaProp.PositionsData.size();
 		for (uint32_t index : subMesh.mIndices)
 			SponzaProp.IndicesData.push_back(index + baseVertex);
-		
+
 		for (float3 position : subMesh.mPositions)
 			SponzaProp.PositionsData.push_back(position);
-	
+
 		for (float3 normal : subMesh.mNormals)
 			normals.push_back(normal);
-			
+
 		for (float2 uv : subMesh.mUvs)
 			uvs.push_back(uv);
-		
+
 		size_t meshPrimitiveCount = subMesh.mIndices.size() / 3;
 		for (size_t i = 0; i < meshPrimitiveCount; i += 1)
 		{
 			materialIds.push_back(subMesh.mMaterialId);
 		}
 	}
-		
+
 	BufferLoadDesc desc = {};
 	desc.mDesc.mMemoryUsage = RESOURCE_MEMORY_USAGE_GPU_ONLY;
 	desc.mDesc.mDescriptors = DESCRIPTOR_TYPE_BUFFER;
@@ -545,12 +545,12 @@ bool LoadSponza()
 	desc.ppBuffer = &SponzaProp.pPositionStream;
 	desc.pData = SponzaProp.PositionsData.data();
 	addResource(&desc);
-	
+
 	desc.mDesc.mSize = totalVertexCount * sizeof(float3);
 	desc.ppBuffer = &SponzaProp.pNormalStream;
 	desc.pData = normals.data();
 	addResource(&desc);
-	
+
 	desc.mDesc.mSize = totalVertexCount * sizeof(float2);
 	desc.mDesc.mFormat = TinyImageFormat_R32G32_SFLOAT;
 	desc.mDesc.mVertexStride = sizeof(float2);
@@ -581,15 +581,15 @@ bool LoadSponza()
         desc.ppBuffer = &SponzaProp.pConstantBuffer;
         addResource(&desc);
     }
-	
+
 	AssignSponzaTextures();
-	
+
 	desc.mDesc.mSize = gSponzaTextureIndexForMaterial.size() * sizeof(uint32_t);
 	desc.mDesc.mElementCount = (uint32_t)gSponzaTextureIndexForMaterial.size();
 	desc.ppBuffer = &SponzaProp.pMaterialTexturesStream;
 	desc.pData = gSponzaTextureIndexForMaterial.data();
 	addResource(&desc);
-	
+
     finishResourceLoading();
     return true;
 }
@@ -599,15 +599,15 @@ void UnloadSponza()
 {
 	if (SponzaProp.PositionsData.empty())
 		return;
-	
+
     for (int i = 0; i < TOTAL_IMGS; ++i)
 		removeResource(pMaterialTextures[i]);
 
 	gSponzaTextureIndexForMaterial.set_capacity(0);
-	
+
 	SponzaProp.PositionsData.set_capacity(0);
 	SponzaProp.IndicesData.set_capacity(0);
-	
+
 	removeResource(SponzaProp.pPositionStream);
 	removeResource(SponzaProp.pNormalStream);
 	removeResource(SponzaProp.pUVStream);
@@ -620,14 +620,14 @@ void UnloadSponza()
 static float haltonSequence(uint index, uint base) {
     float f = 1.f;
     float r = 0.f;
-    
+
     while (index > 0) {
         f /= (float)base;
         r += f * (float)(index % base);
         index /= base;
-        
+
     }
-    
+
     return r;
 }
 
@@ -649,7 +649,7 @@ public:
 				mBenchmark = true;
 		}
 	}
-	
+
 	bool Init()
 	{
         // FILE PATHS
@@ -658,7 +658,7 @@ public:
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/16_Raytracing");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
 			fsSetRelativePathForResourceDirectory(RD_TEXTURES,        				 "../../../../Art/Sponza/Textures");
 			fsSetRelativePathForResourceDirectory(RD_MESHES,          				 "../../../../Art/Sponza/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,   				 "../../UnitTestResources/Fonts");
@@ -667,7 +667,7 @@ public:
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,   				 "../../../../Middleware_3/UI");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_3, 					 "../../../../Middleware_3/ParallelPrimitives");
         }
-        
+
 		if (!initInputSystem(pWindow))
 			return false;
 
@@ -719,7 +719,7 @@ public:
         displayShader.mStages[0] = { "DisplayTexture.vert", &denoiserMacro, 1, RD_SHADER_SOURCES };
         displayShader.mStages[1] = { "DisplayTexture.frag", &denoiserMacro, 1, RD_SHADER_SOURCES };
         addShader(pRenderer, &displayShader, &pDisplayTextureShader);
-        
+
         SamplerDesc samplerDesc = { FILTER_NEAREST,
                                     FILTER_NEAREST,
                                     MIPMAP_MODE_NEAREST,
@@ -727,7 +727,7 @@ public:
                                     ADDRESS_MODE_CLAMP_TO_EDGE,
                                     ADDRESS_MODE_CLAMP_TO_EDGE };
         addSampler(pRenderer, &samplerDesc, &pSampler);
-        
+
         const char*       pStaticSamplers[] = { "uSampler0" };
         RootSignatureDesc rootDesc = {};
         rootDesc.mStaticSamplerCount = 1;
@@ -740,7 +740,7 @@ public:
         RasterizerStateDesc rasterizerStateDesc = {};
         rasterizerStateDesc.mCullMode = CULL_MODE_NONE;
         addRasterizerState(pRenderer, &rasterizerStateDesc, &pRast);
-		
+
 		CameraMotionParameters cmp{ 200.0f, 250.0f, 300.0f };
 		vec3                   camPos{ 100.0f, 300.0f, 0.0f };
 		vec3                   lookAt{ 0, 340, 0 };
@@ -748,14 +748,14 @@ public:
 		pCameraController = createFpsCameraController(camPos, lookAt);
 
 		pCameraController->setMotionParameters(cmp);
-		
+
 		bool deviceSupported = true;
-		
+
 #ifdef TARGET_IOS
 		if (![pRenderer->pDevice supportsFeatureSet:MTLFeatureSet_iOS_GPUFamily4_v1])
 			deviceSupported = false;
 #endif
-		
+
 		if (!isRaytracingSupported(pRenderer) || !deviceSupported)
 		{
 			pRaytracing = NULL;
@@ -768,13 +768,13 @@ public:
 		pGuiWindow->AddWidget(SliderFloatWidget("Light Direction X", &mLightDirection.x, -2.0f, 2.0f, 0.001f));
 		pGuiWindow->AddWidget(SliderFloatWidget("Light Direction Y", &mLightDirection.y, -2.0f, 2.0f, 0.001f));
 		pGuiWindow->AddWidget(SliderFloatWidget("Light Direction Z", &mLightDirection.z, -2.0f, 2.0f, 0.001f));
-		
+
 		/************************************************************************/
 		/************************************************************************/
-		
+
         if (!LoadSponza())
             return false;
-		
+
 		// App Actions
 		InputActionDesc actionDesc = { InputBindings::BUTTON_FULLSCREEN, [](InputActionContext* ctx) { toggleFullscreen(((IApp*)ctx->pUserData)->pWindow); return true; }, this };
 		addInputAction(&actionDesc);
@@ -806,16 +806,16 @@ public:
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		/************************************************************************/
 		// Raytracing setup
 		/************************************************************************/
-		
+
 		initRaytracing(pRenderer, &pRaytracing);
 		/************************************************************************/
 		// 02 Creation Acceleration Structure
 		/************************************************************************/
-        
+
 
 		AccelerationStructureGeometryDesc geomDesc = {};
 		geomDesc.mFlags = ACCELERATION_STRUCTURE_GEOMETRY_FLAG_OPAQUE;
@@ -824,7 +824,7 @@ public:
 		geomDesc.pIndices32 = SponzaProp.IndicesData.data();
 		geomDesc.indicesCount = (uint32_t)SponzaProp.IndicesData.size();
 		geomDesc.indexType = INDEX_TYPE_UINT32;
-		
+
 		AccelerationStructureDescBottom bottomASDesc = {};
 		bottomASDesc.mDescCount = 1;
 		bottomASDesc.pGeometryDescs = &geomDesc;
@@ -833,24 +833,24 @@ public:
         AccelerationStructureDescTop topAS = {};
         topAS.mBottomASDescs = &bottomASDesc;
         topAS.mBottomASDescsCount = 1;
-        
+
         // The transformation matrices for the instances
         mat4 transformation = mat4::identity(); // Identity
-        
+
         //Construct descriptions for Acceleration Structures Instances
         AccelerationStructureInstanceDesc instanceDesc = {};
-        
+
         instanceDesc.mFlags = ACCELERATION_STRUCTURE_INSTANCE_FLAG_NONE;
         instanceDesc.mInstanceContributionToHitGroupIndex = 0;
         instanceDesc.mInstanceID = 0;
         instanceDesc.mInstanceMask = 1;
         memcpy(instanceDesc.mTransform, &transformation, sizeof(float[12]));
         instanceDesc.mAccelerationStructureIndex = 0;
-        
+
         topAS.mInstancesDescCount = 1;
         topAS.pInstanceDescs = &instanceDesc;
         addAccelerationStructure(pRaytracing, &topAS, &pSponzaAS);
-        
+
         // Build Acceleration Structure
 		RaytracingBuildASDesc buildASDesc = {};
 		unsigned bottomASIndices[] = { 0 };
@@ -866,7 +866,7 @@ public:
         // 03 - Create Raytracing Shaders
         /************************************************************************/
         {
-			
+
 			ShaderMacro denoiserMacro  = { "DENOISER_ENABLED", USE_DENOISER ? "1" : "0" };
             ShaderLoadDesc desc = {};
             desc.mStages[0] = { "RayGen.rgen", &denoiserMacro, 1, RD_SHADER_SOURCES, "rayGen"};
@@ -874,18 +874,18 @@ public:
             desc.mTarget = shader_target_6_3;
 #endif
             addShader(pRenderer, &desc, &pShaderRayGen);
-            
+
             desc.mStages[0] = { "ClosestHit.rchit", &denoiserMacro, 1, RD_SHADER_SOURCES, "chs"};
             addShader(pRenderer, &desc, &pShaderClosestHit);
-            
+
             desc.mStages[0] = { "Miss.rmiss", &denoiserMacro, 1, RD_SHADER_SOURCES, "miss"};
             addShader(pRenderer, &desc, &pShaderMiss);
-            
+
             desc.mStages[0] = { "MissShadow.rmiss", &denoiserMacro, 1, RD_SHADER_SOURCES, "missShadow"};
             addShader(pRenderer, &desc, &pShaderMissShadow);
         }
-		
-		
+
+
 		samplerDesc = { FILTER_LINEAR,       FILTER_LINEAR,       MIPMAP_MODE_LINEAR,
 									ADDRESS_MODE_REPEAT, ADDRESS_MODE_REPEAT, ADDRESS_MODE_REPEAT };
 		addSampler(pRenderer, &samplerDesc, &pLinearSampler);
@@ -906,9 +906,9 @@ public:
 		RaytracingHitGroup hitGroups[2] = {};
         hitGroups[0].pClosestHitShader    = pShaderClosestHit;
         hitGroups[0].pHitGroupName        = "hitGroup";
-		
+
         hitGroups[1].pHitGroupName        = "missHitGroup";
-        
+
         Shader* pMissShaders[] = { pShaderMiss, pShaderMissShadow };
 		PipelineDesc rtPipelineDesc = {};
 		rtPipelineDesc.mType = PIPELINE_TYPE_RAYTRACING;
@@ -949,10 +949,10 @@ public:
 		addDescriptorSet(pRenderer, &setDesc, &pDescriptorSetRaytracing);
 		setDesc = { pRootSignature, DESCRIPTOR_UPDATE_FREQ_PER_FRAME, gImageCount };
 		addDescriptorSet(pRenderer, &setDesc, &pDescriptorSetUniforms);
-		
+
 		const char* hitGroupNames[2] = { "hitGroup", "missHitGroup" };
 		const char* missShaderNames[2] = { "miss", "missShadow" };
-		
+
         RaytracingShaderTableDesc shaderTableDesc = {};
         shaderTableDesc.pPipeline = pPipeline;
         shaderTableDesc.pRayGenShader = "rayGen";
@@ -969,7 +969,7 @@ public:
 			params[0].ppBuffers = &pRayGenConfigBuffer[i];
 			updateDescriptorSet(pRenderer, i, pDescriptorSetUniforms, 1, params);
 		}
-		
+
 		return true;
 	}
 
@@ -977,41 +977,41 @@ public:
 	{
 		PathHandle statsPath = fsAppendPathComponent(PathHandle(fsCopyLogFileDirectoryPath()), "Forge-Raytracer-Benchmark.txt");
 		FileStream* statsFile = fsOpenFile(statsPath, FM_WRITE);
-		
+
 		if (statsFile)
 		{
 			fsPrintToStream(statsFile, "The Forge Raytracer:\n\n");
 			fsPrintToStream(statsFile, "Width: %i\n", mSettings.mWidth);
 			fsPrintToStream(statsFile, "Height: %i\n", mSettings.mHeight);
-			
+
 			fsPrintToStream(statsFile, "Frames rendered: %llu\n\n", (unsigned long long)mFrameTimes.size());
-			
+
 			double averageTime = 0.0;
 			double movingAverageTime = 0.0;
-			
+
 			double minAverageTime = DBL_MAX;
 			double maxAverageTime = -DBL_MAX;
-			
+
 			const size_t firstFrame = 2; // Ignore the first two frames while we're warming up.
-			
+
 			for (size_t i = firstFrame; i < mFrameTimes.size(); i += 1)
 			{
 				averageTime += (mFrameTimes[i] - averageTime) / (i + 1 - firstFrame);
 				movingAverageTime = i > firstFrame ? (0.8 * movingAverageTime + 0.2 * mFrameTimes[i]) : mFrameTimes[i];
-				
+
 				if (movingAverageTime < minAverageTime)
 					minAverageTime = movingAverageTime;
-				
+
 				if (movingAverageTime > maxAverageTime)
 					maxAverageTime = movingAverageTime;
 			}
-			
+
 			fsPrintToStream(statsFile, "Min/Max/Average Frame Time (ms):\n");
 			fsPrintToStream(statsFile, "%.6f/%.6f/%.6f\n\n", minAverageTime, maxAverageTime, averageTime);
-			
+
 			fsPrintToStream(statsFile, "Min/Max/Average FPS:\n");
 			fsPrintToStream(statsFile, "%.6f/%.6f/%.6f\n", 1.f / maxAverageTime, 1.f / minAverageTime, 1.f / averageTime);
-			
+
 			fsPrintToStream(statsFile, "\nFrame Times (ms):\n\n");
 			for (size_t i = firstFrame; i < mFrameTimes.size(); i += 1)
 			{
@@ -1019,11 +1019,11 @@ public:
 				fsPrintToStream(statsFile, "%.6f\n", time * 1000.0);
 			}
 			mFrameTimes.set_capacity(0);
-			
+
 			fsCloseStream(statsFile);
 		}
 	}
-	
+
 	void Exit()
 	{
 		waitQueueIdle(pQueue);
@@ -1031,11 +1031,11 @@ public:
 		exitInputSystem();
 
 		exitProfiler();
-		
+
 		destroyCameraController(pCameraController);
 
 		gAppUI.Exit();
-		gVirtualJoystick.Exit(); 
+		gVirtualJoystick.Exit();
 		UnloadSponza();
 
 		removeGpuProfiler(pRenderer, pGpuProfiler);
@@ -1078,7 +1078,7 @@ public:
 		removeQueue(pQueue);
 		removeResourceLoaderInterface(pRenderer);
 		removeRenderer(pRenderer);
-		
+
 		if (mBenchmark)
 		{
 			PrintBenchmarkStats();
@@ -1111,7 +1111,7 @@ public:
 		loadDesc.pDesc = &uavDesc;
 		loadDesc.ppTexture = &pComputeOutput;
 		addResource(&loadDesc);
-		
+
 #if USE_DENOISER
 		uavDesc.mFormat = TinyImageFormat_B10G10R10A2_UNORM;
 		loadDesc.ppTexture = &pAlbedoTexture;
@@ -1130,7 +1130,7 @@ public:
 		swapChainDesc.mPresentQueueCount = 1;
 		swapChainDesc.mWindowHandle = pWindow->handle;
 		addSwapChain(pRenderer, &swapChainDesc, &pSwapChain);
-		
+
 #if USE_DENOISER
 		{
 			RenderTargetDesc rtDesc = {};
@@ -1141,46 +1141,46 @@ public:
 			rtDesc.mSampleCount = SAMPLE_COUNT_1;
 			rtDesc.mSampleQuality = 0;
 			rtDesc.mArraySize = 1;
-			
+
 			rtDesc.mFormat = TinyImageFormat_R16G16B16A16_SFLOAT;
 			addRenderTarget(pRenderer, &rtDesc, &pDepthNormalRenderTarget[0]);
 			addRenderTarget(pRenderer, &rtDesc, &pDepthNormalRenderTarget[1]);
-			
+
 			rtDesc.mFormat = TinyImageFormat_R16G16_SFLOAT;
 			rtDesc.mClearValue = { 0, 0 };
 			addRenderTarget(pRenderer, &rtDesc, &pMotionVectorRenderTarget);
-			
+
 			rtDesc.mFormat = TinyImageFormat_D32_SFLOAT;
 			rtDesc.mClearValue = { 1.0f, 0 };
 			rtDesc.mFlags = TEXTURE_CREATION_FLAG_ON_TILE;
 			addRenderTarget(pRenderer, &rtDesc, &pDepthRenderTarget);
-			
+
 			ShaderLoadDesc denoiserShader = {};
 			denoiserShader.mStages[0] = { "DenoiserInputsPass.vert", NULL, 0, RD_SHADER_SOURCES };
 			denoiserShader.mStages[1] = { "DenoiserInputsPass.frag", NULL, 0, RD_SHADER_SOURCES };
 			addShader(pRenderer, &denoiserShader, &pDenoiserInputsShader);
-			
+
 			RootSignatureDesc rootSignature = {};
 			rootSignature.ppShaders = &pDenoiserInputsShader;
 			rootSignature.mShaderCount = 1;
 			addRootSignature(pRenderer, &rootSignature, &pDenoiserInputsRootSignature);
-			
+
 			RasterizerStateDesc rasterState = {};
 			rasterState.mCullMode = CULL_MODE_BACK;
 			rasterState.mFrontFace = FRONT_FACE_CW;
 			addRasterizerState(pRenderer, &rasterState, &pDenoiserRasterState);
-			
+
 			DepthStateDesc depthStateDesc = {};
 			depthStateDesc.mDepthTest = true;
 			depthStateDesc.mDepthWrite = true;
 			depthStateDesc.mDepthFunc = CMP_LEQUAL;
 			addDepthState(pRenderer, &depthStateDesc, &pDenoiserDepthState);
-			
+
 			PipelineDesc pipelineDesc = {};
 			pipelineDesc.mType = PIPELINE_TYPE_GRAPHICS;
-			
+
 			TinyImageFormat rtFormats[] = { pDepthNormalRenderTarget[0]->pTexture->mDesc.mFormat, pMotionVectorRenderTarget->pTexture->mDesc.mFormat };
-			
+
 			VertexLayout vertexLayout = {};
 			vertexLayout.mAttribCount = 0;
 			GraphicsPipelineDesc& pipelineSettings = pipelineDesc.mGraphicsDesc;
@@ -1197,7 +1197,7 @@ public:
 			pipelineSettings.pShaderProgram = pDenoiserInputsShader;
 
 			addPipeline(pRenderer, &pipelineDesc, &pDenoiserInputsPipeline);
-			
+
 			BufferLoadDesc ubDesc = {};
 			ubDesc.mDesc.mDescriptors = DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 			ubDesc.mDesc.mMemoryUsage = RESOURCE_MEMORY_USAGE_GPU_ONLY;
@@ -1207,23 +1207,23 @@ public:
 				ubDesc.ppBuffer = &pDenoiserInputsUniformBuffer[i];
 				addResource(&ubDesc);
 			}
-			
+
 			DescriptorSetDesc setDesc = { pDenoiserInputsRootSignature, DESCRIPTOR_UPDATE_FREQ_PER_FRAME, gImageCount };
 			addDescriptorSet(pRenderer, &setDesc, &pDenoiserInputsDescriptorSet);
-			
+
 			DescriptorData params[1] = {};
-			
+
 			params[0].pName = "uniforms";
 			for (uint32_t i = 0; i < gImageCount; ++i)
 			{
 				params[0].ppBuffers = &pDenoiserInputsUniformBuffer[i];
 				updateDescriptorSet(pRenderer, i, pDenoiserInputsDescriptorSet, 1, params);
 			}
-			
+
 			addSSVGFDenoiser(pRenderer, &pDenoiser);
 		}
 #endif
-        
+
         VertexLayout vertexLayout = {};
         vertexLayout.mAttribCount = 0;
 		PipelineDesc graphicsPipelineDesc = {};
@@ -1241,16 +1241,16 @@ public:
         addPipeline(pRenderer, &graphicsPipelineDesc, &pDisplayTexturePipeline);
 		/************************************************************************/
 		/************************************************************************/
-		
+
 #ifdef TARGET_IOS
 		ResourceDirectory circlePadDirectory = RD_ROOT;
 #else
 		ResourceDirectory circlePadDirectory = RD_TEXTURES;
 #endif
-		
+
 		if (!gVirtualJoystick.Init(pRenderer, "circlepad", circlePadDirectory))
 			return false;
-		
+
 		if (!gAppUI.Load(pSwapChain->ppSwapchainRenderTargets))
 			return false;
 
@@ -1259,15 +1259,15 @@ public:
 
 		loadProfiler(&gAppUI, mSettings.mWidth, mSettings.mHeight);
 
-		
+
 		DescriptorData params[9] = {};
 
 		if (pRaytracing != NULL)
 		{
 			params[0].pName = "gOutput";
 			params[0].ppTextures = &pComputeOutput;
-			
-			
+
+
 			params[1].pName = "indices";
 			params[1].ppBuffers = &SponzaProp.pIndicesStream;
 			params[2].pName = "positions";
@@ -1316,31 +1316,31 @@ public:
 		unloadProfiler();
 		gAppUI.Unload();
 		gVirtualJoystick.Unload();
-		
+
 		removePipeline(pRenderer, pDisplayTexturePipeline);
 		removeSwapChain(pRenderer, pSwapChain);
 		removeResource(pComputeOutput);
-		
+
 #if USE_DENOISER
 		for (uint32_t i = 0; i < gImageCount; i += 1)
 		{
 			removeResource(pDenoiserInputsUniformBuffer[i]);
 		}
 		removeResource(pAlbedoTexture);
-		
+
 		removeDescriptorSet(pRenderer, pDenoiserInputsDescriptorSet);
-		
+
 		removeRenderTarget(pRenderer, pMotionVectorRenderTarget);
 		removeRenderTarget(pRenderer, pDepthNormalRenderTarget[0]);
 		removeRenderTarget(pRenderer, pDepthNormalRenderTarget[1]);
 		removeRenderTarget(pRenderer, pDepthRenderTarget);
-		
+
 		removePipeline(pRenderer, pDenoiserInputsPipeline);
 		removeRootSignature(pRenderer, pDenoiserInputsRootSignature);
 		removeShader(pRenderer, pDenoiserInputsShader);
 		removeDepthState(pDenoiserDepthState);
 		removeRasterizerState(pDenoiserRasterState);
-		
+
 		removeSSVGFDenoiser(pDenoiser);
 #endif
 	}
@@ -1350,9 +1350,9 @@ public:
 		updateInputSystem(mSettings.mWidth, mSettings.mHeight);
 
 		pCameraController->update(deltaTime);
-		
+
 		// ProfileSetDisplayMode()
-		// TODO: need to change this better way 
+		// TODO: need to change this better way
 		if (gMicroProfiler != bPrevToggleMicroProfiler)
 		{
 		  Profile& S = *ProfileGet();
@@ -1364,7 +1364,7 @@ public:
 		}
 
 		gAppUI.Update(deltaTime);
-		
+
 		if (mBenchmark && deltaTime > 0)
 			mFrameTimes.push_back(deltaTime);
 	}
@@ -1388,10 +1388,10 @@ public:
 			const float farPlane = 6000.f;
 			mat4 projMat = mat4::perspective(horizontalFOV, aspectInverse, nearPlane, farPlane);
 			mat4 projectView = projMat * viewMat;
-			
+
 			bool cameraMoved = memcmp(&projectView, &mPathTracingData.mHistoryProjView, sizeof(mat4)) != 0;
 			bool lightMoved = memcmp(&mLightDirection, &mPathTracingData.mHistoryLightDirection, sizeof(float3)) != 0;
-			
+
 #if USE_DENOISER
 			if (lightMoved)
 			{
@@ -1408,31 +1408,31 @@ public:
 			{
 				mPathTracingData.mLastCameraMoveFrame = mPathTracingData.mFrameIndex;
 			}
-			
+
 			ShadersConfigBlock cb;
 			cb.mCameraToWorld = inverse(viewMat);
 			cb.mProjNear = nearPlane;
 			cb.mProjFarMinusNear = farPlane - nearPlane;
 			cb.mZ1PlaneSize = float2(1.0f / projMat.getElem(0, 0), 1.0f / projMat.getElem(1, 1));
 			cb.mLightDirection = v3ToF3(normalize(f3Tov3(mLightDirection)));
-			
+
 			cb.mRandomSeed = (float)sin((double)getUSec());
-			
+
 			// Loop through the first 16 items in the Halton sequence.
             // The Halton sequence takes one-based indices.
             cb.mSubpixelJitter = float2(haltonSequence(mPathTracingData.mHaltonIndex + 1, 2),
                                                 haltonSequence(mPathTracingData.mHaltonIndex + 1, 3));
-			
+
 			cb.mFrameIndex = mPathTracingData.mFrameIndex;
-			
+
 			cb.mFramesSinceCameraMove = mPathTracingData.mFrameIndex - mPathTracingData.mLastCameraMoveFrame;
-			
+
 			BufferUpdateDesc bufferUpdate;
 			bufferUpdate.pBuffer = pRayGenConfigBuffer[mFrameIdx];
 			bufferUpdate.pData = &cb;
 			bufferUpdate.mSize = sizeof(cb);
 			updateResource(&bufferUpdate);
-			
+
 #if USE_DENOISER
 			DenoiserUniforms denoiserUniforms;
 			denoiserUniforms.mWorldToCamera = viewMat;
@@ -1440,36 +1440,36 @@ public:
 			denoiserUniforms.mWorldToProjectionPrevious = mPathTracingData.mHistoryProjView;
 			denoiserUniforms.mRTInvSize = float2(1.0f / mSettings.mWidth, 1.0f / mSettings.mHeight);
 			denoiserUniforms.mFrameIndex = mPathTracingData.mFrameIndex;
-			
+
 			bufferUpdate.pBuffer = pDenoiserInputsUniformBuffer[mFrameIdx];
 			bufferUpdate.pData = &denoiserUniforms;
 			bufferUpdate.mSize = sizeof(denoiserUniforms);
 			updateResource(&bufferUpdate);
 #endif
-			
+
 			mPathTracingData.mHistoryProjView = projectView;
 			mPathTracingData.mHistoryLightDirection = mLightDirection;
 			mPathTracingData.mFrameIndex += 1;
 			mPathTracingData.mHaltonIndex = (mPathTracingData.mHaltonIndex + 1) % 16;
 		}
-		
+
 		Cmd* pCmd = ppCmds[mFrameIdx];
 		beginCmd(pCmd);
 		cmdBeginGpuFrameProfile(pCmd, pGpuProfiler, true);
-		
+
 #if USE_DENOISER
 		if (pRaytracing != NULL)
 		{
 			RenderTarget* depthNormalTarget = pDepthNormalRenderTarget[mPathTracingData.mFrameIndex & 0x1];
-			
+
 			TextureBarrier barriers[] = {
 				{ pDepthRenderTarget->pTexture, RESOURCE_STATE_RENDER_TARGET },
 				{ depthNormalTarget->pTexture, RESOURCE_STATE_RENDER_TARGET },
 				{ pMotionVectorRenderTarget->pTexture, RESOURCE_STATE_RENDER_TARGET },
 			};
-			
+
 			cmdResourceBarrier(pCmd, 0, NULL, 3, barriers);
-			
+
 			RenderTarget* denoiserRTs[] = { depthNormalTarget, pMotionVectorRenderTarget };
 			LoadActionsDesc loadActions = {};
 			loadActions.mLoadActionsColor[0] = LOAD_ACTION_CLEAR;
@@ -1478,32 +1478,32 @@ public:
 			loadActions.mClearColorValues[1] = { 0, 0, 0, 0 };
 			loadActions.mLoadActionDepth = LOAD_ACTION_CLEAR;
 			loadActions.mClearDepth = { 1.f };
-			
+
 			cmdBeginGpuTimestampQuery(pCmd, pGpuProfiler, "Generate Denoiser Inputs");
 			cmdBindRenderTargets(pCmd, 2, denoiserRTs, pDepthRenderTarget, &loadActions, NULL, NULL, 0, 0);
-			
+
 			cmdBindPipeline(pCmd, pDenoiserInputsPipeline);
-			
+
 			cmdBindDescriptorSet(pCmd, mFrameIdx, pDenoiserInputsDescriptorSet);
-			
+
 			Buffer* pVertexBuffers[] = { SponzaProp.pPositionStream, SponzaProp.pNormalStream };
 			cmdBindVertexBuffer(pCmd, 2, pVertexBuffers, NULL);
-			
+
 			cmdBindIndexBuffer(pCmd, SponzaProp.pIndicesStream, 0);
 			cmdDrawIndexed(pCmd, (uint32_t)SponzaProp.IndicesData.size(), 0, 0);
-			
+
 			cmdBindRenderTargets(pCmd, 0, NULL, NULL, NULL, NULL, NULL, 0, 0);
 			cmdEndGpuTimestampQuery(pCmd, pGpuProfiler);
 		}
 #endif
-		
+
 		/************************************************************************/
 		// Transition UAV texture so raytracing shader can write to it
 		/************************************************************************/
 		cmdBeginGpuTimestampQuery(pCmd, pGpuProfiler, "Path Trace Scene", true);
 		TextureBarrier uavBarrier = { pComputeOutput, RESOURCE_STATE_UNORDERED_ACCESS };
 		cmdResourceBarrier(pCmd, 0, NULL, 1, &uavBarrier);
-		
+
 		/************************************************************************/
 		// Perform raytracing
 		/************************************************************************/
@@ -1523,7 +1523,7 @@ public:
 
             //dispatchDesc.pIndexes = { 0 };
             //dispatchDesc.pSets = { 0 };
-            
+
             dispatchDesc.pIndexes[DESCRIPTOR_UPDATE_FREQ_NONE] = 0;
 			dispatchDesc.pSets[DESCRIPTOR_UPDATE_FREQ_NONE] = pDescriptorSetRaytracing;
             dispatchDesc.pIndexes[DESCRIPTOR_UPDATE_FREQ_PER_FRAME] = mFrameIdx;
@@ -1540,7 +1540,7 @@ public:
 			{ pRenderTarget->pTexture, RESOURCE_STATE_RENDER_TARGET },
 		};
 		cmdResourceBarrier(pCmd, 0, NULL, 2, copyBarriers);
-		
+
 		Texture* pathTracedTexture = pComputeOutput;
 #if USE_DENOISER
 		Texture* denoisedTexture = cmdSSVGFDenoise(pCmd, pDenoiser,
@@ -1548,15 +1548,15 @@ public:
 						pMotionVectorRenderTarget->pTexture,
 						pDepthNormalRenderTarget[mPathTracingData.mFrameIndex & 0x1]->pTexture,
 						pDepthNormalRenderTarget[(mPathTracingData.mFrameIndex + 1) & 0x1]->pTexture);
-		
+
 		DescriptorData params[1] = {};
 		params[0].pName = "uTex0";
 		params[0].ppTextures = &denoisedTexture;
 		updateDescriptorSet(pRenderer, mFrameIdx, pDescriptorSetTexture, 1, params);
-		
+
 		removeResource(denoisedTexture);
 #endif
-		
+
 		cmdEndGpuTimestampQuery(pCmd, pGpuProfiler);
 		/************************************************************************/
 		// Present to screen
@@ -1567,7 +1567,7 @@ public:
 		cmdBindRenderTargets(pCmd, 1, &pRenderTarget, NULL, &loadActions, NULL, NULL, -1, -1);
 		cmdSetViewport(pCmd, 0.0f, 0.0f, (float)mSettings.mWidth, (float)mSettings.mHeight, 0.0f, 1.0f);
 		cmdSetScissor(pCmd, 0, 0, mSettings.mWidth, mSettings.mHeight);
-        
+
 		if (pRaytracing != NULL)
 		{
 			/************************************************************************/
@@ -1584,33 +1584,33 @@ public:
 		cmdBeginDebugMarker(pCmd, 0, 1, 0, "Draw UI");
 		static HiresTimer gTimer;
 		gTimer.GetUSec(true);
-		
+
         TextDrawDesc frameTimeDraw = TextDrawDesc(0, 0xff0080ff, 18);
-		
+
 		gVirtualJoystick.Draw(pCmd, { 1.0f, 1.0f, 1.0f, 1.0f });
-		
+
 		gAppUI.DrawText(
 						pCmd, float2(8, 15), eastl::string().sprintf("CPU %f ms", gTimer.GetUSecAverage() / 1000.0f).c_str(), &frameTimeDraw);
-		
+
 #if !defined(__ANDROID__)
 		gAppUI.DrawText(
 						pCmd, float2(8, 40), eastl::string().sprintf("GPU %f ms", (float)pGpuProfiler->mCumulativeTime * 1000.0f).c_str(),
 						&frameTimeDraw);
 		gAppUI.DrawDebugGpuProfile(pCmd, float2(8, 65), pGpuProfiler, NULL);
 #endif
-		
+
 		cmdDrawProfiler();
-		
+
 		gAppUI.Gui(pGuiWindow);
 		gAppUI.Draw(pCmd);
-		
+
 		cmdBindRenderTargets(pCmd, 0, NULL, NULL, NULL, NULL, NULL, -1, -1);
 
 		TextureBarrier presentBarrier = { pRenderTarget->pTexture, RESOURCE_STATE_PRESENT };
 		cmdResourceBarrier(pCmd, 0, NULL, 1, &presentBarrier);
 
 		cmdEndGpuFrameProfile(pCmd, pGpuProfiler);
-		
+
 		endCmd(pCmd);
 		queueSubmit(pQueue, 1, &pCmd, pRenderCompleteFences[mFrameIdx], 1, &pImageAcquiredSemaphore, 1, &pRenderCompleteSemaphores[mFrameIdx]);
 		queuePresent(pQueue, pSwapChain, mFrameIdx, 1, &pRenderCompleteSemaphores[mFrameIdx]);
@@ -1633,7 +1633,7 @@ private:
 
 	eastl::vector<float> 	mFrameTimes;
 	bool					mBenchmark;
-	
+
 	Renderer*			   pRenderer;
 	Raytracing*			 pRaytracing;
 	Queue*				  pQueue;

@@ -1,6 +1,6 @@
 #include "ComponentRepresentation.h"
 #include <string.h>
-#include "../../Common_3/OS/Interfaces/IMemory.h" // NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IMemory.h> // NOTE: this should be the last include in a .cpp
 using namespace FCR;
 
 uint32_t const UniqueIdGenerator::generateUniqueId(eastl::string component_name, BaseComponent* (*func)())
@@ -179,7 +179,7 @@ bool FCR::TransformMatrixVar::operator==(const TransformMatrixVar &otherVar) con
 		approximatelyEqual(otherVar.value.getCol3().getX(), value.getCol3().getX(), EPSILON) &&
 		approximatelyEqual(otherVar.value.getCol3().getY(), value.getCol3().getY(), EPSILON) &&
 		approximatelyEqual(otherVar.value.getCol3().getZ(), value.getCol3().getZ(), EPSILON) &&
-		approximatelyEqual(otherVar.value.getCol3().getW(), value.getCol3().getW(), EPSILON) 
+		approximatelyEqual(otherVar.value.getCol3().getW(), value.getCol3().getW(), EPSILON)
 		);
 }
 
@@ -201,7 +201,7 @@ StringVar& FCR::StringVar::operator=(const StringVar& other)
 }
 
 FCR::StringVar::StringVar(const StringVar& other)
-{	
+{
 	strcpy(value, other.value);
 }
 

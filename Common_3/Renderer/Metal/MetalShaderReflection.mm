@@ -24,12 +24,12 @@
 
 #ifdef METAL
 
-#include "../../OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/unordered_map.h>
 #include "../IRenderer.h"
 #include <string.h>
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define MAX_REFLECT_STRING_LENGTH 128
 #define MAX_BUFFER_BINDINGS 31
@@ -40,9 +40,9 @@ struct BufferStructMember
 	int                 bufferIndex;
 	unsigned long       offset;    //byte offset within the uniform block
 	int                 sizeInBytes;
-    
+
     ArgumentDescriptor  descriptor;
-    
+
 	BufferStructMember()
         : sizeInBytes(0)
         , offset(0)
@@ -184,7 +184,7 @@ uint32_t reflectShaderStruct(ShaderReflectionInfo* info, unsigned int bufferInde
         bufferMember.descriptor.mAccessType = MTLArgumentAccessReadOnly;
         bufferMember.descriptor.mAlignment = 0;
         bufferMember.descriptor.mArrayLength = 0;
-        
+
 		//  process each MTLStructMember
 		if (member.dataType == MTLDataTypeStruct)
 		{
@@ -199,7 +199,7 @@ uint32_t reflectShaderStruct(ShaderReflectionInfo* info, unsigned int bufferInde
             bufferMember.descriptor.mArrayLength = (uint32_t)member.arrayType.arrayLength;
 
             bufferMember.descriptor.mDataType = member.arrayType.elementType;
-            
+
 			ASSERT(member.arrayType != nil);
 			int arrayLength = (int)member.arrayType.arrayLength;
 			if (member.arrayType.elementType == MTLDataTypeStruct)
@@ -216,14 +216,14 @@ uint32_t reflectShaderStruct(ShaderReflectionInfo* info, unsigned int bufferInde
         {
             bufferMember.descriptor.mAccessType = member.textureReferenceType.access;
             bufferMember.descriptor.mTextureType = member.textureReferenceType.textureType;
-            
+
             bufferMember.sizeInBytes = getSizeFromDataType(member.dataType);
         }
         else if (member.dataType == MTLDataTypePointer)
         {
             bufferMember.descriptor.mAccessType = member.pointerType.access;
             bufferMember.descriptor.mAlignment = member.pointerType.alignment;
-            
+
             bufferMember.sizeInBytes = getSizeFromDataType(member.dataType);
         }
 		else
@@ -262,7 +262,7 @@ void reflectShaderBufferArgument(ShaderReflectionInfo* info, MTLArgument* arg)
     bufferInfo.alignment   = arg.bufferAlignment;
 	bufferInfo.isUAV = (arg.access == MTLArgumentAccessReadWrite || arg.access == MTLArgumentAccessWriteOnly);
 	bufferInfo.isArgBuffer = arg.bufferPointerType.elementIsArgumentBuffer;
-    
+
 	info->buffers.push_back(bufferInfo);
 }
 
@@ -315,13 +315,13 @@ uint32_t calculateNamePoolSize(const ShaderReflectionInfo* shaderReflectionInfo)
 	{
 		const BufferInfo& buffer = shaderReflectionInfo->buffers[i];
 		namePoolSize += (uint32_t)strlen(buffer.name) + 1;
-        
+
         if (buffer.isArgBuffer)
         {
             for (uint32_t i = 0; i < shaderReflectionInfo->variableMembers.size(); ++i)
             {
                 const BufferStructMember& bufferMember = shaderReflectionInfo->variableMembers[i];
-                
+
                 if (bufferMember.bufferIndex == buffer.bufferIndex)
                 {
                     namePoolSize += (uint32_t)strlen(bufferMember.name) + 1;
@@ -551,12 +551,12 @@ void mtl_createShaderReflection(
         {
             // argument buffer
             ++resourceCount;
-            
+
             // iterate over argument buffer fields
             for (uint32_t i = 0; i < pReflectionInfo->variableMembers.size(); ++i)
             {
                 const BufferStructMember& bufferMember = pReflectionInfo->variableMembers[i];
-                
+
                 if (bufferMember.bufferIndex == bufferInfo.bufferIndex)
                     ++resourceCount;
             }
@@ -610,14 +610,14 @@ void mtl_createShaderReflection(
                 {
                     // argument buffer info
                     addShaderResource(pResources, resourceIdx, DESCRIPTOR_TYPE_ARGUMENT_BUFFER, bufferInfo.bufferIndex, bufferInfo.sizeInBytes, bufferInfo.alignment, shaderStage, &pCurrentName, (char*)bufferInfo.name);
-                    
+
                     resourceIdxByBufferIdx[bufferInfo.bufferIndex] = resourceIdx++;
-                    
+
                     // argument buffer fields
                     for (uint32_t i = 0; i < pReflectionInfo->variableMembers.size(); ++i)
                     {
                         const BufferStructMember& bufferMember = pReflectionInfo->variableMembers[i];
-                        
+
                         if (bufferMember.bufferIndex == bufferInfo.bufferIndex)
                         {
                             DescriptorType descriptorType;
@@ -651,12 +651,12 @@ void mtl_createShaderReflection(
                                     descriptorType = DESCRIPTOR_TYPE_UNDEFINED;
                                     break;
                             }
-                            
+
                             addShaderResource(pResources, resourceIdx, descriptorType, bufferInfo.bufferIndex, bufferMember.sizeInBytes, 0, shaderStage, &pCurrentName, (char*)bufferMember.name);
-                            
+
                             pResources[resourceIdx].mIsArgumentBufferField = true;
                             pResources[resourceIdx].mtlArgumentDescriptors = bufferMember.descriptor;
-                            
+
                             resourceIdx++;
                         }
                     }
@@ -666,16 +666,16 @@ void mtl_createShaderReflection(
                     eastl::string bufferName = bufferInfo.name;
                     bufferName.make_lower();
                     DescriptorType descriptorType = (bufferName.find("rootconstant", 0) != eastl::string::npos ? DESCRIPTOR_TYPE_ROOT_CONSTANT : DESCRIPTOR_TYPE_BUFFER);
-                    
+
                     addShaderResource(pResources, resourceIdx, descriptorType, bufferInfo.bufferIndex, bufferInfo.sizeInBytes, bufferInfo.alignment, shaderStage, &pCurrentName, (char*)bufferInfo.name);
-                    
+
                     pResources[resourceIdx].mIsArgumentBufferField = false;
                     //pResources[resourceIdx].mtlArgumentBufferType = RESOURCE_STATE_UNDEFINED;
-                    
+
                     resourceIdxByBufferIdx[bufferInfo.bufferIndex] = resourceIdx++;
                 }
 			}
-            
+
             ASSERT(resourceCount + 1 > resourceIdx);
 		}
 		for (uint32_t i = 0; i < pReflectionInfo->textures.size(); ++i, ++resourceIdx)
@@ -699,7 +699,7 @@ void mtl_createShaderReflection(
             pResources[resourceIdx].mIsArgumentBufferField = false;
 		}
 	}
-    
+
 	ShaderVariable* pVariables = NULL;
 	// now do variables
 	if (variablesCount > 0)

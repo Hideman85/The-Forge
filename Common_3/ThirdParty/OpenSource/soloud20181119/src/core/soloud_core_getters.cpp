@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Getters - return information about SoLoud state
 
@@ -57,7 +57,7 @@ namespace SoLoud
 		handle *h = voiceGroupHandleToArray(aVoiceHandle);
 		if (h != NULL) aVoiceHandle = *h;
 
-		if (aVoiceHandle == 0) 
+		if (aVoiceHandle == 0)
 		{
 			return -1;
 		}
@@ -69,7 +69,7 @@ namespace SoLoud
 		{
 			return ch;
 		}
-		return -1;		
+		return -1;
 	}
 
 	unsigned int Soloud::getMaxActiveVoiceCount() const
@@ -94,7 +94,7 @@ namespace SoLoud
 		int c = 0;
 		for (i = 0; i < (signed)mHighestVoice; i++)
 		{
-			if (mVoice[i]) 
+			if (mVoice[i])
 			{
 				c++;
 			}
@@ -110,7 +110,7 @@ namespace SoLoud
 			return 0;
 
 		lockAudioMutex();
-		if (getVoiceFromHandle(aVoiceHandle) != -1) 
+		if (getVoiceFromHandle(aVoiceHandle) != -1)
 		{
 			unlockAudioMutex();
 			return 1;
@@ -166,7 +166,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;
@@ -194,7 +194,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;
@@ -208,7 +208,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;
@@ -236,7 +236,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 1;
@@ -250,7 +250,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;
@@ -264,7 +264,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;
@@ -278,7 +278,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;
@@ -293,11 +293,11 @@ namespace SoLoud
 		int i;
 		unsigned int lowest_play_index_value = 0xffffffff;
 		int lowest_play_index = -1;
-		
+
 		// (slowly) drag the highest active voice index down
 		if (mHighestVoice > 0 && mVoice[mHighestVoice - 1] == NULL)
 			mHighestVoice--;
-		
+
 		for (i = 0; i < VOICE_COUNT; i++)
 		{
 			if (mVoice[i] == NULL)
@@ -308,7 +308,7 @@ namespace SoLoud
 				}
 				return i;
 			}
-			if (((mVoice[i]->mFlags & AudioSourceInstance::PROTECTED) == 0) && 
+			if (((mVoice[i]->mFlags & AudioSourceInstance::PROTECTED) == 0) &&
 				mVoice[i]->mPlayIndex < lowest_play_index_value)
 			{
 				lowest_play_index_value = mVoice[i]->mPlayIndex;
@@ -323,7 +323,7 @@ namespace SoLoud
 	{
 		lockAudioMutex();
 		int ch = getVoiceFromHandle(aVoiceHandle);
-		if (ch == -1) 
+		if (ch == -1)
 		{
 			unlockAudioMutex();
 			return 0;

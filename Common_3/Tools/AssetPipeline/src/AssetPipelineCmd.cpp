@@ -1,11 +1,11 @@
 #include "AssetPipeline.h"
-#include "../../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../OS/Interfaces/ILog.h"
+#include <EASTL/string.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 
 #include <cstdio>
 #include <sys/stat.h>
 
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 const char* gApplicationName = NULL;
 
@@ -58,11 +58,11 @@ int AssetPipelineCmd(int argc, char** argv)
 
     FileSystem* fileSystem = fsGetSystemFileSystem();
     PathHandle workingDir = fsCopyWorkingDirectoryPath();
-    
+
 	PathHandle inputDir = fsCreatePath(fileSystem, argv[2]);
     if (!inputDir)
         inputDir = fsAppendPathComponent(workingDir, argv[2]);
-    
+
 	PathHandle outputDir = fsCreatePath(fileSystem, argv[3]);
     if (!outputDir)
         outputDir = fsAppendPathComponent(workingDir, argv[3]);

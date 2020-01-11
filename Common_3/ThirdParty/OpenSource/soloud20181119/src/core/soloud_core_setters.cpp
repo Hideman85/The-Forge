@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud_internal.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Setters - set various bits of SoLoud state
 
@@ -38,7 +38,7 @@ namespace SoLoud
 	{
 		mGlobalVolumeFader.mActive = 0;
 		mGlobalVolume = aVolume;
-	}		
+	}
 
 	result Soloud::setRelativePlaySpeed(handle aVoiceHandle, float aSpeed)
 	{
@@ -54,7 +54,7 @@ namespace SoLoud
 	{
 		FOR_ALL_VOICES_PRE
 			mVoice[ch]->mBaseSamplerate = aSamplerate;
-			updateVoiceRelativePlaySpeed(ch);		
+			updateVoiceRelativePlaySpeed(ch);
 		FOR_ALL_VOICES_POST
 	}
 
@@ -84,7 +84,7 @@ namespace SoLoud
 
 		mResampleData = (AlignedFloatBuffer*)conf_malloc(aVoiceCount * 2 * sizeof(AlignedFloatBuffer));
 		mResampleDataOwner = (AudioSourceInstance**)conf_malloc(aVoiceCount * sizeof(AudioSourceInstance*));
-		
+
 		for (i = 0; i < aVoiceCount * 2; i++)
 		{
 			conf_placement_new<AlignedFloatBuffer>(&mResampleData[i]);
@@ -125,7 +125,7 @@ namespace SoLoud
 	}
 
 	void Soloud::setPan(handle aVoiceHandle, float aPan)
-	{		
+	{
 		FOR_ALL_VOICES_PRE
 			setVoicePan(ch, aPan);
 		FOR_ALL_VOICES_POST
@@ -134,8 +134,8 @@ namespace SoLoud
 	void Soloud::setPanAbsolute(handle aVoiceHandle, float aLVolume, float aRVolume, float aLBVolume, float aRBVolume, float aCVolume, float aSVolume)
 	{
 		FOR_ALL_VOICES_PRE
-			mVoice[ch]->mPanFader.mActive = 0;	
-			mVoice[ch]->mChannelVolume[0] = aLVolume;			
+			mVoice[ch]->mPanFader.mActive = 0;
+			mVoice[ch]->mChannelVolume[0] = aLVolume;
 			mVoice[ch]->mChannelVolume[1] = aRVolume;
 			if (mVoice[ch]->mChannels == 4)
 			{

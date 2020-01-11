@@ -23,8 +23,8 @@
 */
 
 #pragma once
-#include "../../Common_3/OS/Math/MathTypes.h"
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Math/MathTypes.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 struct Renderer;
 struct RenderTarget;

@@ -2,13 +2,13 @@
 #include "allocator_forge.h"
 
 #if EASTL_ALLOCATOR_FORGE
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 	namespace eastl
 	{
 
 		void* allocator_forge::allocate(size_t n, int /*flags*/)
-		{ 
+		{
 			return conf_malloc(n);
 		}
 
@@ -22,12 +22,12 @@
 		}
 
 		void allocator_forge::deallocate(void* p, size_t /*n*/)
-		{ 
+		{
 			conf_free(p);
 		}
 
 		/// gDefaultAllocator
-		/// Default global allocator_forge instance. 
+		/// Default global allocator_forge instance.
 		EASTL_API allocator_forge  gDefaultAllocatorForge;
 		EASTL_API allocator_forge* gpDefaultAllocatorForge = &gDefaultAllocatorForge;
 

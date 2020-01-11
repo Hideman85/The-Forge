@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../../Common_3/OS/Interfaces/IOperatingSystem.h"
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/string.h>
+#include <EASTL/unordered_map.h>
 
-//#include "../../Common_3/OS/Interfaces/IMemory.h"
+//#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define MAX_COMPONENT_STRING_SIZE 256
 

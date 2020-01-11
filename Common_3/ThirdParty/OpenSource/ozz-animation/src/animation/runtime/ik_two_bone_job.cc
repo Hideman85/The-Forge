@@ -27,8 +27,7 @@
 
 #include "../../../include/ozz/animation/runtime/ik_two_bone_job.h"
 
-#include "../../../../../Common_3/OS/Interfaces/ILog.h"
-
+#include <TheForge/OS/Interfaces/ILog.h>
 namespace ozz {
 namespace animation {
 IKTwoBoneJob::IKTwoBoneJob()

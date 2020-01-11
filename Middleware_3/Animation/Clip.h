@@ -24,13 +24,13 @@
 
 #pragma once
 
-#include "../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/animation.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/animation/runtime/sampling_job.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/base/memory/allocator.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/stream.h"
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/archive.h"
+#include <ozz/animation/runtime/animation.h>
+#include <ozz/animation/runtime/sampling_job.h>
+#include <ozz/base/memory/allocator.h>
+#include <ozz/base/io/stream.h>
+#include <ozz/base/io/archive.h>
 
 #include "Rig.h"
 

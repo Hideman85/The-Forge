@@ -42,40 +42,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ********************************************************************/
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../Common_3/Renderer/IRenderer.h"
-#include "../../Common_3/OS/Interfaces/ILog.h"
+#include <EASTL/vector.h>
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 
 extern ResourceDirectory RD_MIDDLEWARE_PARALLEL_PRIMITIVES;
 
 struct IndirectCountBuffer {
 	Buffer *pBuffer; // Containing four `uint32_t`s: the count, the threadgroups X (ceil(count / THREADS_PER_THREADGROUP)), and threadgroups Y/Z (should be 1).
 	uint32_t mUpperLimit;
-	
+
 	IndirectCountBuffer(uint32_t count, Buffer* buffer) : mUpperLimit(count), pBuffer(buffer) {};
 };
 
 struct ParallelPrimitives {
 public:
 	static const uint32_t setsPerPipeline = 1024;
-	
+
 	static const uint32_t workgroupSize = 64;
 	static const uint32_t scanElementsPerWorkItem = 8;
 	static const uint32_t segmentScanElementsPerWorkItem = 1;
 	static const uint32_t scanElementsPerWorkgroup = workgroupSize * scanElementsPerWorkItem;
 	static const uint32_t segmentScanElementsPerWorkgroup = workgroupSize * segmentScanElementsPerWorkItem;
-	
+
 	ParallelPrimitives(Renderer* pRenderer);
 	~ParallelPrimitives();
-    
+
 	void scanExclusiveAdd(Cmd* pCmd, Buffer* input, Buffer* output, uint32_t elementCount);
 	void sortRadix(Cmd* pCmd, Buffer* inputKeys, Buffer* outputKeys, IndirectCountBuffer elementCount, uint32_t maxKey = ~0);
 	void sortRadixKeysValues(Cmd* pCmd, Buffer* inputKeys, Buffer* inputValues, Buffer* outputKeys, Buffer* outputValues, IndirectCountBuffer elementCount, uint32_t maxKey = ~0);
-	
+
 	void generateOffsetBuffer(Cmd* pCmd, Buffer* sortedCategoryIndices, Buffer* outputBuffer, Buffer* totalCountOutputBuffer, IndirectCountBuffer sortedIndicesCount, uint32_t categoryCount, uint32_t indirectThreadsPerThreadgroup);
-	
+
 	void generateIndirectArgumentsFromOffsetBuffer(Cmd* pCmd, Buffer* offsetBuffer, Buffer* activeIndexCountBuffer, Buffer* outIndirectArgumentsBuffer, uint32_t categoryCount, uint32_t indirectThreadsPerThreadgroup);
-	
+
 private:
 	struct PipelineComponents {
 		uint32_t mNextSetIndex;
@@ -84,15 +84,15 @@ private:
 		Shader* pShader;
 		Pipeline* pPipeline;
 		RootSignature* pRootSignature;
-		
+
 		PipelineComponents();
 		~PipelineComponents();
-		
+
 		void init(Renderer* renderer, const char* functionName);
 	};
-	
+
 	Renderer* pRenderer;
-	
+
 	PipelineComponents mScanExclusiveInt4;
 	PipelineComponents mScanExclusivePartInt4;
 	PipelineComponents mDistributePartSumInt4;
@@ -102,21 +102,21 @@ private:
 	PipelineComponents mClearOffsetBuffer;
 	PipelineComponents mGenerateOffsetBuffer;
 	PipelineComponents mIndirectArgsFromOffsetBuffer;
-	
+
 	eastl::vector<Buffer*> mTemporaryBuffers;
-	
+
 	CommandSignature* pCommandSignature;
-	
+
 	Buffer* temporaryBuffer(size_t length);
 	void depositTemporaryBuffer(Buffer* buffer);
-	
-	
+
+
 	inline uint32_t incrementSetIndex(uint32_t* setIndex) {
 		uint32_t index = *setIndex;
 		*setIndex = (*setIndex + 1) % ParallelPrimitives::setsPerPipeline;
 		return index;
 	}
-	
+
 	inline unsigned int clz32a( uint32_t x ) /* 32-bit clz */
 	{
 		unsigned int n;
@@ -126,10 +126,10 @@ private:
 			for (n = 0; ((x & 0x80000000) == 0); n++, x <<= 1) ;
 		return n;
 	}
-	
+
 	void scanExclusiveAddWG(Cmd* pCmd, Buffer* input, Buffer* output, uint32_t elementCount);
-    
+
 	void scanExclusiveAddTwoLevel(Cmd* pCmd, Buffer* input, Buffer* output, uint32_t elementCount);
-    
+
 	void scanExclusiveAddThreeLevel(Cmd* pCmd, Buffer* input, Buffer* output, uint32_t elementCount);
 };

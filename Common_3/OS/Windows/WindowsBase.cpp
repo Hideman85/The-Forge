@@ -34,8 +34,8 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif
 
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/vector.h>
+#include <EASTL/unordered_map.h>
 
 #include "../Interfaces/IOperatingSystem.h"
 #include "../Interfaces/ILog.h"
@@ -617,7 +617,7 @@ int WindowsMain(int argc, char** argv, IApp* app)
 		RectDesc rect = {};
 		getRecommendedResolution(&rect);
 		pSettings->mWidth = getRectWidth(rect);
-		pSettings->mHeight = getRectHeight(rect); 
+		pSettings->mHeight = getRectHeight(rect);
 	}
 
 	window.callbacks.onResize = onResize;

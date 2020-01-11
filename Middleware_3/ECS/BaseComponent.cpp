@@ -1,6 +1,6 @@
 #include "BaseComponent.h"
 
-#include "../../Common_3/OS/Interfaces/IMemory.h"    // Must be the last include in a cpp file
+#include <TheForge/OS/Interfaces/IMemory.h>    // Must be the last include in a cpp file
 
 ComponentRegistrator* ComponentRegistrator::instance = NULL;
 

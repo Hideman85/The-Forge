@@ -26,7 +26,7 @@
 
 #include "../../../ThirdParty/OpenSource/meshoptimizer/tools/cgltf.h"
 #include "../../../ThirdParty/OpenSource/meshoptimizer/tools/fast_obj.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 
 struct Attr
 {

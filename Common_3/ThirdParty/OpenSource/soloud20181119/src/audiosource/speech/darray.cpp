@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "darray.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 darray::darray()
 {
@@ -52,7 +52,7 @@ char * darray::getDataInPos(int aPosition)
 		}
 
 		mData = newdata;
-		mAllocated = newsize;			
+		mAllocated = newsize;
 	}
 
 	if (aPosition >= mUsed)

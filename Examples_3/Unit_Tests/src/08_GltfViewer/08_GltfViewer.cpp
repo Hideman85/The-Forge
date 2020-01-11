@@ -26,8 +26,8 @@
 #include "../../../../Common_3/Tools/AssimpImporter/AssimpImporter.h"
 #include "../../../../Common_3/Tools/AssetPipeline/src/AssetLoader.h"
 
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
  //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -759,7 +759,7 @@ public:
 
 #if defined(__ANDROID__) || defined(__LINUX__)
 		pGuiWindow->AddWidget(DropdownWidget("Models", &guiModelToLoadIndex, modelFileNames.data(), gDropDownWidgetData.data(), (uint32_t)gModelFiles.size()));
-#else		
+#else
 		pGuiWindow->AddWidget(SeparatorWidget());
 
 		ButtonWidget loadModelButtonWidget("Load Model                                      ");
@@ -868,7 +868,7 @@ public:
 			{
 #if defined(TARGET_IOS) || defined(__ANDROID__)
 				gVirtualJoystick.OnMove(index, ctx->mPhase != INPUT_ACTION_PHASE_CANCELED, ctx->pPosition);
-#endif				
+#endif
 				index ? pCameraController->onRotate(ctx->mFloat2) : pCameraController->onMove(ctx->mFloat2);
 			}
 			return true;
@@ -1478,7 +1478,7 @@ public:
 								eastl::string baseColorTextureName(texture->image->uri);
 								eastl_size_t extensionPos = baseColorTextureName.find_last_of('.');
 								baseColorTextureName.resize(extensionPos);
-#if USE_BASIS					
+#if USE_BASIS
 								baseColorTextureName.append(".basis");
 #endif
 								pMaterialTextures.back() = NULL;
@@ -1501,7 +1501,7 @@ public:
 								eastl::string normalTextureName(texture->image->uri);
 								eastl_size_t extensionPos = normalTextureName.find_last_of('.');
 								normalTextureName.resize(extensionPos);
-#if USE_BASIS				
+#if USE_BASIS
 								normalTextureName.append(".basis");
 #endif
 								PathHandle mrTexturePath = fsCopyPathInResourceDirectory(RD_TEXTURES, normalTextureName.c_str());
@@ -1525,7 +1525,7 @@ public:
 								eastl::string mrTextureName(texture->image->uri);
 								eastl_size_t extensionPos = mrTextureName.find_last_of('.');
 								mrTextureName.resize(extensionPos);
-#if USE_BASIS						
+#if USE_BASIS
 								mrTextureName.append(".basis");
 #endif
 								PathHandle mrTexturePath = fsCopyPathInResourceDirectory(RD_TEXTURES, mrTextureName.c_str());
@@ -1549,7 +1549,7 @@ public:
 								eastl::string aoTextureName(texture->image->uri);
 								eastl_size_t extensionPos = aoTextureName.find_last_of('.');
 								aoTextureName.resize(extensionPos);
-#if USE_BASIS						
+#if USE_BASIS
 								aoTextureName.append(".basis");
 #endif
 								PathHandle aoTexturePath = fsCopyPathInResourceDirectory(RD_TEXTURES, aoTextureName.c_str());
@@ -1573,7 +1573,7 @@ public:
 								eastl::string emmisiveTextureName(texture->image->uri);
 								eastl_size_t extensionPos = emmisiveTextureName.find_last_of('.');
 								emmisiveTextureName.resize(extensionPos);
-#if USE_BASIS						
+#if USE_BASIS
 								emmisiveTextureName.append(".basis");
 #endif
 								PathHandle emissiveTexturePath = fsCopyPathInResourceDirectory(RD_TEXTURES, emmisiveTextureName.c_str());

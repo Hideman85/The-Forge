@@ -28,8 +28,8 @@
 #ifndef AMD_TRESSFX_ASSET_H
 #define AMD_TRESSFX_ASSET_H
 
-#include "../../../OS/Math/MathTypes.h"
-#include "../../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Math/MathTypes.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 #include "TressFXFileFormat.h"
 

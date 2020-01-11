@@ -33,8 +33,8 @@
 #include "../../../include/ozz/base/maths/math_ex.h"
 #include "../../../include/ozz/base/memory/allocator.h"
 
-#include "../../EASTL/internal/char_traits.h"
-#include "../../../../../Common_3/OS/Interfaces/ILog.h"
+#include <EASTL/internal/char_traits.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 //CONFFX_END
 
 #include <cassert>
@@ -51,7 +51,7 @@ namespace animation {
 Animation::Animation() : duration_(0.f), num_tracks_(0), name_(NULL) {}
 
 Animation::~Animation() {
-	
+
 	//Deallocate(); //CONFFX_BEGIN - called manually by Middleware in Destroy()
 
 }

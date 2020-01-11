@@ -27,8 +27,8 @@
 #include "../IRenderer.h"
 
 #include "../../Tools/SpirvTools/SpirvTools.h"
-#include "../../OS/Interfaces/ILog.h"
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 static DescriptorType sSPIRV_TO_DESCRIPTOR[SPIRV_TYPE_COUNT] = {
 	DESCRIPTOR_TYPE_UNDEFINED,        DESCRIPTOR_TYPE_UNDEFINED,    DESCRIPTOR_TYPE_UNIFORM_BUFFER,  DESCRIPTOR_TYPE_RW_BUFFER,

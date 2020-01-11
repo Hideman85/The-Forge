@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Header files, Assimp
 #include <assimp/DefaultLogger.hpp>
 
-//#include "../../../../OS/Interfaces/IFileSystem.h"
+//#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 using namespace Assimp;
 

@@ -32,7 +32,7 @@
 #include "ozz/base/containers/vector.h"
 
 //CONFFX_BEGIN
-#include "../../../../../../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 //CONFFX_END
 
 namespace ozz {

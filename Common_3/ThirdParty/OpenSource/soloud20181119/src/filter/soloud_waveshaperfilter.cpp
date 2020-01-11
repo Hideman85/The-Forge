@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #include <string.h>
 #include "soloud.h"
 #include "soloud_waveshaperfilter.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -48,7 +48,7 @@ namespace SoLoud
 		if (mParam[1] == 1)
 			k = 2 * mParam[1] / 0.01f;
 		else
-			k = 2 * mParam[1] / (1 - mParam[1]);	
+			k = 2 * mParam[1] / (1 - mParam[1]);
 
 		for (i = 0; i < aSamples; i++)
 		{

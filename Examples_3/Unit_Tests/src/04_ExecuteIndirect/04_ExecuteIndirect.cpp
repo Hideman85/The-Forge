@@ -47,9 +47,9 @@
 #include "Random.h"
 
 //TinySTL
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
+#include <EASTL/unordered_map.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -300,7 +300,7 @@ class ExecuteIndirect: public IApp
 		mSettings.mContentScaleFactor = 1.f;
 #endif
 	}
-	
+
 	bool Init()
 	{
         // FILE PATHS
@@ -309,7 +309,7 @@ class ExecuteIndirect: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/04_ExecuteIndirect");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,           "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,             "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,       "../../UnitTestResources/Fonts");
@@ -320,7 +320,7 @@ class ExecuteIndirect: public IApp
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_PANINI,  "../../../../Middleware_3/PaniniProjection");
 #endif
         }
-		
+
 		RendererDesc settings = { 0 };
 		initRenderer(GetName(), &settings, &pRenderer);
 		//check for init success
@@ -727,7 +727,7 @@ class ExecuteIndirect: public IApp
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		DescriptorData skyboxParams[6] = {};
 		skyboxParams[0].pName = "RightText";
@@ -791,7 +791,7 @@ class ExecuteIndirect: public IApp
 			directParams[0].ppBuffers = &gAsteroidSubsets[i].pAsteroidInstanceBuffer;
 			updateDescriptorSet(pRenderer, i, pDescriptorSetDirectDraw[1], 1, directParams);
 		}
-		
+
 		return true;
 	}
 
@@ -1717,7 +1717,7 @@ class ExecuteIndirect: public IApp
             cmdBindPipeline(cmd, pBasicPipeline);
 			cmdBindDescriptorSet(cmd, 0, pDescriptorSetDirectDraw[0]);
 			cmdBindDescriptorSet(cmd, index, pDescriptorSetDirectDraw[1]);
-            
+
 			cmdBindVertexBuffer(cmd, 1, &pAsteroidVertexBuffer, NULL);
 			cmdBindIndexBuffer(cmd, pAsteroidIndexBuffer, 0);
 

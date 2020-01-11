@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
 
 enum ScriptState
 {

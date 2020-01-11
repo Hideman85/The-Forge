@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 
 --
 
-Based on "Using the Biquad Resonant Filter", 
+Based on "Using the Biquad Resonant Filter",
 Phil Burk, Game Programming Gems 3, p. 606
 */
 
@@ -31,7 +31,7 @@ Phil Burk, Game Programming Gems 3, p. 606
 #include <string.h>
 #include "soloud.h"
 #include "soloud_biquadresonantfilter.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -92,7 +92,7 @@ namespace SoLoud
 		mFilterType = aParent->mFilterType;
 
 		initParams(4);
-		
+
 		mParam[SAMPLERATE] = aParent->mSampleRate;
 		mParam[RESONANCE] = aParent->mResonance;
 		mParam[FREQUENCY] = aParent->mFrequency;
@@ -145,7 +145,7 @@ namespace SoLoud
 
 		// Apply a small impulse to filter to prevent arithmetic underflow,
 		// which can cause the FPU to interrupt the CPU.
-		s.mY1 += (float) 1.0E-26;		
+		s.mY1 += (float) 1.0E-26;
 	}
 
 

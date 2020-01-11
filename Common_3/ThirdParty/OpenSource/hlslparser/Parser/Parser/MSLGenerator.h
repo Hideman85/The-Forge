@@ -4,9 +4,9 @@
 #include "CodeWriter.h"
 #include "HLSLTree.h"
 
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
-#include "../../../EASTL/hash_set.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
+#include <EASTL/hash_set.h>
 #include "Parser.h"
 
 class  HLSLTree;
@@ -41,7 +41,7 @@ public:
     struct Options
     {
         unsigned int flags;
-        
+
 		unsigned int textureRegisterOffset;
 		unsigned int bufferRegisterOffset;
 
@@ -76,14 +76,14 @@ public:
     const char* GetResult() const;
 
 private:
-    
+
     // @@ Rename class argument. Add buffers & textures.
     struct ClassArgument
     {
         CachedString name;
         HLSLType type;
         CachedString registerName;
-		bool bStructuredBuffer;	
+		bool bStructuredBuffer;
 
         ClassArgument(CachedString nameParam, HLSLType typeParam, CachedString registerNameParam, bool bStructuredBufferParam = false) :
             name(nameParam), type(typeParam), registerName(registerNameParam), bStructuredBuffer(bStructuredBufferParam)
@@ -104,7 +104,7 @@ private:
     void HideUnusedStatementDeclarations(HLSLFunction * entryFunction);
 
     void PrependDeclarations();
-    
+
     void OutputStatements(int indent, HLSLStatement* statement);
     void OutputAttributes(int indent, HLSLAttribute* attribute, bool bMain);
     void OutputDeclaration(HLSLDeclaration* declaration);

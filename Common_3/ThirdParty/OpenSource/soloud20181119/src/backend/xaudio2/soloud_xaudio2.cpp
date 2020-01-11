@@ -48,7 +48,7 @@ namespace SoLoud
 #include "backend/xaudio2/xaudio2.h"
 #endif
 
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -72,7 +72,7 @@ namespace SoLoud
     class VoiceCallback : public IXAudio2VoiceCallback
     {
     public:
-        VoiceCallback(HANDLE aBufferEndEvent) 
+        VoiceCallback(HANDLE aBufferEndEvent)
             : IXAudio2VoiceCallback(), mBufferEndEvent(aBufferEndEvent) {}
         virtual ~VoiceCallback() {}
 
@@ -92,7 +92,7 @@ namespace SoLoud
 
         // Called when this voice has just finished processing a buffer.
         // The buffer can now be reused or destroyed.
-        void __stdcall OnBufferEnd(void *aBufferContext) 
+        void __stdcall OnBufferEnd(void *aBufferContext)
         {
             SetEvent(mBufferEndEvent);
         }
@@ -114,11 +114,11 @@ namespace SoLoud
     {
         XAudio2Data *data = static_cast<XAudio2Data*>(aParam);
         int bufferIndex = 0;
-        while (WAIT_OBJECT_0 != WaitForSingleObject(data->audioProcessingDoneEvent, 0)) 
+        while (WAIT_OBJECT_0 != WaitForSingleObject(data->audioProcessingDoneEvent, 0))
         {
             XAUDIO2_VOICE_STATE state;
             data->sourceVoice->GetState(&state);
-            while (state.BuffersQueued < BUFFER_COUNT) 
+            while (state.BuffersQueued < BUFFER_COUNT)
             {
                 data->soloud->mix(data->buffer[bufferIndex], data->samples);
                 XAUDIO2_BUFFER info = {0};
@@ -146,7 +146,7 @@ namespace SoLoud
         SetEvent(data->audioProcessingDoneEvent);
         SetEvent(data->bufferEndEvent);
         Thread::release(data->thread);
-        if (0 != data->sourceVoice) 
+        if (0 != data->sourceVoice)
         {
             data->sourceVoice->Stop();
             data->sourceVoice->FlushSourceBuffers();
@@ -171,7 +171,7 @@ namespace SoLoud
         {
             data->xaudio2->Release();
         }
-        for (int i=0;i<BUFFER_COUNT;++i) 
+        for (int i=0;i<BUFFER_COUNT;++i)
         {
             if (0 != data->buffer[i])
             {
@@ -217,13 +217,13 @@ namespace SoLoud
         {
             return UNKNOWN_ERROR;
         }
-        if (FAILED(data->xaudio2->CreateMasteringVoice(&data->masteringVoice, 
-                                                       format.nChannels, aSamplerate))) 
+        if (FAILED(data->xaudio2->CreateMasteringVoice(&data->masteringVoice,
+                                                       format.nChannels, aSamplerate)))
         {
             return UNKNOWN_ERROR;
         }
         data->voiceCb = conf_new(VoiceCallback, data->bufferEndEvent);
-        if (FAILED(data->xaudio2->CreateSourceVoice(&data->sourceVoice, 
+        if (FAILED(data->xaudio2->CreateSourceVoice(&data->sourceVoice,
                    &format, 0, 2.f, data->voiceCb)))
         {
             return UNKNOWN_ERROR;

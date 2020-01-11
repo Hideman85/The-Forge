@@ -53,7 +53,7 @@
 #include "soloud_fftfilter.h"
 #include "soloud_wav.h"
 
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/string.h>
 
 #include "../../../../Common_3/OS/Interfaces/IMemory.h"
 
@@ -191,7 +191,7 @@ public:
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/31_Audio");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -200,7 +200,7 @@ public:
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_TEXT,  "../../../../Middleware_3/Text");
             fsSetRelativePathForResourceDirectory(RD_MIDDLEWARE_UI,    "../../../../Middleware_3/UI");
         }
-        
+
 		// WINDOW AND RENDERER SETUP
 		//
 		RendererDesc settings = { 0 };
@@ -223,7 +223,7 @@ public:
 		}
 		addSemaphore(pRenderer, &pImageAcquiredSemaphore);
 
-		// Resource loader 
+		// Resource loader
 		initResourceLoaderInterface(pRenderer);
 
 		// INITIALIZE PIPILINE STATES
@@ -276,8 +276,8 @@ public:
 
 		ButtonWidget playSpeechAudioButton("Play Speech Text!");
 		playSpeechAudioButton.pOnDeactivatedAfterEdit = PlaySpeechAudio;
-				
-		{				
+
+		{
 			pStandaloneControlsGUIWindow->AddWidget(LabelWidget("GLOBALS"));
 			pStandaloneControlsGUIWindow->AddWidget(globalAudioSlider);
 			pStandaloneControlsGUIWindow->AddWidget(SeparatorWidget());
@@ -293,17 +293,17 @@ public:
 			pStandaloneControlsGUIWindow->AddWidget(wetFilterCheckbox);
 			pStandaloneControlsGUIWindow->AddWidget(speechTextbox);
 			pStandaloneControlsGUIWindow->AddWidget(playSpeechAudioButton);
-			pStandaloneControlsGUIWindow->AddWidget(SeparatorWidget());		
+			pStandaloneControlsGUIWindow->AddWidget(SeparatorWidget());
 		}
 
 		// Init the audio data
 		pGlobal = conf_new(GlobalAudio);
 		pGlobal->mSoLoud.init();
-				
+
 		SoLoud::result res = pGlobal->mBgWavObj.load(gWavBgTestFile);
 		ASSERT(res == SoLoud::SO_NO_ERROR);
 		res = pGlobal->mWarWavObj.load(gOggWarNoiseFile);
-		ASSERT(res == SoLoud::SO_NO_ERROR);		
+		ASSERT(res == SoLoud::SO_NO_ERROR);
 
 		pGlobal->mSoLoud.setGlobalVolume(gGlobalVolume);
 
@@ -335,7 +335,7 @@ public:
 		pGlobal->mSoLoud.deinit();
 
 		gAppUI.Exit();
-				
+
 		removeDepthState(pDepth);
 
 		for (uint32_t i = 0; i < gImageCount; ++i)

@@ -22,7 +22,7 @@
  * under the License.
 */
 
-#include "../../ThirdParty/OpenSource/libzip/zip.h"
+#include <zip.h>
 
 #include "ZipFileSystem.h"
 #include "ZipFileStream.h"
@@ -122,7 +122,7 @@ FileStream* ZipFileSystem::OpenFile(const Path* filePath, FileMode mode) const
             LOGF(LogLevel::eERROR, "Zip file %s cannot be open for both reading and writing", fsGetPathAsNativeString(filePath));
             return NULL;
         }
-        
+
         zip_error_t error = {};
         zip_source_t* source = zip_source_buffer_create(NULL, 0, 0, &error);
         if (error.zip_err)
@@ -131,11 +131,11 @@ FileStream* ZipFileSystem::OpenFile(const Path* filePath, FileMode mode) const
             LogLevel::eERROR, "Error %i creating zip source at %s: %s", error.zip_err, fsGetPathAsNativeString(filePath), error.str);
             return NULL;
         }
-        
+
         if (!source) { return NULL; }
-        
+
         zip_source_keep(source);
-        
+
         if (zip_file_add(pZipFile, fsGetPathAsNativeString(filePath), source, ZIP_FL_ENC_UTF_8 | ZIP_FL_OVERWRITE) == -1)
         {
             zip_error_t* error = zip_get_error(pZipFile);
@@ -144,11 +144,11 @@ FileStream* ZipFileSystem::OpenFile(const Path* filePath, FileMode mode) const
             zip_source_free(source);
             return NULL;
         }
-        
+
         zip_source_begin_write(source);
         return conf_new(ZipSourceStream, source, mode);
     }
-    
+
 	zip_int64_t index = zip_name_locate(pZipFile, fsGetPathAsNativeString(filePath), ZIP_FL_ENC_STRICT);
 	if (index == -1)
 	{
@@ -158,7 +158,7 @@ FileStream* ZipFileSystem::OpenFile(const Path* filePath, FileMode mode) const
 			error->str);
 		return NULL;
 	}
-    
+
 	zip_stat_t stat = {};
 	if (zip_stat_index(pZipFile, index, 0, &stat) != 0)
 	{
@@ -171,14 +171,14 @@ FileStream* ZipFileSystem::OpenFile(const Path* filePath, FileMode mode) const
 	zip_file_t* file = zip_fopen_index(pZipFile, index, ZIP_FL_ENC_STRICT);
 	if (!file) { return NULL; }
 
-    
+
     if (mode & FM_APPEND)
     {
         zip_source_t* source = zip_source_zip(pZipFile, pZipFile, index, (zip_flags_t)0, 0, -1);
         zip_source_begin_write_cloning(source, stat.size);
         return conf_new(ZipSourceStream, source, mode);
     }
-    
+
 	return conf_new(ZipFileStream, file, mode, (size_t)stat.size);
 }
 

@@ -33,10 +33,9 @@
 #include "../../../include/ozz/base/maths/soa_math_archive.h"
 #include "../../../include/ozz/base/memory/allocator.h"
 
-#include "../../../../../Common_3/OS/Interfaces/ILog.h"
-#include "../../../../../Common_3/OS/Math/MathTypes.h"
-
-#include "../../EASTL/internal/char_traits.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Math/MathTypes.h>
+#include <EASTL/internal/char_traits.h>
 //CONFFX_END
 
 namespace ozz {
@@ -80,9 +79,9 @@ namespace animation {
 
 Skeleton::Skeleton() {}
 
-Skeleton::~Skeleton() { 
-	
-	//Deallocate(); 
+Skeleton::~Skeleton() {
+
+	//Deallocate();
 
 }
 

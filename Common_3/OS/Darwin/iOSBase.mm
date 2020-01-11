@@ -31,7 +31,7 @@
 
 #include <ctime>
 
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/vector.h>
 
 #include "../Interfaces/IOperatingSystem.h"
 #include "../Interfaces/ILog.h"
@@ -180,12 +180,12 @@ int iOSMain(int argc, char** argv, IApp* app)
     self = [super init];
     self.view = [[ForgeMTLView alloc] initWithFrame:FrameRect];
     CAMetalLayer *metalLayer = (CAMetalLayer*)self.view.layer;
-    
+
     metalLayer.device =  device;
     metalLayer.framebufferOnly = YES; //todo: optimized way
     metalLayer.pixelFormat = hdr? MTLPixelFormatRGBA16Float : MTLPixelFormatBGRA8Unorm;
     metalLayer.drawableSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
-    
+
     return self;
 }
 
@@ -200,21 +200,21 @@ void openWindow(const char* app_name, WindowsDesc* winDesc, id<MTLDevice> device
 {
     CGRect ViewRect {0,0, 1280, 720 }; //Initial default values
     UIWindow* Window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     [Window setOpaque:YES];
     [Window makeKeyAndVisible];
     winDesc->handle.window = (void*)CFBridgingRetain(Window);
-    
+
     // Adjust window size to match retina scaling.
     CGFloat scale = UIScreen.mainScreen.scale;
     if (pApp->mSettings.mContentScaleFactor >= 1.0f)
         gRetinaScale = { (float)pApp->mSettings.mContentScaleFactor, (float)pApp->mSettings.mContentScaleFactor };
     else
         gRetinaScale = { (float)scale, (float)scale };
-    
+
     gDeviceWidth = UIScreen.mainScreen.bounds.size.width * gRetinaScale.x;
     gDeviceHeight = UIScreen.mainScreen.bounds.size.height * gRetinaScale.y;
-    
+
     ForgeMTLViewController *ViewController = [[ForgeMTLViewController alloc] initWithFrame:ViewRect device:device display:0 hdr:NO vsync:NO];
     [Window setRootViewController:ViewController];
 }
@@ -276,13 +276,13 @@ GameController* pMainViewController;
 
     // Kick-off the MetalKitApplication.
     _application = [[MetalKitApplication alloc] initWithMetalDevice:_device renderDestinationProvider:self];
-    
+
     _view = (ForgeMTLView*)UIApplication.sharedApplication.keyWindow.rootViewController.view;
 
 	// Enable multi-touch in our apps.
 	[_view setMultipleTouchEnabled:true];
 	_view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-	
+
 	if (pApp->mSettings.mContentScaleFactor >= 1.f)
 	{
 		[_view setContentScaleFactor:pApp->mSettings.mContentScaleFactor];
@@ -303,7 +303,7 @@ GameController* pMainViewController;
 	 selector:@selector(applicationWillTerminate:)
 												 name:UIApplicationWillTerminateNotification
 											   object:app];
-    
+
     return self;
 }
 
@@ -345,13 +345,13 @@ uint32_t testingMaxFrameCount = 120;
 		MemAllocInit();
 		fsInitAPI();
 		Log::Init();
-		
+
 		pSettings = &pApp->mSettings;
 
         gCurrentWindow = {};
         openWindow(pApp->GetName(), &gCurrentWindow, device);
         UIApplication.sharedApplication.delegate.window = (__bridge UIWindow*)gCurrentWindow.handle.window;
-        
+
 		if (pSettings->mWidth == -1 || pSettings->mHeight == -1)
 		{
 			RectDesc rect = {};
@@ -367,7 +367,7 @@ uint32_t testingMaxFrameCount = 120;
 
         ForgeMTLView *forgeView = (ForgeMTLView*)((__bridge UIWindow*)(gCurrentWindow.handle.window)).rootViewController.view;
         forgeView.delegate = self;
-        
+
 		pSettings->mWidth = getRectWidth(gCurrentWindow.fullscreenRect);
 		pSettings->mHeight = getRectHeight(gCurrentWindow.fullscreenRect);
 		pApp->pWindow = &gCurrentWindow;
@@ -398,9 +398,9 @@ uint32_t testingMaxFrameCount = 120;
 		pApp->mSettings.mHeight = size.height * gRetinaScale.y;
 		needToUpdateApp = true;
 	}
-	
+
 	pApp->mSettings.mFullScreen = true;
-	
+
 	if (needToUpdateApp)
 	{
 		pApp->Unload();

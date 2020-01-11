@@ -30,9 +30,9 @@
 #pragma once
 
 #include "../Renderer/IRenderer.h"
-#include "../OS/Core/Atomics.h"
-#include "../OS/Interfaces/IFileSystem.h"
-#include "../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
+#include <TheForge/OS/Core/Atomics.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <tinyimageformat_base.h>
 
 typedef struct BufferLoadDesc
 {
@@ -61,10 +61,10 @@ typedef struct BinaryImageData
 typedef struct TextureLoadDesc
 {
 	Texture** ppTexture;
-	
+
 	/// Load empty texture
 	TextureDesc* pDesc;
-    
+
 	/// Load texture from disk
 	const Path* pFilePath;
 	uint32_t    mNodeIndex;
@@ -74,7 +74,7 @@ typedef struct TextureLoadDesc
 	BinaryImageData* pBinaryImageData = NULL;
 
 	// Following is ignored if pDesc != NULL.  pDesc->mFlags will be considered instead.
-	TextureCreationFlags mCreationFlag; 
+	TextureCreationFlags mCreationFlag;
 
 } TextureLoadDesc;
 

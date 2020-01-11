@@ -59,7 +59,7 @@ void mmgrSetExecutableName(const char* name, size_t length) {}
 
 #ifdef _MSC_VER
 #include <memory.h>
-#include "../../ThirdParty/OpenSource/EASTL/EABase/eabase.h"
+#include <EASTL/EABase/eabase.h>
 void* conf_malloc(size_t size) { return _aligned_malloc(size, EA_PLATFORM_MIN_MALLOC_ALIGNMENT); }
 
 void* conf_calloc(size_t count, size_t size)

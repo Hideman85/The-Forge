@@ -29,7 +29,7 @@
 #define OZZ_OZZ_ANIMATION_RUNTIME_SKELETON_H_
 
 //CONFFX_BEGIN
-#include "../../../../../../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 #include "../../base/io/archive_traits.h"
 #include "../../base/platform.h"
 

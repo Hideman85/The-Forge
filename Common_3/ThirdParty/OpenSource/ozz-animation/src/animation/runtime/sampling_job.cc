@@ -35,7 +35,7 @@
 #include "../../../include/ozz/base/maths/math_ex.h"
 #include "../../../include/ozz/base/memory/allocator.h"
 
-#include "../../../../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 //CONFFX_END
 
 // Internal include file

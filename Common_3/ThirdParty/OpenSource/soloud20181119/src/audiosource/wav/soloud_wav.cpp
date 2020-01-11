@@ -32,7 +32,7 @@ freely, subject to the following restrictions:
 #include "dr_mp3.h"
 #include "dr_wav.h"
 #include "dr_flac.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -43,7 +43,7 @@ namespace SoLoud
 	}
 
 	unsigned int WavInstance::getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize)
-	{		
+	{
 		if (mParent->mData == NULL)
 			return 0;
 
@@ -83,7 +83,7 @@ namespace SoLoud
 		mData = NULL;
 		mSampleCount = 0;
 	}
-	
+
 	Wav::~Wav()
 	{
 		stop();
@@ -134,7 +134,7 @@ namespace SoLoud
 	}
 
 	result Wav::loadogg(MemoryFile *aReader)
-	{	
+	{
 		int e = 0;
 		stb_vorbis *vorbis = 0;
 		vorbis = stb_vorbis_open_memory(aReader->getMemPtr(), aReader->length(), &e, 0);
@@ -200,7 +200,7 @@ namespace SoLoud
 		mBaseSamplerate = (float)decoder.sampleRate;
 		mSampleCount = (unsigned int)samples;
 		mChannels = decoder.channels;
-		drmp3_seek_to_pcm_frame(&decoder, 0); 
+		drmp3_seek_to_pcm_frame(&decoder, 0);
 
 		unsigned int i, j, k;
 		for (i = 0; i<mSampleCount; i += 512)
@@ -208,9 +208,9 @@ namespace SoLoud
 			float tmp[512 * MAX_CHANNELS];
 			unsigned int blockSize = (mSampleCount - i) > 512 ? 512 : mSampleCount - i;
 			drmp3_read_pcm_frames_f32(&decoder, blockSize, tmp);
-			for (j = 0; j < blockSize; j++) 
+			for (j = 0; j < blockSize; j++)
 			{
-				for (k = 0; k < decoder.channels; k++) 
+				for (k = 0; k < decoder.channels; k++)
 				{
 					mData[k * mSampleCount + i + j] = tmp[j * decoder.channels + k];
 				}
@@ -270,12 +270,12 @@ namespace SoLoud
 		mSampleCount = 0;
 		mChannels = 1;
         int tag = aReader->read32();
-		if (tag == MAKEDWORD('O','g','g','S')) 
+		if (tag == MAKEDWORD('O','g','g','S'))
         {
 			return loadogg(aReader);
 
-		} 
-        else if (tag == MAKEDWORD('R','I','F','F')) 
+		}
+        else if (tag == MAKEDWORD('R','I','F','F'))
         {
 			return loadwav(aReader);
 		}
@@ -348,7 +348,7 @@ namespace SoLoud
 			return INVALID_PARAMETER;
 		stop();
 		conf_free(mData);
-		mData = (float*)conf_calloc(aLength, sizeof(float));	
+		mData = (float*)conf_calloc(aLength, sizeof(float));
 		mSampleCount = aLength / aChannels;
 		mChannels = aChannels;
 		mBaseSamplerate = aSamplerate;

@@ -12,7 +12,7 @@
 #include "sid.h"
 //#include "Tedmem.h"
 
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define DIGIBLASTER_MULT 14
 
@@ -28,7 +28,7 @@
 //
 
 // Test a bit. Returns 1 if bit is set.
-inline static long bit(long val, unsigned int bitnr) 
+inline static long bit(long val, unsigned int bitnr)
 {
 	return (val >> bitnr) & 1;
 }
@@ -42,7 +42,7 @@ inline void SIDsound::updateShiftReg(SIDVoice &v)
 	// Shift 1 bit left
 	shiftReg = ((shiftReg) << 1);// & 0x7fffff;
 
-	// Feed bit 0 
+	// Feed bit 0
 	v.shiftReg = shiftReg | (bit22 ^ bit17);
 }
 
@@ -61,7 +61,7 @@ inline int SIDsound::waveNoise(SIDVoice &v)
 		(bit(shiftReg, 2) << 4) );
 };
 
-void SIDsound::setModel(unsigned int model) 
+void SIDsound::setModel(unsigned int model)
 {
 	int i;
 
@@ -104,11 +104,11 @@ void SIDsound::setModel(unsigned int model)
 			break;
 
 		case SID6581R1: // 6581 R1
-			for (i=0; i<1024; i++) { 
+			for (i=0; i<1024; i++) {
 				cutOffFreq[i] = (tanh(((double)i-1024.0)/1024.0*M_PI) + tanh(M_PI))
 					* (6000.0 - 220.0) + 220.0;
 			}
-			for (; i<2048; i++) { 
+			for (; i<2048; i++) {
 				cutOffFreq[i] = (tanh (((double)i-2048.0)/1024.0*M_PI) + tanh(M_PI))
 					* (18000.0 - 4600.0) + 4600.0;
 			}
@@ -128,7 +128,7 @@ const unsigned int SIDsound::RateCountPeriod[16] = {
 };
 
 const unsigned char SIDsound::envGenDRdivisors[256] = {
-	30,30,30,30,30,30,16,16,16,16,16,16,16,16,8,8, 
+	30,30,30,30,30,30,16,16,16,16,16,16,16,16,8,8,
 	8,8,8,8,8,8,8,8,8,8,4,4,4,4,4,4,
 	4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 	4,4,4,4,4,4,2,2,2,2,2,2,2,2,2,2,
@@ -280,7 +280,7 @@ unsigned char SIDsound::read(unsigned int adr)
 }
 
 void SIDsound::write(unsigned int adr, unsigned char value)
-{	
+{
 	lastByteWritten = value;
 
 	SIDVoice &v = voice[adr/7];
@@ -289,7 +289,7 @@ void SIDsound::write(unsigned int adr, unsigned char value)
 		case 7:
 		case 14:
 			v.freq = (unsigned short)((v.freq & 0xff00) | value);
-			v.add = (unsigned int)(((double)v.freq 
+			v.add = (unsigned int)(((double)v.freq
 				* sidBaseFreq) * 16.0 / sampleRate + 0.5);
 			break;
 
@@ -297,7 +297,7 @@ void SIDsound::write(unsigned int adr, unsigned char value)
 		case 8:
 		case 15:
 			v.freq = (unsigned short)((v.freq & 0xff) | (value << 8));
-			v.add = (unsigned int)(((double)v.freq 
+			v.add = (unsigned int)(((double)v.freq
 				* sidBaseFreq) * 16.0 / sampleRate + 0.5);
 			break;
 
@@ -430,7 +430,7 @@ inline unsigned int SIDsound::clock()
 	unsigned int count = sidCyclesPerSampleInt >> 8;
 	unsigned int tmp = sidCyclesPerSampleInt & 0xFF;
 	unsigned int newCount = clockDeltaRemainder + tmp;
-	
+
 	if (newCount >= 0x100) {
 		clockDeltaRemainder = newCount & 0xFF;
 		count++;
@@ -572,8 +572,8 @@ void SIDsound::calcSamples(short *buf, long accu)
 				v.accu += v.add;
 				unsigned int accPrev = v.accPrev;
 				if (v.sync && !(v.accPrev & 0x8000000) && (v.accu & 0x8000000)
-    				&& !( v.modulatedBy->sync && !(v.modulatedBy->accPrev & 0x800000) && 
-        			(v.modulatedBy->accu & 0x800000)) 
+    				&& !( v.modulatedBy->sync && !(v.modulatedBy->accPrev & 0x800000) &&
+        			(v.modulatedBy->accu & 0x800000))
            			)
 #endif
 					v.modulatesThis->accu = 0;
@@ -603,7 +603,7 @@ void SIDsound::calcSamples(short *buf, long accu)
 			}
 		} while (j--);
 
-		int accu = (sumOutput + filterOutput(cyclesToDo, sumFilteredOutput) 
+		int accu = (sumOutput + filterOutput(cyclesToDo, sumFilteredOutput)
 			+ dcMixer + dcDigiBlaster) * volume;
 
 #if 1

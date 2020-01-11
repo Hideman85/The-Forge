@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud_internal.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // Core operations related to faders (not including filters)
 
@@ -139,7 +139,7 @@ namespace SoLoud
 			setRelativePlaySpeed(aVoiceHandle, aTo);
 			return;
 		}
-		
+
 		FOR_ALL_VOICES_PRE
 		mVoice[ch]->mRelativePlaySpeedFader.setLFO(aFrom, aTo, aTime, mVoice[ch]->mStreamTime);
 		FOR_ALL_VOICES_POST

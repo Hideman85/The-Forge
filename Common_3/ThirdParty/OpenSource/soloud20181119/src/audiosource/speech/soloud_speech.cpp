@@ -24,14 +24,14 @@ freely, subject to the following restrictions:
 #include <string.h>
 #include "soloud.h"
 #include "soloud_speech.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 
 namespace SoLoud
 {
 	SpeechInstance::SpeechInstance(Speech *aParent)
 	{
-		mParent = aParent;			
+		mParent = aParent;
 		mSynth.init(mParent->mBaseFrequency, mParent->mBaseSpeed, mParent->mBaseDeclination, mParent->mBaseWaveform);
 		mSample = (short*)conf_calloc(mSynth.mNspFr * 100, sizeof(short));
 		mSynth.initsynth(mParent->mElement.getSize(), (unsigned char *)mParent->mElement.getData());
@@ -60,7 +60,7 @@ namespace SoLoud
 		if (mSampleCount > mOffset)
 		{
 			unsigned int copycount = mSampleCount - mOffset;
-			if (copycount > aSamplesToRead) 
+			if (copycount > aSamplesToRead)
 			{
 				copycount = aSamplesToRead;
 			}
@@ -82,7 +82,7 @@ namespace SoLoud
 				}
 				writesamples(mSample, aBuffer + samples_out, copycount);
 				mOffset += copycount;
-				samples_out += copycount;				
+				samples_out += copycount;
 			}
 		}
 		return samples_out;
@@ -99,11 +99,11 @@ namespace SoLoud
 	}
 
 	bool SpeechInstance::hasEnded()
-	{			
+	{
 		if (mSampleCount < 0)
-			return 1;				
+			return 1;
 		return 0;
-	}	
+	}
 
 	result Speech::setParams(unsigned int aBaseFrequency, float aBaseSpeed, float aBaseDeclination, int aBaseWaveform)
 	{
@@ -145,5 +145,5 @@ namespace SoLoud
 	AudioSourceInstance *Speech::createInstance()
 	{
 		return conf_new(SpeechInstance, this);
-	}	
+	}
 };

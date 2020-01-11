@@ -16,8 +16,8 @@
 
 #include <stdarg.h>
 #include <string.h>
-#include "../../../EASTL/string_hash_map.h"
-#include "../../../EASTL/sort.h"
+#include <EASTL/string_hash_map.h>
+#include <EASTL/sort.h>
 
 static const HLSLType kFloatType(HLSLBaseType_Float);
 static const HLSLType kUintType(HLSLBaseType_Uint);
@@ -218,7 +218,7 @@ const char * GetTypeName(const HLSLType& type)
 	{
 		return RawStr(type.OutputPatchName);
 	}
-	
+
 	if (baseType == HLSLBaseType_TriangleStream)
 	{
 		return RawStr(type.structuredTypeName);
@@ -466,7 +466,7 @@ void AssignRegisters(HLSLRoot* root, const eastl::vector<BindingShift>& shiftVec
 			Range& r2 = ranges.second[i];
 			if (r2.start <= r1.end)
 			{
-				r1.end = eastl::max(r1.end, r2.end); 
+				r1.end = eastl::max(r1.end, r2.end);
 			}
 			else
 			{
@@ -634,7 +634,7 @@ static void WriteOpenglGetDimensionsVariation(CodeWriter & writer,
 		{
 			fullPrototype = fullPrototype + ", out " + typeName + " " + dimNames[i];
 		}
-		
+
 		if (isArray)
 		{
 			fullPrototype = fullPrototype + ", out " + typeName + " elements";
@@ -1355,7 +1355,7 @@ static void WriteOpenglMatrixMultiplyVariation(CodeWriter & writer,
 	if (lhsMatrix && rhsMatrix)
 	{
 		ASSERT_PARSER(lhsCols == rhsRows);
-		
+
 		int dstCols = rhsCols;
 		int dstRows = lhsRows;
 
@@ -1433,8 +1433,8 @@ static void WriteOpenglMatrixMultiplyVariation(CodeWriter & writer,
 		// if the matrix is on the right side, we assume everything is backwards, so
 		// the vector is a row vector, not a column vector
 		// [ x0 x1 ][ m00 m01 m02] = [ b0 b1 b2]
-		//          [ m10 m11 m12] 
-		// 
+		//          [ m10 m11 m12]
+		//
 
 		ASSERT_PARSER(!lhsMatrix);
 		ASSERT_PARSER(lhsRows >= 2);
@@ -1721,7 +1721,7 @@ bool GLSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targ
 	}
 
 	if (needs_f32tof16)
-	{		
+	{
 		m_writer.WriteLine(0, "uint %s(float x) { uint f32 = floatBitsToUint(val); return ((f32 >> 16) & 0x8000) | ((((f32 & 0x7f800000) - 0x38000000) >> 13) & 0x7c00) | ((f32 >> 13) & 0x03ff); }", FetchCstr(m_stringLibrary, m_f32tof16Function));
 	}
 
@@ -1900,7 +1900,7 @@ bool GLSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targ
     m_writer.WriteLine(0, "vec4  %s(float x) { return  vec4(x, x, x, x); }", m_scalarSwizzle4Function);
     m_writer.WriteLine(0, "ivec4 %s(int   x) { return ivec4(x, x, x, x); }", m_scalarSwizzle4Function);
 	*/
-	
+
 	/*
     if (!m_versionLegacy)
     {
@@ -1910,8 +1910,8 @@ bool GLSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targ
     }
 	*/
 
-	
-	
+
+
     if (needs_sincos)
     {
         const char* floatTypes[] = { "float", "vec2", "vec3", "vec4" };
@@ -1941,7 +1941,7 @@ bool GLSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targ
 		m_writer.WriteLine(0, "%s %s(%s x) { return (x); }", CHECK_CSTR("int"), CHECK_CSTR("asint"), CHECK_CSTR("int"));
 		m_writer.WriteLine(0, "%s %s(%s x) { return (x); }", CHECK_CSTR("int"), CHECK_CSTR("asint"), CHECK_CSTR("uint"));
 	}
-	
+
 
 	// special function to emulate ?: with bool{2,3,4} condition type
 	/*
@@ -2108,10 +2108,10 @@ bool GLSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targ
 				m_writer.Write(" rast_FragData%d; ", i);
 				m_writer.WriteLine(0, "");
 			}
-		}           
+		}
     }
 
-	m_writer.WriteLine(0, "");	
+	m_writer.WriteLine(0, "");
 
 	int counter = 0;
     OutputStatements(0, statement);
@@ -2119,7 +2119,7 @@ bool GLSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targ
 
     m_tree = NULL;
 
-    // The GLSL compilers don't check for this, so generate our own error message.	
+    // The GLSL compilers don't check for this, so generate our own error message.
     if (target == Target_VertexShader && !m_outputPosition)
     {
 		//This can be a vertex shader for a Tesseleation or Geometry shader
@@ -2500,14 +2500,14 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 			//now just compare with first field, need to change later
 			else if ( m_target == Target_GeometryShader && (String_Equal(structure->field->semantic, "SV_POSITION") || String_Equal(structure->field->semantic, "SV_Position")))
 				bGeometryFactor = true;
-			
+
 		}
 
 		if (memberAccess->object->expressionType.baseType == HLSLBaseType_InputPatch || memberAccess->object->expressionType.baseType == HLSLBaseType_OutputPatch)
 		{
 			ASSERT_PARSER(structure != NULL);
-			
-			
+
+
 			HLSLStructField* field = structure->field;
 			while (field != NULL)
 			{
@@ -2525,7 +2525,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					}
 
 					break;
-				}				
+				}
 				field = field->nextField;
 			}
 		}
@@ -2547,7 +2547,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 
 					break;
 				}
-				
+
 				field = field->nextField;
 			}
 		}
@@ -2559,7 +2559,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				if (String_Equal(field->name, memberAccess->field))
 				{
 					if ( (String_Equal(field->semantic, "SV_POSITION") || String_Equal(field->semantic, "SV_Position")) && String_Equal(m_geoOutputdataType, structure->name))
-					{						
+					{
 						m_writer.Write("gl_Position");
 					}
 					else if (String_Equal(structure->name, m_geoOutputdataType))
@@ -2687,7 +2687,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 			// GLSL access a matrix as m[c][r] while HLSL is m[r][c], so use our
 			// special row access function to convert.
 			//OutputExpression(arrayAccessInMatrix->array);
-				
+
 			//Disable this for coherence
 			/*
 			HLSLLiteralExpression* literalExpressionCol = static_cast<HLSLLiteralExpression*>(arrayAccessInMatrix->index);
@@ -2718,14 +2718,14 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				m_writer.Write(")");
 			}
 			*/
-					
+
 
 			OutputExpression(arrayAccess->array);
 
 			m_writer.Write("[");
 			OutputExpression(arrayAccess->index);
 			m_writer.Write("]");
-						
+
 		}
 		else if (IsTexture(arrayAccess->array->expressionType))
 		{
@@ -2771,7 +2771,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					//}
 					//else
 						m_writer.Write("0");
-				}						
+				}
 				break;
 
 			case HLSLBaseType_Texture1DArray:
@@ -2793,7 +2793,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					//else
 						m_writer.Write("0");
 				}
-						
+
 				break;
 
 			case HLSLBaseType_Texture2D:
@@ -2826,7 +2826,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				break;
 
 			case HLSLBaseType_Texture2DMS:
-						
+
 				m_writer.Write("ivec2(");
 				OutputExpression(arrayAccess->index);
 				m_writer.Write(").xy");
@@ -2855,7 +2855,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				//	}
 				//}
 
-						
+
 				break;
 
 			case HLSLBaseType_Texture2DArray:
@@ -2876,7 +2876,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					//}
 					//else
 						m_writer.Write("0");
-				}						
+				}
 				break;
 
 			//case HLSLBaseType_Texture2DMSArray:
@@ -2918,7 +2918,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					//}
 					//else
 						m_writer.Write("0");
-				}						
+				}
 				break;
 			default:
 				break;
@@ -3101,7 +3101,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 			else if (String_Equal(functionName, "SampleLevel"))
 			{
 				// If we have 3 arguments, it's textureLod. If we have 4, it's textureLodOffset.
-				
+
 				if (args.size() == 4)
 				{
 					m_writer.Write("textureLod(");
@@ -3158,7 +3158,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					m_writer.Write("sampler2DArray");
 				}
 				break;
-			case HLSLBaseType_Texture3D: 
+			case HLSLBaseType_Texture3D:
 				m_writer.Write("sampler3D");
 				break;
 			case HLSLBaseType_Texture2DMS:
@@ -3265,9 +3265,9 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 
 				switch (params[0]->expressionType.baseType)
 				{
-					
+
 				case HLSLBaseType_Texture1D:
-					
+
 					m_writer.Write("(");
 					OutputExpression(params[1]);
 					m_writer.Write(").x, ");
@@ -3278,7 +3278,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					break;
 
 				case HLSLBaseType_Texture1DArray:
-						
+
 					m_writer.Write("ivec2(");
 					OutputExpression(params[1]);
 					m_writer.Write(").xy, ");
@@ -3289,10 +3289,10 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					break;
 
 				case HLSLBaseType_Texture2D:
-						
+
 					m_writer.Write("ivec2(");
 					OutputExpression(params[1]);
-					m_writer.Write(").xy");	
+					m_writer.Write(").xy");
 
 					//offset
 					if (params.size() > 3)
@@ -3311,7 +3311,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					break;
 
 				case HLSLBaseType_Texture2DMS:
-						
+
 					m_writer.Write("ivec2(");
 					OutputExpression(functionCall->params[1]);
 					m_writer.Write(").xy");
@@ -3332,16 +3332,16 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 						m_writer.Write(")");
 					}
 					else
-					{						
+					{
 						OutputExpression(params[1]);
 						m_writer.Write(".z");
-					}					
+					}
 
-						
+
 					break;
 
 				case HLSLBaseType_Texture2DArray:
-						
+
 					m_writer.Write("ivec3(");
 					OutputExpression(params[1]);
 					m_writer.Write(").xyz, ");
@@ -3352,7 +3352,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					break;
 
 				case HLSLBaseType_Texture2DMSArray:
-						
+
 					m_writer.Write("ivec3(");
 					OutputExpression(params[1]);
 					m_writer.Write(").xyz, ");
@@ -3371,7 +3371,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					break;
 
 				case HLSLBaseType_Texture3D:
-						
+
 					m_writer.Write("ivec3(");
 					OutputExpression(params[1]);
 					m_writer.Write(").xyz");
@@ -3499,12 +3499,12 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				int argIter = 0;
 				while (expression != NULL)
 				{
-					
+
 					if (numExpressions2 == 2)
 					{
 						m_writer.Write(")");
 						break;
-					}					
+					}
 
 					if (numExpressions2 > 0)
 						m_writer.Write(", ");
@@ -3512,7 +3512,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 					if (numExpressions2 == 1 && isImage)
 					{
 						// if we are doing the image variation, then write the index after the first param
-	
+
 						// cast to signed
 						m_writer.Write("%s(", GetBaseTypeName(indexDstType));
 
@@ -3534,7 +3534,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				}
 #endif
 			}
-			
+
 		}
 		else
 		{
@@ -3543,7 +3543,7 @@ void GLSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType*
 				int temp = 0;
 				temp++;
 			}
-			
+
 			OutputIdentifier(functionName);
 			m_writer.Write("(");
 			OutputExpressionList(functionCall->params);
@@ -3744,7 +3744,7 @@ void GLSLGenerator::OutputIdentifier(const CachedString & srcName)
 	{
 		dstName = MakeCached("subgroupBallotExclusiveBitCount");
 	}
-	
+
 	else if (String_Equal(srcName, "WavePrefixProduct"))
 	{
 		dstName = MakeCached("subgroupExclusiveMul");
@@ -3763,7 +3763,7 @@ void GLSLGenerator::OutputIdentifier(const CachedString & srcName)
 	else if (String_Equal(srcName, "WaveReadLaneAt"))
 	{
 		dstName = MakeCached("subgroupBroadcast");
-	}	
+	}
 
 	else if (String_Equal(srcName, "InterlockedAdd"))
 	{
@@ -3796,7 +3796,7 @@ void GLSLGenerator::OutputIdentifier(const CachedString & srcName)
 	else if (String_Equal(srcName, "InterlockedCompareExchange"))
 	{
 		dstName = MakeCached("atomicCompSwap");
-	}	
+	}
 	else if (String_Equal(srcName, "InterlockedAnd"))
 	{
 		dstName = MakeCached("atomicAnd");
@@ -3824,7 +3824,7 @@ void GLSLGenerator::OutputIdentifier(const CachedString & srcName)
 	else if (String_Equal(srcName, "InterlockedCompareExchange"))
 	{
 		dstName = MakeCached("atomicCompSwap");
-	}	
+	}
 	else if (String_Equal(srcName, "GroupMemoryBarrierWithGroupSync"))
 	{
 		dstName = MakeCached("barrier(); groupMemoryBarrier");
@@ -3849,7 +3849,7 @@ void GLSLGenerator::OutputIdentifier(const CachedString & srcName)
 	{
 		dstName = MakeCached("barrier(); groupMemoryBarrier();  memoryBarrierImage(); memoryBarrier");
 	}
-	else 
+	else
 	{
 		dstName = srcName;
 
@@ -3871,7 +3871,7 @@ void GLSLGenerator::OutputIdentifierExpression(HLSLIdentifierExpression* pIdentE
 		if (buffer->type.array && buffer->type.arrayDimension > 0)
 		{
 			// original code for reference, we have an extra name in there, but I think it's harmless. Fixing it anyways.
-			// m_writer.Write("%s", name, name);			
+			// m_writer.Write("%s", name, name);
 			m_writer.Write("%s", FetchCstr(m_stringLibrary, baseName));
 		}
 		else
@@ -4036,7 +4036,7 @@ void GLSLGenerator::OutputAttributes(int indent, HLSLAttribute* attribute)
 				m_writer.EndLine();
 			}
 
-			
+
 
 
 			if (m_target == Target_DomainShader && m_domain.IsNotEmpty() && m_partitioning.IsNotEmpty() && m_outputtopology.IsNotEmpty())
@@ -4083,8 +4083,8 @@ void GLSLGenerator::OutputAttributes(int indent, HLSLAttribute* attribute)
 				m_writer.Write(") in;");
 				m_writer.EndLine();
 			}
-			
-			
+
+
 		}
 
 		attribute = attribute->nextAttribute;
@@ -4254,7 +4254,7 @@ void GLSLGenerator::OutputStatements(int indent, HLSLStatement* statement, const
         else if (statement->nodeType == HLSLNodeType_Struct)
         {
             HLSLStruct* structure = static_cast<HLSLStruct*>(statement);
-			
+
             m_writer.WriteLine(indent, "struct %s", RawStr(structure->name));
 			m_writer.WriteLine(indent, "{");
             HLSLStructField* field = structure->field;
@@ -4273,11 +4273,11 @@ void GLSLGenerator::OutputStatements(int indent, HLSLStatement* statement, const
 					m_writer.Write(";");
 					m_writer.EndLine();
 				}
-              
+
                 field = field->nextField;
             }
             m_writer.WriteLine(indent, "};");
-        }				
+        }
 		else if (statement->nodeType == HLSLNodeType_Buffer)
 		{
 			HLSLBuffer* buffer = static_cast<HLSLBuffer*>(statement);
@@ -4305,7 +4305,7 @@ void GLSLGenerator::OutputStatements(int indent, HLSLStatement* statement, const
 					m_writer.Write("buffer %s_Block", RawStr(buffer->name));
 				else
 					m_writer.Write("buffer %s", RawStr(buffer->name));
-								
+
 				m_writer.WriteLine(0, "\n{");
 
 				if (buffer->type.elementType != HLSLBaseType_Unknown)
@@ -4547,7 +4547,7 @@ void GLSLGenerator::OutputStatements(int indent, HLSLStatement* statement, const
 							m_writer.EndLine();
 						}
 						field = (HLSLStructField*)field->nextField;
-					}					
+					}
 				}
 
 				if (buffer->bPushConstant)
@@ -4559,7 +4559,7 @@ void GLSLGenerator::OutputStatements(int indent, HLSLStatement* statement, const
 					else
 						m_writer.WriteLine(indent, "};");
 				}
-				
+
 			}
 			else if (buffer->type.baseType == HLSLBaseType_StructuredBuffer || buffer->type.baseType == HLSLBaseType_PureBuffer)
 			{
@@ -4697,9 +4697,9 @@ void GLSLGenerator::OutputStatements(int indent, HLSLStatement* statement, const
 				m_writer.Write(indent, "else if (");
 				OutputExpression(ifStatement->elseifStatement[i]->condition);
 				m_writer.EndLine(")");
-				
-				
-				
+
+
+
 				m_writer.WriteLine(indent, "{");
 				OutputStatements(indent + 1, ifStatement->elseifStatement[i]->statement, returnType);
 				m_writer.WriteLine(indent, "}");
@@ -5233,18 +5233,18 @@ void GLSLGenerator::OutputAttribute(const HLSLType& type, const CachedString & s
 					m_writer.Write("patch %s ", FetchCstr(m_stringLibrary, qualifier));
 				else
 					m_writer.Write("%s ", FetchCstr(m_stringLibrary, qualifier) );
-				
+
 				char attribName[ 64 ];
 				String_Printf( attribName, 64, "%s%s", FetchCstr(m_stringLibrary, prefix), FetchCstr(m_stringLibrary, field->semantic));
 
 				if(field->type.baseType == HLSLBaseType_Int || field->type.baseType == HLSLBaseType_Uint && m_target != Target_VertexShader)
-					m_writer.Write("flat ");				
-					
+					m_writer.Write("flat ");
+
 				OutputDeclaration(field->type, MakeCached(attribName));
 
 				if (m_target == Target_GeometryShader && modifier == AttributeModifier_In)
 					m_writer.Write("[]");
-				
+
 				m_writer.EndLine(";");
             }
             field = field->nextField;
@@ -5282,7 +5282,7 @@ void GLSLGenerator::OutputAttribute(const HLSLType& type, const CachedString & s
 					m_writer.Write("patch ");
 
 				m_writer.Write("%s ", FetchCstr(m_stringLibrary, qualifier));
-				
+
 				if (m_target == Target_HullShader && type.array)
 				{
 					field->type.array = true;
@@ -5292,13 +5292,13 @@ void GLSLGenerator::OutputAttribute(const HLSLType& type, const CachedString & s
 					field->type.arrayExtent[2] = type.arrayExtent[2];
 				}
 				else if (m_target == Target_DomainShader)
-				{					
+				{
 					field->type.array = false;
 				}
 
 				char attribName[64];
 				String_Printf(attribName, 64, "%s%s", RawStr(m_inAttribPrefix), RawStr(field->semantic));
-				
+
 
 				if (builtInSemantic.IsNotEmpty())
 				{
@@ -5493,8 +5493,8 @@ void GLSLGenerator::OutputEntryCaller(HLSLFunction* entryFunction)
             {
 				HLSLStruct* structDeclaration = FindStruct(root, argument->type.typeName);
 				ASSERT_PARSER(structDeclaration != NULL);
-                
-				
+
+
 				if (argument->type.array)
 				{
 					int arraySize = argument->type.arrayExtent[0];
@@ -5545,8 +5545,8 @@ void GLSLGenerator::OutputEntryCaller(HLSLFunction* entryFunction)
 						field = field->nextField;
 					}
 				}
-				
-				
+
+
             }
             else if (argument->semantic.IsNotEmpty())
             {
@@ -5631,12 +5631,12 @@ void GLSLGenerator::OutputEntryCaller(HLSLFunction* entryFunction)
     m_writer.BeginLine(1);
     if (entryFunction->returnType.baseType != HLSLBaseType_Void)
         m_writer.Write("%s %s = ", CHECK_CSTR(GetTypeName(entryFunction->returnType)), CHECK_CSTR(resultName));
-    
+
 	if(String_Equal(m_entryName, "main"))
 		m_writer.Write("HLSL%s(", FetchCstr(m_stringLibrary, m_entryName));
 	else
 		m_writer.Write("%s(", FetchCstr(m_stringLibrary, m_entryName));
-	
+
 	int firstArgument = 0;
 
 	//DomainShader
@@ -5647,7 +5647,7 @@ void GLSLGenerator::OutputEntryCaller(HLSLFunction* entryFunction)
 
 	int numWritten = 0;
 	for (int i = firstArgument; i < argumentVec.size(); i++)
-    {		
+    {
 		HLSLArgument * argument = argumentVec[i];
 		if (argument->type.baseType == HLSLBaseType_InputPatch || argument->type.baseType == HLSLBaseType_OutputPatch)
 		{
@@ -5667,7 +5667,7 @@ void GLSLGenerator::OutputEntryCaller(HLSLFunction* entryFunction)
         }
 
 		m_writer.Write("%s", FetchCstr(m_stringLibrary, GetSafeIdentifierName(argument->name)));
-        
+
 		numWritten++;
     }
     m_writer.EndLine(");");
@@ -5749,7 +5749,7 @@ void GLSLGenerator::OutputDeclaration(const HLSLType& type, const CachedString &
 {
 	if (!(type.baseType == HLSLBaseType_InputPatch ||
 		type.baseType == HLSLBaseType_OutputPatch /*||
-		
+
 		type.baseType == HLSLBaseType_PointStream ||
 		type.baseType == HLSLBaseType_LineStream ||
 		type.baseType == HLSLBaseType_TriangleStream
@@ -5760,12 +5760,12 @@ void GLSLGenerator::OutputDeclaration(const HLSLType& type, const CachedString &
 		OutputDeclarationBody(type, name);
 	}
 
-	
+
 }
 
 void GLSLGenerator::OutputDeclarationType( const HLSLType& type )
 {
-	
+
 	m_writer.Write( "%s ", CHECK_CSTR(GetTypeName( type )) );
 }
 
@@ -5777,14 +5777,14 @@ void GLSLGenerator::OutputDeclarationBody( const HLSLType& type, const CachedStr
 	}
 	else
 	{
-		
+
 		m_writer.Write("%s[", FetchCstr(m_stringLibrary, GetSafeIdentifierName(name)));
 
-		if (type.arrayExtent[0])		
+		if (type.arrayExtent[0])
 			m_writer.Write("%d", type.arrayExtent[0]);
-		
+
 		m_writer.Write("]");
-	
+
 	}
 
 }
@@ -5812,7 +5812,7 @@ void GLSLGenerator::Error(const char* format, ...)
     va_start(arg, format);
     Log_ErrorArgList(format, arg);
     va_end(arg);
-} 
+}
 
 CachedString GLSLGenerator::GetSafeIdentifierName(const CachedString & name) const
 {
@@ -5856,7 +5856,7 @@ CachedString GLSLGenerator::GetBuiltInSemantic(const CachedString & semantic, At
 {
     if (outputIndex)
         *outputIndex = -1;
-	
+
     if ((m_target == Target_VertexShader || m_target == Target_DomainShader) && modifier == AttributeModifier_Out && (String_Equal(semantic, "SV_POSITION") || String_Equal(semantic, "SV_Position")))
         return MakeCached("gl_Position");
 
@@ -5887,7 +5887,7 @@ CachedString GLSLGenerator::GetBuiltInSemantic(const CachedString & semantic, At
 
 	if (m_target == Target_GeometryShader && modifier == AttributeModifier_Out && (String_Equal(semantic, "SV_POSITION") || String_Equal(semantic, "SV_Position")))
 			return MakeCached("gl_Position");
-	
+
 	if (m_target == Target_ComputeShader && modifier == AttributeModifier_In && (String_Equal(semantic, "SV_DispatchThreadID")))
 		return MakeCached("gl_GlobalInvocationID");
 
@@ -5917,7 +5917,7 @@ CachedString GLSLGenerator::GetBuiltInSemantic(const CachedString & semantic, At
 
 	if (m_target == Target_DomainShader && (String_Equal(semantic, "SV_DomainLocation")))
 		return MakeCached("gl_TessCoord");
-	
+
 	if (m_target == Target_FragmentShader && modifier == AttributeModifier_In && (String_Equal(semantic, "SV_IsFrontFace")))
 		return MakeCached("gl_FrontFacing");
 

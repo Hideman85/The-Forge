@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #include "soloud.h"
 #include "soloud_fftfilter.h"
 #include "soloud_fft.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 
 namespace SoLoud
@@ -76,7 +76,7 @@ namespace SoLoud
 		unsigned int ofs = 0;
 		unsigned int chofs = 512 * aChannel;
 		unsigned int bofs = mOffset[aChannel];
-		
+
 		while (ofs < aSamples)
 		{
 			for (i = 0; i < 128; i++)
@@ -84,7 +84,7 @@ namespace SoLoud
 				mInputBuffer[chofs + ((bofs + i + 128) & 511)] = aBuffer[ofs + i];
 				mMixBuffer[chofs + ((bofs + i + 128) & 511)] = 0;
 			}
-			
+
 			for (i = 0; i < 256; i++)
 			{
 				b[i] = mInputBuffer[chofs + ((bofs + i) & 511)];
@@ -93,14 +93,14 @@ namespace SoLoud
 
 			// do magic
 			fftFilterChannel(b, 128, aSamplerate, aTime, aChannel, aChannels);
-			
+
 			FFT::ifft256(b);
 
 			for (i = 0; i < 256; i++)
 			{
 				mMixBuffer[chofs + ((bofs + i) & 511)] += b[i] * (128 - abs(128 - i)) * (1.0f / 128.0f);
-			}			
-			
+			}
+
 			for (i = 0; i < 128; i++)
 			{
 				aBuffer[ofs + i] += (mMixBuffer[chofs + ((bofs + i) & 511)] - aBuffer[ofs + i]) * mParam[0];

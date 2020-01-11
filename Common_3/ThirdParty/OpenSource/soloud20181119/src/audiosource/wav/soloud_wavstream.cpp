@@ -32,7 +32,7 @@ freely, subject to the following restrictions:
 #include "soloud_wavstream.h"
 #include "soloud_file.h"
 #include "stb_vorbis.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -113,7 +113,7 @@ namespace SoLoud
 		{
 			return;
 		}
-		
+
 		if (mFile)
 		{
 			if (mParent->mFiletype == WAVSTREAM_WAV)
@@ -213,7 +213,7 @@ namespace SoLoud
 	}
 
 	static int getOggData(float **aOggOutputs, float *aBuffer, int aSamples, int aPitch, int aFrameSize, int aFrameOffset, int aChannels)
-	{			
+	{
 		if (aFrameSize <= 0)
 			return 0;
 
@@ -231,10 +231,10 @@ namespace SoLoud
 		return samples;
 	}
 
-	
+
 
 	unsigned int WavStreamInstance::getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize)
-	{			
+	{
 		unsigned int offset = 0;
 		if (mFile == NULL)
 			return 0;
@@ -388,14 +388,14 @@ namespace SoLoud
 		mMemFile = 0;
 		mStreamFile = 0;
 	}
-	
+
 	WavStream::~WavStream()
 	{
 		stop();
 		conf_free(mFilename);
 		conf_delete(mMemFile);
 	}
-	
+
 #define MAKEDWORD(a,b,c,d) (((d) << 24) | ((c) << 16) | ((b) << 8) | (a))
 
 	result WavStream::loadwav(File * fp)
@@ -451,7 +451,7 @@ namespace SoLoud
 
 		if (decoder == NULL)
 			return FILE_LOAD_FAILED;
-		
+
 		mChannels = decoder->channels;
 		if (mChannels > MAX_CHANNELS)
 		{
@@ -501,12 +501,12 @@ namespace SoLoud
 		int res = fp.open(aFilename);
 		if (res != SO_NO_ERROR)
 			return res;
-		
+
 		int len = (int)strlen(aFilename);
-		mFilename = (char*)conf_malloc(sizeof(char) * len + 1);		
+		mFilename = (char*)conf_malloc(sizeof(char) * len + 1);
 		memcpy(mFilename, aFilename, len);
 		mFilename[len] = 0;
-		
+
 		res = parse(&fp);
 
 		if (res != SO_NO_ERROR)

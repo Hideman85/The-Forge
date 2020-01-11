@@ -1,8 +1,8 @@
 #ifndef COMMON_3_OS_IMAGE_IMAGE_HELPER_H_
 #define COMMON_3_OS_IMAGE_IMAGE_HELPER_H_
 
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_query.h>
 
 static inline uint32_t Image_GetMipMappedSize(uint32_t w, uint32_t h, uint32_t d,
 																				uint32_t nMipMapLevels, TinyImageFormat srcFormat)

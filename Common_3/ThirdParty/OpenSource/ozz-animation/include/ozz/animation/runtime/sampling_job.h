@@ -31,8 +31,7 @@
 //CONFFX_BEGIN
 #include "../../base/platform.h"
 
-#include "../../../../../../../../Common_3/OS/Math/MathTypes.h"
-
+#include <TheForge/OS/Math/MathTypes.h>
 namespace ozz {
 
 //CONFFX_END

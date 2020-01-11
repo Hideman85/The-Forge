@@ -37,8 +37,8 @@
 #include "../../../../Common_3/Tools/AssetPipeline/src/TFXImporter.h"
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -890,7 +890,7 @@ class MaterialPlayground: public IApp
         {
             PathHandle resourceDirRoot = fsAppendPathComponent(programDirectory, "../../../src/06_MaterialPlayground");
             fsSetResourceDirectoryRootPath(resourceDirRoot);
-            
+
             fsSetRelativePathForResourceDirectory(RD_TEXTURES,        "../../UnitTestResources/Textures");
             fsSetRelativePathForResourceDirectory(RD_MESHES,          "../../UnitTestResources/Meshes");
             fsSetRelativePathForResourceDirectory(RD_BUILTIN_FONTS,    "../../UnitTestResources/Fonts");
@@ -942,7 +942,7 @@ class MaterialPlayground: public IApp
 		//
 
 		ComputePBRMaps();
-		
+
 		LoadModelsAndTextures();
 
 		CreateRasterizerStates();
@@ -979,7 +979,7 @@ class MaterialPlayground: public IApp
 		guiDesc.mStartPosition = vec2(5, 220.0f) / dpiScale;
 		guiDesc.mStartSize = vec2(450, 600) / dpiScale;
 		pGuiWindowMain = gAppUI.AddGuiComponent(GetName(), &guiDesc);
-		
+
 		//guiDesc.mStartPosition = vec2(300, 300.0f) / dpiScale;
 		guiDesc.mStartPosition = vec2((float)mSettings.mWidth - 300.0f * dpiScale, 20.0f) / dpiScale;
 		pGuiWindowMaterial = gAppUI.AddGuiComponent("Material Properties", &guiDesc);
@@ -1222,7 +1222,7 @@ class MaterialPlayground: public IApp
 		gUniformDataCameraSkybox.mProjectView = projMat * viewMat;
 
 		viewMat = pLightView->getViewMatrix();
-		
+
 		// lights
 		gUniformDataDirectionalLights.mDirectionalLights[0].mDirection = v3ToF3(normalize(f3Tov3(gDirectionalLightPosition)));
 		gUniformDataDirectionalLights.mDirectionalLights[0].mShadowMap = 0;
@@ -1234,9 +1234,9 @@ class MaterialPlayground: public IApp
 
 		gUniformDataPointLights.mNumPointLights = 0;    // short out point lights for now
 
-		
 
-		// update the texture config (position and all other variables are 
+
+		// update the texture config (position and all other variables are
 		// set during initialization and they dont change during Update()).
 		//
 		for (int i = 0; i < MATERIAL_INSTANCE_COUNT; ++i)
@@ -1247,7 +1247,7 @@ class MaterialPlayground: public IApp
 			gUniformDataObject.textureConfig = ETextureConfigFlags::TEXTURE_CONFIG_FLAGS_ALL;
 			if (gDiffuseReflectionModel == OREN_NAYAR_REFLECTION)
 				gUniformDataObject.textureConfig |= ETextureConfigFlags::OREN_NAYAR;
-			
+
 			// Update material properties
 			if (gOverrideRoughnessTextures)
 			{
@@ -1486,7 +1486,7 @@ class MaterialPlayground: public IApp
 		// DRAW DIRECTIONAL SHADOW MAP
 		//
 		cmdBeginGpuTimestampQuery(cmd, pGpuProfiler, "Shadow Pass", true);
-		
+
 		TextureBarrier shadowTexBarrier[] = { { pRenderTargetShadowMap->pTexture, RESOURCE_STATE_DEPTH_WRITE } };
 		cmdResourceBarrier(cmd, 0, NULL, 1, shadowTexBarrier);
 
@@ -2973,7 +2973,7 @@ class MaterialPlayground: public IApp
 			//this->LoadModel(filename);
 			return 0;    //return amount of arguments that we want to send back to script
 		});
-        
+
         PathHandle loadModelsPath = fsCopyPathInResourceDirectory(RD_MIDDLEWARE_2, "loadModels.lua");
 		gLuaManager.AddAsyncScript(loadModelsPath, [&modelsAreLoaded](ScriptState state) { modelsAreLoaded = true; });
 
@@ -3006,10 +3006,10 @@ class MaterialPlayground: public IApp
 
 			return 0;
 		});
-        
+
         PathHandle loadTexturesPath = fsCopyPathInResourceDirectory(RD_MIDDLEWARE_2, "loadTextures.lua");
 		gLuaManager.AddAsyncScript(loadTexturesPath, [&texturesAreLoaded](ScriptState state) { texturesAreLoaded = true; });
-        
+
 		while (!texturesAreLoaded)
 			Thread::Sleep(0);
 
@@ -3029,7 +3029,7 @@ class MaterialPlayground: public IApp
 
 			return 0;
 		});
-        
+
         PathHandle loadGroundTexturesPath = fsCopyPathInResourceDirectory(RD_MIDDLEWARE_2, "loadGroundTextures.lua");
 		gLuaManager.AddAsyncScript(
 			loadGroundTexturesPath, [&groundTexturesAreLoaded](ScriptState state) { groundTexturesAreLoaded = true; });
@@ -3320,7 +3320,7 @@ class MaterialPlayground: public IApp
 
 		TextureBarrier srvBarriers[1] = { { pTextureSkybox, RESOURCE_STATE_SHADER_RESOURCE } };
 		cmdResourceBarrier(pCmd, 0, NULL, 1, srvBarriers);
-        
+
 		/************************************************************************/
 		// Compute sky irradiance
 		/************************************************************************/
@@ -3886,7 +3886,7 @@ class MaterialPlayground: public IApp
 		// Directional light
 		gUniformDataDirectionalLights.mDirectionalLights[0].mDirection = v3ToF3(normalize(f3Tov3(gDirectionalLightPosition)));
 		gUniformDataDirectionalLights.mDirectionalLights[0].mShadowMap = 0;
-		
+
 		gUniformDataDirectionalLights.mDirectionalLights[0].mColor = float3(255.0f, 180.0f, 117.0f) / 255.0f;
 		//gUniformDataDirectionalLights.mDirectionalLights[0].mColor = float3(236.222f, 178.504f, 119.650f) / 255.0f;
 		//gUniformDataDirectionalLights.mDirectionalLights[0].mColor = float3(255.0f, 0.5f, 0.5f) / 255.0f;
@@ -3911,7 +3911,7 @@ class MaterialPlayground: public IApp
                                                &tfxAsset);
         if (!imported)
             return;
-        
+
 		HairBuffer hairBuffer = {};
 
 		hairBuffer.mName = name;
@@ -4220,7 +4220,7 @@ class MaterialPlayground: public IApp
 		// Load clips
         PathHandle neckCrackPath = fsCopyPathInResourceDirectory(RD_ANIMATIONS, "stickFigure/animations/neckCrack.ozz");
 		gAnimationClipNeckCrack.Initialize(neckCrackPath, &gAnimationRig[0]);
-        
+
         PathHandle standPath = fsCopyPathInResourceDirectory(RD_ANIMATIONS, "stickFigure/animations/stand.ozz");
 		gAnimationClipStand.Initialize(standPath, &gAnimationRig[0]);
 
@@ -4779,7 +4779,7 @@ void GuiController::AddGui()
 	--dropDownCount;
 #endif
 
-	static const char* diffuseReflectionNames[] = 
+	static const char* diffuseReflectionNames[] =
 	{
 		"Lambert",
 		"Oren-Nayar",
@@ -4815,7 +4815,7 @@ void GuiController::AddGui()
 	pGuiWindowMain->AddWidget(ReloadScriptButton);
 
 	pGuiWindowMain->AddWidget(CheckboxWidget("Skybox", &gDrawSkybox));
-	
+
 	CollapsingHeaderWidget SunLightWidgets("Lighting Options");
 	SunLightWidgets.AddSubWidget(CheckboxWidget("Environment Lighting", &gEnvironmentLighting));
 	SunLightWidgets.AddSubWidget(SliderFloatWidget("Environment Light Intensity", &gEnvironmentLightingIntensity, 0.0f, 1.0f, 0.005f));

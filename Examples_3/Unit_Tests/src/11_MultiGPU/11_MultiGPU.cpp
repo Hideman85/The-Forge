@@ -29,8 +29,8 @@
 #define MAX_PLANETS 20    // Does not affect test, just for allocating space in uniform block. Must match with shader.
 
 //tiny stl
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 //Interfaces
 #include "../../../../Common_3/OS/Interfaces/ICameraController.h"
@@ -509,7 +509,7 @@ public:
 
 		if (!gPanini.Init(pRenderer))
 			return false;
-		
+
 		gPanini.SetMaxDraws(gImageCount * 2);
 
 		if (!initInputSystem(pWindow))
@@ -543,7 +543,7 @@ public:
 		addInputAction(&actionDesc);
 		actionDesc = { InputBindings::BUTTON_NORTH, [](InputActionContext* ctx) { pCameraController->resetView(); return true; } };
 		addInputAction(&actionDesc);
-		
+
 		// Prepare descriptor sets
 		for (uint32_t i = 0; i < gViewCount; ++i)
 		{
@@ -828,7 +828,7 @@ public:
 		/************************************************************************/
 		/************************************************************************/
 		// ProfileSetDisplayMode()
-		// TODO: need to change this better way 
+		// TODO: need to change this better way
 		if (gMicroProfiler != bPrevToggleMicroProfiler)
 		{
 		  toggleProfiler();

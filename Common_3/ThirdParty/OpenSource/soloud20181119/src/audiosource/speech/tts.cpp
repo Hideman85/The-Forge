@@ -4,7 +4,7 @@
 #include <string.h>
 #include "darray.h"
 #include "tts.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 static const char *ASCII[] =
 {
@@ -597,9 +597,9 @@ static Rule *Rules[] =
 
 static const char *Cardinals[] =
 {
-	"zero", "one", "two", "three", "four", 
-	"five", "six", "seven", "eight", "nine", 
-	"ten", "eleven", "twelve", "thirteen", "fourteen", 
+	"zero", "one", "two", "three", "four",
+	"five", "six", "seven", "eight", "nine",
+	"ten", "eleven", "twelve", "thirteen", "fourteen",
 	"fifteen", "sixteen", "seventeen", "eighteen", "nineteen"
 };
 
@@ -613,9 +613,9 @@ static const char *Twenties[] =
 
 static const char *Ordinals[] =
 {
-	"zeroth", "first", "second", "third", "fourth", 
+	"zeroth", "first", "second", "third", "fourth",
 	"fifth", "sixth", "seventh","eighth", "ninth",
-	"tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", 
+	"tenth", "eleventh", "twelfth", "thirteenth", "fourteenth",
 	"fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth"
 };
 

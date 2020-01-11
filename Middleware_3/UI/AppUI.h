@@ -23,11 +23,11 @@
 */
 
 #pragma once
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../Common_3/OS/Interfaces/IMiddleware.h"
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/IMiddleware.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 #include "../Text/Fontstash.h"
 
 typedef void (*WidgetCallback)();
@@ -195,7 +195,7 @@ class LabelWidget: public IWidget
 class ColorLabelWidget : public IWidget
 {
 public:
-  ColorLabelWidget(const eastl::string& _label, const float4& _color) : 
+  ColorLabelWidget(const eastl::string& _label, const float4& _color) :
     IWidget(_label),
     mColor(_color) {}
 
@@ -479,10 +479,10 @@ class DropdownWidget: public IWidget
 class ColumnWidget : public IWidget
 {
 public:
-  ColumnWidget(const eastl::string& _label, const eastl::vector<IWidget*>& _perColWidgets) : IWidget(_label) 
+  ColumnWidget(const eastl::string& _label, const eastl::vector<IWidget*>& _perColWidgets) : IWidget(_label)
   {
     mNumColumns = (uint32_t)_perColWidgets.size();
-    for (uint32_t i = 0; i < _perColWidgets.size(); ++i) 
+    for (uint32_t i = 0; i < _perColWidgets.size(); ++i)
     {
       mPerColumnWidgets.push_back(_perColWidgets[i]);
     }
@@ -531,7 +531,7 @@ class ColorSliderWidget: public IWidget
 class HistogramWidget : public IWidget
 {
 public:
-  HistogramWidget(const eastl::string& _label, float* _values, uint32_t _valuesCount, float* _minScale, float* _maxScale, float2 _graphScale, eastl::string* _title) : 
+  HistogramWidget(const eastl::string& _label, float* _values, uint32_t _valuesCount, float* _minScale, float* _maxScale, float2 _graphScale, eastl::string* _title) :
     IWidget(_label),
     pValues(_values),
     mCount(_valuesCount),
@@ -553,7 +553,7 @@ protected:
   eastl::string* mHistogramTitle;
 };
 
-class PlotLinesWidget : public IWidget 
+class PlotLinesWidget : public IWidget
 {
 public:
   PlotLinesWidget(const eastl::string& _label, float* _values, uint32_t _valueCount, float* _scaleMin, float* _scaleMax, float2* _plotScale, eastl::string* _title)
@@ -608,7 +608,7 @@ class TextboxWidget: public IWidget
 	bool     mAutoSelectAll;
 };
 
-class DynamicTextWidget : public IWidget 
+class DynamicTextWidget : public IWidget
 {
 public:
   DynamicTextWidget(const eastl::string& _label, char* _data, uint32_t const _length, float4* _color) :
@@ -616,7 +616,7 @@ public:
     pData(_data),
     mLength(_length),
     pColor(_color)
-  {  
+  {
   }
 
   IWidget* Clone() const;

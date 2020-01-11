@@ -26,7 +26,7 @@
 #include "../Interfaces/ILog.h"
 #include "../Interfaces/IFileSystem.h"
 #include "../Interfaces/IOperatingSystem.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/unordered_map.h>
 
 #include "../Interfaces/IMemory.h"
 
@@ -60,7 +60,7 @@ void log_write(void * user_data, const eastl::string & message)
 {
 	FileStream* fh = (FileStream*)user_data;
     ASSERT(fh);
-    
+
     fsWriteToStreamLine(fh, message.c_str());
     fsFlushStream(fh);
 }
@@ -78,7 +78,7 @@ void log_flush(void * user_data)
 {
     FileStream* fh = (FileStream*)user_data;
     ASSERT(fh);
-    
+
     fsFlushStream(fh);
 }
 
@@ -144,15 +144,15 @@ void Log::AddFile(const char * filename, FileMode file_mode, LogLevel log_level)
 {
 	if (filename == NULL)
 		return;
-	
+
     PathHandle logFileDirectory = fsCopyLogFileDirectoryPath();
     PathHandle path = fsAppendPathComponent(logFileDirectory, filename);
     FileStream* fh = fsOpenFile(path, file_mode);
 	if (fh)//If the File Exists
 	{
-	
+
 		// AddCallback will try to acquire mutex
-        
+
 		AddCallback(fsGetPathAsNativeString(path), log_level, fh, log_write, log_close, log_flush);
 
 		{
@@ -217,7 +217,7 @@ void Log::Write(uint32_t level, const eastl::string & message, const char * file
 			++log_level_count;
 		}
 	}
-	
+
 	bool do_once = false;
 	{
 		MutexLock lock{ pLogger->mLogMutex }; // scope lock as stack frames from calling AddInitialLogFile will attempt to lock mutex
@@ -253,7 +253,7 @@ void Log::Write(uint32_t level, const eastl::string & message, const char * file
 			_PrintUnicodeLine(formattedMessage, level & LogLevel::eERROR);
 		}
 	}
-	
+
 	for (LogCallback & callback : pLogger->mCallbacks)
 	{
 		// Log for each flag
@@ -275,11 +275,11 @@ void Log::WriteRaw(uint32_t level, const eastl::string & message, bool error)
 	}
 	if (do_once)
 		AddInitialLogFile();
-	
+
 	MutexLock lock{ pLogger->mLogMutex };
-	
+
 	pLogger->mLastMessage = message;
-	
+
 	if (pLogger->mQuietMode)
 	{
 		if (error)
@@ -287,7 +287,7 @@ void Log::WriteRaw(uint32_t level, const eastl::string & message, bool error)
 	}
 	else
 		_PrintUnicode(message, error);
-	
+
 	for (LogCallback & callback : pLogger->mCallbacks)
 	{
 		if (callback.mLevel & level)
@@ -299,20 +299,20 @@ void Log::AddInitialLogFile()
 {
 
 	// Add new file with executable name
-    
+
     const char *extension = ".log";
     const size_t extensionLength = strlen(extension);
-    
+
     char exeFileName[256];
     fsGetExecutableName(exeFileName, 256 - extensionLength);
-    
+
 	// Minimum length check
 	if (exeFileName[0] == 0 || exeFileName[1] == 0)
     {
         strncpy(exeFileName, "Log", 3);
     }
     strncat(exeFileName, extension, extensionLength);
-    
+
     AddFile(exeFileName, FM_WRITE_BINARY, LogLevel::eALL);
 }
 
@@ -389,7 +389,7 @@ Log::~Log()
 		if (callback.mClose)
 			callback.mClose(callback.mUserData);
 	}
-	
+
 	mCallbacks.clear();
 }
 

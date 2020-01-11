@@ -1,8 +1,8 @@
 #ifndef MCPP_PREPROC_H_
 #define MCPP_PREPROC_H_
 
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 namespace MCPPPreproc
 {

@@ -23,13 +23,13 @@
 #include "TFXImporter.h"
 #include <cstdlib>
 #include "TressFXAsset.h"
-#include "../../../OS/Interfaces/IFileSystem.h"
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 bool TFXImporter::ImportTFX(
 	const Path* path, int numFollowHairs, float tipSeperationFactor, float maxRadiusAroundGuideHair, TFXAsset* tfxAsset)
 {
-    
+
     FileStream* fh = fsOpenFile(path, FM_READ_BINARY);
 	if (!fh)
 		return false;
@@ -37,7 +37,7 @@ bool TFXImporter::ImportTFX(
 	AMD::TressFXAsset tressFXAsset = {};
 	if (!tressFXAsset.LoadHairData(fh))
 		return false;
-    
+
     fsCloseStream(fh);
 
 	if (numFollowHairs > 0)
@@ -74,7 +74,7 @@ bool TFXImporter::ImportTFX(
 	memcpy(tfxAsset->mTriangleIndices.data(), tressFXAsset.m_triangleIndices, sizeof(int) * numIndices);
 	tfxAsset->mNumVerticesPerStrand = tressFXAsset.m_numVerticesPerStrand;
     tfxAsset->mNumGuideStrands = tressFXAsset.m_numGuideStrands;
-    
+
 	return true;
 }
 

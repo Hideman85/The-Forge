@@ -24,27 +24,27 @@
 
 #define CGLTF_IMPLEMENTATION
 //#define FAST_OBJ_IMPLEMENTATION
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../../Common_3/ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/string.h>
+#include <EASTL/unordered_map.h>
 
 #include "AssetLoader.h"
 
 
 // OZZ
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/stream.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/archive.h"
+#include <ozz/base/io/stream.h>
+#include <ozz/base/io/archive.h>
 
 // TFX
 #include "TressFXAsset.h"
 
-#include "../../../OS/Interfaces/IOperatingSystem.h"
-#include "../../../OS/Interfaces/IMemory.h"    //NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
+#include <TheForge/OS/Interfaces/IMemory.h>    //NOTE: this should be the last include in a .cpp
 
 bool AssetLoader::LoadSkeleton(const Path* path, ozz::animation::Skeleton* skeleton)
 {
 	// Load skeleton from disk
 	ozz::io::File file(path, FM_READ_BINARY);
-    
+
 	if (!file.opened())
 		return false;
 	ozz::io::IArchive archive(&file);

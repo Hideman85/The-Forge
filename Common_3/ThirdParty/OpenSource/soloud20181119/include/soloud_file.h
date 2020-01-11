@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #define SOLOUD_FILE_H
 
 #include <stdio.h>
-#include "../../../../../Common_3/OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 #include "soloud.h"
 
 typedef void* Soloud_Filehack;
@@ -47,7 +47,7 @@ namespace SoLoud
 		virtual unsigned int pos() = 0;
 		virtual FILE * getFilePtr() { return 0; }
 		virtual unsigned char * getMemPtr() { return 0; }
-		
+
 	};
 
 	class DiskFile : public File
@@ -59,7 +59,7 @@ namespace SoLoud
 		virtual void seek(int aOffset);
 		virtual unsigned int pos();
 		virtual ~DiskFile();
-		DiskFile();		
+		DiskFile();
 		result open(const char *aFilename);
 		virtual FILE * getFilePtr();
 

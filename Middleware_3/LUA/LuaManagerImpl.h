@@ -2,20 +2,20 @@
 
 extern "C"
 {
-#include "../../Common_3/ThirdParty/OpenSource/lua-5.3.5/src/lua.h"
-#include "../../Common_3/ThirdParty/OpenSource/lua-5.3.5/src/lualib.h"
-#include "../../Common_3/ThirdParty/OpenSource/lua-5.3.5/src/lauxlib.h"
+#include <TheForge/ThirdParty/OpenSource/lua-5.3.5/src/lua.h>
+#include <TheForge/ThirdParty/OpenSource/lua-5.3.5/src/lualib.h>
+#include <TheForge/ThirdParty/OpenSource/lua-5.3.5/src/lauxlib.h>
 }
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
+#include <TheForge/OS/Interfaces/ILog.h>
 #include "LunaV.hpp"
 #include "LuaManagerCommon.h"
 
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../Common_3/OS/Interfaces/IThread.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/IThread.h>
 
 #define MAX_LUA_WORKERS 4
 

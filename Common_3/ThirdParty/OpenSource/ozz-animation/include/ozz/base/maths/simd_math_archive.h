@@ -29,7 +29,7 @@
 #define OZZ_OZZ_BASE_MATHS_SIMD_MATH_ARCHIVE_H_
 
 //CONFFX_BEGIN
-#include "../../../../../../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 #include "../io/archive_traits.h"
 #include "../platform.h"

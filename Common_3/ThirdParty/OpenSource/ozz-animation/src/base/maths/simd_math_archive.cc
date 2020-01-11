@@ -30,7 +30,7 @@
 
 #include "../../../include/ozz/base/io/archive.h"
 
-#include "../../../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 #include <cassert>
 

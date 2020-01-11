@@ -1,9 +1,9 @@
 #include "LuaManagerImpl.h"
 
-#include "../../Common_3/ThirdParty/OpenSource/EASTL/string.h"
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
-#include "../../Common_3/OS/Interfaces/ICameraController.h"
-#include "../../Common_3/OS/Interfaces/IMemory.h"
+#include <EASTL/string.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ICameraController.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 const char LuaManagerImpl::className[] = "LuaManager";
 bool       LuaManagerImpl::m_registered = false;
@@ -47,7 +47,7 @@ LuaManagerImpl::LuaManagerImpl(): m_SyncLuaState(nullptr), m_AsyncScriptsCounter
 	memset(m_AsyncLuaStates, 0, MAX_LUA_WORKERS * sizeof(lua_State*));
 
 	Register();
-	
+
 	for (uint32_t i = 0; i <  MAX_LUA_WORKERS; ++i)
 		m_AsyncLuaStatesMutex[i].Init();
 	m_AddAsyncScriptMutex.Init();
@@ -81,7 +81,7 @@ LuaManagerImpl::~LuaManagerImpl()
 	for (uint32_t i = 0; i <  MAX_LUA_WORKERS; ++i)
 		m_AsyncLuaStatesMutex[i].Destroy();
 	m_AddAsyncScriptMutex.Destroy();
-	
+
 	m_registered = false;
 }
 
@@ -129,14 +129,14 @@ int RunScriptFile(const Path* scriptPath, lua_State* L)
 {
 	//int loadfile_error = luaL_loadfile(L, scriptPath);
 	lua_Reader reader = luaReaderFunction;
-    
+
     FileStream* fh = fsOpenFile(scriptPath, FM_READ_BINARY);
-    
+
     if (!fh)
     {
         return false;
     }
-    
+
 	int loadfile_error = lua_load(L, reader, fh, NULL, NULL);
 	if (loadfile_error != 0)
 	{
@@ -189,16 +189,16 @@ bool LuaManagerImpl::SetUpdatableScript(const Path* scriptPath, const char* upda
 	//int loadfile_error = luaL_loadfile(m_UpdatableScriptLuaState, m_UpdatableScriptName.c_str());
 	lua_Reader reader = luaReaderFunction;
 	//int loadfile_error = lua_load(m_UpdatableScriptLuaState, reader, open_file(scriptPath, "rb"), NULL, NULL);
-    
+
     FileStream* fHandle = fsOpenFile(scriptPath, FM_READ_BINARY);
     if (!fHandle)
     {
         return false;
     }
-    
+
 	int loadfile_error = lua_load(m_UpdatableScriptLuaState, reader, fHandle, NULL, NULL);
     fsCloseStream(fHandle);
-    
+
 	if (loadfile_error != 0)
 	{
 		LOGF(eERROR, "Can't load script %s\n", fsGetPathAsNativeString(scriptPath));

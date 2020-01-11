@@ -1,7 +1,5 @@
 set(THE_FORGE_LIBS)
 set(THE_FORGE_SHARED_LIBS)
-set(THE_FORGE_LIBS_INCLUDES)
-cmake_policy(SET CMP0077 NEW) # for option overriding
 
 ##########################################
 ##      Assimp
@@ -16,7 +14,7 @@ if (USE_ASSIMP)
     set(ASSIMP_BUILD_ZLIB ON)
     add_subdirectory(assimp/4.1.0)
     list(APPEND THE_FORGE_LIBS assimp)
-    list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/assimp/4.1.0/include)
+    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/assimp/4.1.0/include" "${CMAKE_SOURCE_DIR}/include")
 endif()
 
 ##########################################
@@ -31,7 +29,7 @@ set(BASISU_TRANSCODER_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/trans
 add_library(BasisuTranscoder STATIC ${BASISU_TRANSCODER_SOURCES})
 
 list(APPEND THE_FORGE_LIBS BasisuTranscoder)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${BASISU_TRANSCODER_SOURCES})
+copy_headers("${BASISU_TRANSCODER_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      DirectXShaderCompiler
@@ -42,27 +40,26 @@ list(APPEND THE_FORGE_LIBS_INCLUDES ${BASISU_TRANSCODER_SOURCES})
 ##      EASTL
 ##########################################
 # Build target
-#file(GLOB EASTL_SOURCES "EASTL/*.cpp")
-set(EASTL_SOURCES
-        EASTL/EAStdC/EAMemory.cpp
-        EASTL/intrusive_list.cpp
-        EASTL/red_black_tree.cpp
-        EASTL/numeric_limits.cpp
-        EASTL/thread_support.cpp
-        EASTL/assert.cpp
-        EASTL/string.cpp
-        EASTL/allocator_forge.cpp
-        EASTL/allocator_eastl.cpp
-        EASTL/hashtable.cpp
-        EASTL/fixed_pool.cpp
-        EASTL/EAStdC/EASprintf.cpp
-)
-set(EASTL_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/EASTL)
+file(GLOB EASTL_SOURCES "EASTL/*.cpp")
+#set(EASTL_SOURCES
+#        EASTL/EAStdC/EAMemory.cpp
+#        EASTL/intrusive_list.cpp
+#        EASTL/red_black_tree.cpp
+#        EASTL/numeric_limits.cpp
+#        EASTL/thread_support.cpp
+#        EASTL/assert.cpp
+#        EASTL/string.cpp
+#        EASTL/allocator_forge.cpp
+#        EASTL/allocator_eastl.cpp
+#        EASTL/hashtable.cpp
+#        EASTL/fixed_pool.cpp
+#        EASTL/EAStdC/EASprintf.cpp
+#)
 add_library(EASTL STATIC ${EASTL_SOURCES})
-set_target_properties(EASTL PROPERTIES INCLUDE_DIRECTORIES "")
+#set_target_properties(EASTL PROPERTIES INCLUDE_DIRECTORIES "")
 
 list(APPEND THE_FORGE_LIBS EASTL)
-#list(APPEND THE_FORGE_LIBS_INCLUDES ${EASTL_INCLUDES})
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/EASTL" "${CMAKE_SOURCE_DIR}/include/EASTL")
 
 ##########################################
 ##      FluidStudios
@@ -74,13 +71,13 @@ if (USE_LUA)
     add_library(FS STATIC ${FS_SOURCES})
 
     list(APPEND THE_FORGE_LIBS FS)
-    list(APPEND THE_FORGE_LIBS_INCLUDES ${FS_INCLUDES})
+#    list(APPEND THE_FORGE_LIBS_INCLUDES ${FS_INCLUDES})
 endif()
 
 ##########################################
 ##      Fontstash
 ##########################################
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/Fontstash/src)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Fontstash/src" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Gainput
@@ -90,7 +87,7 @@ set(GAINPUT_SAMPLES OFF)
 set(GAINPUT_BUILD_SHARED OFF)
 add_subdirectory(gainput)
 list(APPEND THE_FORGE_LIBS gainputstatic)
-list(APPEND THE_FORGE_LIBS_INCLUDES $CMAKE_CURRENT_SOURCE_DIR}/gainput/lib/include)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/gainput/lib/include" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Imgui
@@ -99,7 +96,7 @@ set(IMGUI_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/imgui")
 add_library(imgui STATIC imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp)
 target_include_directories(imgui PUBLIC ${IMGUI_INCLUDES})
 list(APPEND THE_FORGE_LIBS imgui)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${IMGUI_INCLUDES})
+copy_headers("${IMGUI_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      LibZip
@@ -108,7 +105,7 @@ set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Linux/libzip.a)
 add_custom_target(libzip_copy)
 add_custom_command(TARGET libzip_copy PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${LIB_ZIP_FILE} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/libzip)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/libzip" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Lua
@@ -120,7 +117,7 @@ if (USE_LUA)
     add_library(Lua STATIC ${FS_SOURCES})
 
     list(APPEND THE_FORGE_LIBS Lua)
-    list(APPEND THE_FORGE_LIBS_INCLUDES ${LUA_INCLUDES})
+#    list(APPEND THE_FORGE_LIBS_INCLUDES ${LUA_INCLUDES})
 endif()
 
 ##########################################
@@ -132,7 +129,7 @@ set(MO_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/meshoptimizer/src)
 add_library(MeshOptimizer STATIC ${MO_SOURCES})
 
 list(APPEND THE_FORGE_LIBS MeshOptimizer)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${MO_INCLUDES})
+copy_headers("${MO_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      MicroProfile
@@ -143,19 +140,19 @@ set(MP_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/MicroProfile)
 add_library(MicroProfile STATIC ${MP_SOURCES})
 
 list(APPEND THE_FORGE_LIBS MicroProfile)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${MP_INCLUDES})
+copy_headers("${MP_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      SonyMath
 ##########################################
 # Header only
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/ModifiedSonyMath)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/ModifiedSonyMath" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      STB Stuffs
 ##########################################
 # Header only
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/Nothings)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Nothings" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Ozz-Animation
@@ -172,7 +169,7 @@ list(APPEND THE_FORGE_LIBS ozz_base)
 list(APPEND THE_FORGE_LIBS ozz_animation)
 list(APPEND THE_FORGE_LIBS ozz_options)
 #list(APPEND THE_FORGE_LIBS ozz_geometry) # require ozz/base/maths/simd_math.h that has been removed by TheForge team
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/ozz-animation/include)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/ozz-animation/include" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Render doc
@@ -184,14 +181,12 @@ list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/ozz-animation/in
 ##########################################
 file(GLOB_RECURSE SOLOUD_SOURCES "soloud20181119/src/*.cpp")
 set(SOLOUD_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/soloud20181119/include")
-set(SOLOUD_LIBS)
 
 add_library(Soloud STATIC ${SOLOUD_SOURCES})
 target_include_directories(Soloud PUBLIC ${SOLOUD_INCLUDES})
-target_link_libraries(Soloud ${SOLOUD_LIBS})
 
 list(APPEND THE_FORGE_LIBS Soloud)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${SOLOUD_INCLUDES})
+copy_headers("${SOLOUD_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      SPIRV_Cross
@@ -202,7 +197,7 @@ set(SPIRV_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/SPIRV_Cross)
 add_library(SPIRV STATIC ${MP_SOURCES})
 
 list(APPEND THE_FORGE_LIBS SPIRV)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${SPIRV_INCLUDES})
+copy_headers("${SPIRV_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ###      TaskScheduler
@@ -213,46 +208,46 @@ list(APPEND THE_FORGE_LIBS_INCLUDES ${SPIRV_INCLUDES})
 ##      tinydds
 ##########################################
 # Header only
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/tinydds)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/tinydds" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      tinydds
 ##########################################
 add_library(TinyEXR STATIC TinyEXR/tinyexr.cpp)
 list(APPEND THE_FORGE_LIBS TinyEXR)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/TinyEXR)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/TinyEXR" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      tinyimageformat
 ##########################################
 # Header only
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/tinyimageformat)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/tinyimageformat" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      tinyktx
 ##########################################
 # Header only
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/tinyktx)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/tinyktx" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      tinydds
 ##########################################
 add_library(TinyXML2 STATIC TinyXML2/tinyxml2.cpp)
 list(APPEND THE_FORGE_LIBS TinyXML2)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/TinyXML2)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/TinyXML2" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      tinydds
 ##########################################
 add_library(volk STATIC volk/volk.c)
 list(APPEND THE_FORGE_LIBS volk)
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/volk)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/volk" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      VulkanMemoryAllocator
 ##########################################
 # Header only
-list(APPEND THE_FORGE_LIBS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator)
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      winpixeventruntime

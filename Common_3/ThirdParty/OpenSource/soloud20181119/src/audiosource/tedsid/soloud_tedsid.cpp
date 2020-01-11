@@ -30,7 +30,7 @@ freely, subject to the following restrictions:
 #include "ted.h"
 #include "soloud_tedsid.h"
 #include "soloud_file.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -41,7 +41,7 @@ namespace SoLoud
 		mSampleCount = 0;
 		mSID = conf_new(SIDsound, mParent->mModel, 0);
 		mSID->setFrequency(0);
-		mSID->setSampleRate(TED_SOUND_CLOCK);		
+		mSID->setSampleRate(TED_SOUND_CLOCK);
 		mSID->setFrequency(1);
 
 		mTED = conf_new(TED);
@@ -69,7 +69,7 @@ namespace SoLoud
 		}
 		return aSamplesToRead;
 	}
-	
+
 	void TedSidInstance::tick()
 	{
 	    if (mParent->mFile == 0)
@@ -175,7 +175,7 @@ namespace SoLoud
 			conf_delete(df);
 			return res;
 		}
-		mFileOwned = true;				
+		mFileOwned = true;
 		return SO_NO_ERROR;
 	}
 
@@ -249,7 +249,7 @@ namespace SoLoud
 	}
 
 
-	AudioSourceInstance * TedSid::createInstance() 
+	AudioSourceInstance * TedSid::createInstance()
 	{
 		return conf_new(TedSidInstance, this);
 	}

@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -71,7 +71,7 @@ namespace SoLoud
 			}
 			double t = aCurrentTime - mStartTime;
 			return (float)(sin(t * mEndTime) * mDelta + (mFrom + mDelta));
-			
+
 		}
 		if (mStartTime > aCurrentTime)
 		{

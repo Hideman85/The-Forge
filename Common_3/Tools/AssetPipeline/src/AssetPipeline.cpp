@@ -26,34 +26,34 @@
 #include "AssetLoader.h"
 
 // Tiny stl
-#include "../../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
+#include <EASTL/unordered_map.h>
 
 // Assimp
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/Importer.hpp"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/Exporter.hpp"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/scene.h"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/metadata.h"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/config.h"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/cimport.h"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/postprocess.h"
-#include "../../../ThirdParty/OpenSource/assimp/4.1.0/include/assimp/DefaultLogger.hpp"
+#include <assimp/Importer.hpp>
+#include <assimp/Exporter.hpp>
+#include <assimp/scene.h>
+#include <assimp/metadata.h>
+#include <assimp/config.h>
+#include <assimp/cimport.h>
+#include <assimp/postprocess.h>
+#include <assimp/DefaultLogger.hpp>
 
 // OZZ
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/stream.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/base/io/archive.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/animation/offline/raw_skeleton.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/animation/offline/raw_animation.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/animation/offline/skeleton_builder.h"
-#include "../../../ThirdParty/OpenSource/ozz-animation/include/ozz/animation/offline/animation_builder.h"
+#include <ozz/base/io/stream.h>
+#include <ozz/base/io/archive.h>
+#include <ozz/animation/offline/raw_skeleton.h>
+#include <ozz/animation/offline/raw_animation.h>
+#include <ozz/animation/offline/skeleton_builder.h>
+#include <ozz/animation/offline/animation_builder.h>
 
 #define IMAGE_CLASS_ALLOWED
-#include "../../../OS/Image/Image.h"
-#include "../../../OS/Interfaces/IOperatingSystem.h"
-#include "../../../OS/Interfaces/IFileSystem.h"
-#include "../../../OS/Interfaces/ILog.h"
-#include "../../../OS/Interfaces/IMemory.h"    //NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Image/Image.h>
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
+#include <TheForge/OS/Interfaces/IFileSystem.h>
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>    //NOTE: this should be the last include in a .cpp
 
 typedef eastl::unordered_map<eastl::string, eastl::vector<PathHandle>> AnimationAssetMap;
 
@@ -125,7 +125,7 @@ bool AssetPipeline::ProcessAnimations(const Path* animationDirectory, const Path
 
 	// Check for assets containing animations in animationDirectory
     AnimationAssetMap                animationAssets;
-    
+
     eastl::vector<PathHandle> subDirectories = fsGetSubDirectories(animationDirectory);
     for (const PathHandle& subDir : subDirectories)
     {
@@ -259,7 +259,7 @@ bool AssetPipeline::ProcessAnimations(const Path* animationDirectory, const Path
         for (size_t i = 1; i < it->second.size(); ++i)
         {
             const PathHandle& animationFile = it->second[i];
-            
+
             eastl::string animationName = fsPathComponentToString(fsGetPathFileName(animationFile));
 
             // Create animation output file name
@@ -735,7 +735,7 @@ bool AssetPipeline::ProcessVirtualTextures(const Path* textureDirectory, const P
 	for (size_t i = 0; i < ddsFilesInDirectory.size(); ++i)
 	{
 		eastl::string outputFile = fsGetPathAsNativeString(ddsFilesInDirectory[i]);
-		
+
 		Image* pImage = NULL;
 		if (outputFile.size() > 0)
 		{
@@ -765,7 +765,7 @@ bool AssetPipeline::ProcessVirtualTextures(const Path* textureDirectory, const P
 			{
 				LOGF(LogLevel::eERROR, "Failed to save sparse virtual texture %s.", outputFile.c_str());
 				return false;
-			}			
+			}
 		}
 	}
 

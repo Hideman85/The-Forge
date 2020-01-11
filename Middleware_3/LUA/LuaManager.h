@@ -2,9 +2,9 @@
 
 #include "LuaManagerCommon.h"
 
-#include "../../Common_3/OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 #define IMEMORY_FROM_HEADER
-#include "../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 class LuaManagerImpl;
 
@@ -55,4 +55,4 @@ void LuaManager::AddAsyncScript(const Path* scriptPath, T callbackLambda)
 	AddAsyncScript(scriptPath, lambdaWrap);
 }
 
-#include "../../Common_3/ThirdParty/OpenSource/FluidStudios/MemoryManager/nommgr.h"
+#include <TheForge/ThirdParty/OpenSource/FluidStudios/MemoryManager/nommgr.h>

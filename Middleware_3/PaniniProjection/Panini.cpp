@@ -24,12 +24,12 @@
 
 #include "Panini.h"
 
-#include "../../Common_3/Renderer/IRenderer.h"
-#include "../../Common_3/Renderer/ResourceLoader.h"
-#include "../../Common_3/Renderer/GpuProfiler.h"
+#include <TheForge/Renderer/IRenderer.h>
+#include <TheForge/Renderer/ResourceLoader.h>
+#include <TheForge/Renderer/GpuProfiler.h>
 
-#include "../../Common_3/OS/Interfaces/ILog.h"
-#include "../../Common_3/OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace eastl
 {
@@ -251,7 +251,7 @@ void Panini::Draw(Cmd* cmd)
 	cmdDrawIndexed(cmd, numIndices, 0, 0);
 }
 
-void Panini::SetMaxDraws(uint32_t maxDraws) 
+void Panini::SetMaxDraws(uint32_t maxDraws)
 {
 	if (pDescriptorSet)
 	{

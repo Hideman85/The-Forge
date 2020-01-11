@@ -28,8 +28,7 @@
 //CONFFX_BEGIN
 #include "../../../include/ozz/animation/runtime/skeleton_utils.h"
 
-#include "../../../../../Common_3/OS/Math/MathTypes.h"
-
+#include <TheForge/OS/Math/MathTypes.h>
 #include <assert.h>
 
 

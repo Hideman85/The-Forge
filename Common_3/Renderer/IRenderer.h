@@ -48,7 +48,7 @@
 #elif defined(__linux__) && !defined(VK_USE_PLATFORM_GGP)
 #define VK_USE_PLATFORM_XLIB_KHR    //Use Xlib or Xcb as display server, defaults to Xlib
 #endif
-#include "../ThirdParty/OpenSource/volk/volk.h"
+#include <volk.h>
 #endif
 #if defined(METAL)
 #import <MetalKit/MetalKit.h>
@@ -74,9 +74,9 @@
 #define ENABLE_RAYTRACING
 #endif
 
-#include "../OS/Interfaces/IOperatingSystem.h"
-#include "../OS/Interfaces/IThread.h"
-#include "../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
+#include <TheForge/OS/Interfaces/IThread.h>
+#include <tinyimageformat_base.h>
 
 #ifdef __cplusplus
 #ifndef MAKE_ENUM_FLAG
@@ -537,14 +537,14 @@ typedef enum BufferCreationFlags
 	BUFFER_CREATION_FLAG_ESRAM = 0x08,
 	/// Flag to specify not to allocate descriptors for the resource
 	BUFFER_CREATION_FLAG_NO_DESCRIPTOR_VIEW_CREATION = 0x10,
-    
+
 #ifdef METAL
     /* ICB Flags */
     /// Ihnerit pipeline in ICB
     BUFFER_CREATION_FLAG_ICB_INHERIT_PIPELINE = 0x100,
     /// Ihnerit pipeline in ICB
     BUFFER_CREATION_FLAG_ICB_INHERIT_BUFFERS = 0x200,
-    
+
 #endif
 } BufferCreationFlags;
 MAKE_ENUM_FLAG(uint32_t, BufferCreationFlags)
@@ -836,7 +836,7 @@ struct VirtualTexturePage
 	Buffer*	pIntermediateBuffer;
 	/// Miplevel for this page
 	uint32_t mipLevel;
-	/// Array layer for this page																
+	/// Array layer for this page
 	uint32_t layer;
 	/// Index for this page
 	uint32_t index;
@@ -846,7 +846,7 @@ struct VirtualTexturePage
 	/// Size for this page
 	D3D12_TILED_RESOURCE_COORDINATE extent;
 	/// Byte size for this page
-	uint32_t size;	
+	uint32_t size;
 #endif
 
 #if defined(VULKAN)
@@ -855,7 +855,7 @@ struct VirtualTexturePage
 	/// Size for this page
 	VkExtent3D extent;
 	/// Sparse image memory bind for this page
-	VkSparseImageMemoryBind imageMemoryBind;						
+	VkSparseImageMemoryBind imageMemoryBind;
 	/// Byte size for this page
 	VkDeviceSize size;
 #endif
@@ -900,23 +900,23 @@ typedef struct Texture
 	/// Flags specifying which aspects (COLOR,DEPTH,STENCIL) are included in the pVkImageView
 	VkImageAspectFlags mVkAspectMask;
 	/// Sparse queue binding information
-	VkBindSparseInfo mBindSparseInfo;	
+	VkBindSparseInfo mBindSparseInfo;
 	/// Sparse image memory bindings of all memory-backed virtual tables
 	void* pSparseImageMemoryBinds;
-	/// Sparse ?aque memory bindings for the mip tail (if present)	
+	/// Sparse ?aque memory bindings for the mip tail (if present)
 	void* pOpaqueMemoryBinds;
 	/// First mip level in mip tail
 	uint32_t mMipTailStart;
-	/// Lstly filled mip level in mip tail						
+	/// Lstly filled mip level in mip tail
 	uint32_t mLastFilledMip;
 	/// Memory type for Sparse texture's memory
 	uint32_t mSparseMemoryTypeIndex;
-	/// Sparse image memory bind info 
+	/// Sparse image memory bind info
 	VkSparseImageMemoryBindInfo mImageMemoryBindInfo;
-	/// Sparse image opaque memory bind info (mip tail)				
+	/// Sparse image opaque memory bind info (mip tail)
 	VkSparseImageOpaqueMemoryBindInfo mOpaqueMemoryBindInfo;
-	/// First mip level in mip tail			
-	uint32_t mipTailStart;	
+	/// First mip level in mip tail
+	uint32_t mipTailStart;
 #endif
 #if defined(METAL)
 	/// Contains resource allocation info such as parent heap, offset in heap
@@ -934,7 +934,7 @@ typedef struct Texture
 	ID3D11UnorderedAccessView** pDxUAVDescriptors;
 #endif
 	/// Virtual Texture members
-	/// Contains all virtual pages of the texture						
+	/// Contains all virtual pages of the texture
 	void* pPages;
 	/// Visibility data
 	Buffer* mVisibility;
@@ -963,7 +963,7 @@ typedef struct Texture
 	/// State of the texture before mCurrentState (used for state tracking during a split barrier)
 	ResourceState mPreviousState;
 	/// This value will be false if the underlying resource is not owned by the texture (swapchain textures,...)
-	bool mOwnsImage;	
+	bool mOwnsImage;
 } Texture;
 
 typedef struct RenderTargetDesc
@@ -1165,7 +1165,7 @@ typedef struct RootSignature
         const DescriptorInfo**  pDescriptors;
         uint32_t                mDescriptorCount;
     } IndexedDescriptor;
-	
+
 	Sampler**           ppStaticSamplers;
 	uint32_t*           pStaticSamplerSlots;
 	ShaderStage*        pStaticSamplerStages;
@@ -1701,7 +1701,7 @@ typedef struct Pipeline
 #endif
 #if defined(VULKAN)
 	VkPipeline pVkPipeline;
-	
+
 	//In DX12 this information is stored in ID3D12StateObject.
 	//But for Vulkan we need to store it manually
 	const char**                ppShaderStageNames;
@@ -2094,7 +2094,7 @@ API_INTERFACE void FORGE_CALLCONV addRootSignature(Renderer* pRenderer, const Ro
 API_INTERFACE void FORGE_CALLCONV removeRootSignature(Renderer* pRenderer, RootSignature* pRootSignature);
 
 // pipeline functions
-API_INTERFACE void FORGE_CALLCONV addPipeline(Renderer* pRenderer, const PipelineDesc* p_pipeline_settings, Pipeline** pp_pipeline); 
+API_INTERFACE void FORGE_CALLCONV addPipeline(Renderer* pRenderer, const PipelineDesc* p_pipeline_settings, Pipeline** pp_pipeline);
 API_INTERFACE void FORGE_CALLCONV removePipeline(Renderer* pRenderer, Pipeline* p_pipeline);
 
 // Descriptor Set functions

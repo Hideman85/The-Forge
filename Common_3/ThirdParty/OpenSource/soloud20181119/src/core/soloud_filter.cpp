@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
 */
 
 #include "soloud.h"
-#include "../../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -35,7 +35,7 @@ namespace SoLoud
 	Filter::~Filter()
 	{
 	}
-	
+
 	FilterInstance::FilterInstance()
 	{
 		mNumParams = 0;
@@ -45,7 +45,7 @@ namespace SoLoud
 	}
 
 	result FilterInstance::initParams(int aNumParams)
-	{		
+	{
 		mNumParams = aNumParams;
 		conf_free(mParam);
 		conf_free(mParamFader);

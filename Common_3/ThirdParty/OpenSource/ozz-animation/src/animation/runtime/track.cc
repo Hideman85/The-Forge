@@ -32,9 +32,8 @@
 #include "ozz/base/maths/math_ex.h"
 #include "ozz/base/memory/allocator.h"
 
-#include "../../EASTL/internal/char_traits.h"
-#include "../../../../../Common_3/OS/Interfaces/ILog.h"
-
+#include <EASTL/internal/char_traits.h>
+#include <TheForge/OS/Interfaces/ILog.h>
 #include <cassert>
 
 namespace ozz {

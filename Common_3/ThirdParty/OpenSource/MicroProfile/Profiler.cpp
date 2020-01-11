@@ -1,4 +1,4 @@
-#include "../../../OS/Interfaces/IProfiler.h"
+#include <TheForge/OS/Interfaces/IProfiler.h>
 
 void flipProfiler()
 {
@@ -7,7 +7,7 @@ void flipProfiler()
 #endif
 }
 
-void toggleProfiler() 
+void toggleProfiler()
 {
 #if PROFILE_ENABLED
   toggleWidgetProfilerUI();

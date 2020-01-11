@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "../../Common_3/OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
-#include "../../Common_3/ThirdParty/OpenSource/ozz-animation/include/ozz/base/memory/allocator.h"
+#include <ozz/base/memory/allocator.h>
 
 #include "Rig.h"
 

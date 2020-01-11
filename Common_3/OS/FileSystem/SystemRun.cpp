@@ -27,8 +27,8 @@
 #include "../Interfaces/IOperatingSystem.h"
 #include "../Interfaces/IFileSystem.h"
 #include "../Interfaces/ILog.h"
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
 
 int systemRun(const char* command, const char** arguments, size_t argumentCount, const Path* stdOutFile)
 {

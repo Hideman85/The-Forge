@@ -28,7 +28,7 @@ freely, subject to the following restrictions:
 #include <math.h>
 #include "soloud_monotone.h"
 #include "soloud_file.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -47,7 +47,7 @@ namespace SoLoud
 		{
 			mOutput[i].mSamplePos = 0;
 			mOutput[i].mSamplePosInc = 0;
-			mOutput[i].mEnabled = i < mParent->mHardwareChannels && i < mParent->mSong.mTotalTracks;			
+			mOutput[i].mEnabled = i < mParent->mHardwareChannels && i < mParent->mSong.mTotalTracks;
 			mChannel[i].mEnabled = i < mParent->mSong.mTotalTracks;
 			mChannel[i].mActive = 0;
 			mChannel[i].mArpCounter = 0;
@@ -97,7 +97,7 @@ namespace SoLoud
 						mChannel[j].mPortamento = 0;
 						mChannel[j].mArp = 0;
 						mChannel[j].mVibrato = 0;
-						
+
 						int oldhz = mChannel[j].mFreq[0];
 
 						if (note == 127)
@@ -152,7 +152,7 @@ namespace SoLoud
 								mChannel[j].mFreq[0] = oldhz;
 								mChannel[j].mPortamento = effectdata;
 								if (oldhz > mChannel[j].mPortamentoToNote)
-									mChannel[j].mPortamento *= -1;							
+									mChannel[j].mPortamento *= -1;
 							}
 							else
 							{
@@ -180,8 +180,8 @@ namespace SoLoud
 							mTempo = effectdata;
 							break;
 						}
-					}					
-					
+					}
+
 					mRow++;
 
 					if (dojump)
@@ -255,9 +255,9 @@ namespace SoLoud
 					mNextChannel++;
 					mNextChannel %= mParent->mSong.mTotalTracks;
 					tries++;
-				}								
+				}
 			}
-			
+
 			aBuffer[i] = 0;
 			int j;
 			switch (mParent->mWaveform)
@@ -281,7 +281,7 @@ namespace SoLoud
 					{
 						float bleh = mOutput[j].mSamplePos + mOutput[j].mSamplePosInc;
 						mOutput[j].mSamplePos = bleh - (long)bleh;
-						// sin: 
+						// sin:
 						aBuffer[i] += (float)sin(mOutput[j].mSamplePos * M_PI * 2) * 0.5f;
 					}
 				}
@@ -400,7 +400,7 @@ namespace SoLoud
 		mWaveform = aWaveform;
 		return SO_NO_ERROR;
 	}
-	
+
 	result Monotone::loadMem(unsigned char *aMem, unsigned int aLength, bool aCopy, bool aTakeOwnership)
 	{
 		MemoryFile mf;
@@ -469,7 +469,7 @@ namespace SoLoud
 	}
 
 
-	AudioSourceInstance * Monotone::createInstance() 
+	AudioSourceInstance * Monotone::createInstance()
 	{
 		return conf_new(MonotoneInstance, this);
 	}

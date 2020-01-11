@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 #define NOMINMAX
 #include <Windows.h>
@@ -27,7 +27,7 @@ eastl::string ReadFile(const char* fileName)
 bool WriteFile(const char* fileName, const char* contents)
 {
 	//check first if there is right folder along the path of filename
-	//And make directory	
+	//And make directory
 
 	size_t found;
 	eastl::string FilenameStr(fileName);
@@ -45,7 +45,7 @@ bool WriteFile(const char* fileName, const char* contents)
 
 #if 0
 const char* getIncludeFiles(char newDirPath[], const char* pIncludedFileName[MAX_INCLUDE_FILE+1], int *pIncludedCounter, const char* pIncluded[MAX_INCLUDE_FILE], std::string originFile)
-{	
+{
 	char toCstr[65536];
 	strcpy(toCstr, originFile.c_str());
 
@@ -93,7 +93,7 @@ const char* getIncludeFiles(char newDirPath[], const char* pIncludedFileName[MAX
 
 		strcpy(newDirPath, drive);
 		strcat(newDirPath, dir);
-		
+
 
 		//check first it also has Include files
 		const char* RESULT = getIncludeFiles(newDirPath, pIncludedFileName, pIncludedCounter, pIncluded, newContents);
@@ -158,7 +158,7 @@ int ParserMain( int argc, char* argv[] )
 	Parser::Language language = Parser::Language_Num;
 
 	eastl::string StageName;
- 
+
 	bool error = false;
 
 	eastl::vector < BindingShift > bindingShift;

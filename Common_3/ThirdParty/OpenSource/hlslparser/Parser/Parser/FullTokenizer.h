@@ -7,8 +7,8 @@
 
 #include "HLSLTokenizer.h"
 
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
 
 #include "StringLibrary.h"
 
@@ -28,7 +28,7 @@ struct FullToken
 		m_fileLine = 0;
 
 		m_id = -1;
-		
+
 		// the default token is EOF
 		m_token = HLSLToken_EndOfStream;
 	}

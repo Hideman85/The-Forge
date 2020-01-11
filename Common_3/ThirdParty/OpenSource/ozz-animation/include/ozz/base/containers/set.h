@@ -30,7 +30,7 @@
 
 #include <set>
 
-#include "../../EASTL/set.h"
+#include <EASTL/set.h>
 
 namespace ozz {
 // Redirects std::set to ozz::Set in order to replace std default allocator by

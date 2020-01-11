@@ -20,7 +20,7 @@
 #define FONS_H
 
 #define IMEMORY_FROM_HEADER
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -104,7 +104,7 @@ FONS_DEF void fonsDeleteInternal(FONScontext* s);
 FONS_DEF void fonsSetErrorCallback(FONScontext* s, void (*callback)(void* uptr, int error, int val), void* uptr);
 // Returns current atlas size.
 FONS_DEF void fonsGetAtlasSize(FONScontext* s, int* width, int* height);
-// Expands the atlas size. 
+// Expands the atlas size.
 FONS_DEF int fonsExpandAtlas(FONScontext* s, int width, int height);
 // Resets the whole stash.
 FONS_DEF int fonsResetAtlas(FONScontext* stash, int width, int height);
@@ -1508,7 +1508,7 @@ FONS_DEF void fonsDrawDebug(FONScontext* stash, float x, float y)
 }
 
 FONS_DEF float fonsTextBounds(FONScontext* stash,
-					 float x, float y, 
+					 float x, float y,
 					 const char* str, const char* end,
 					 float* bounds)
 {

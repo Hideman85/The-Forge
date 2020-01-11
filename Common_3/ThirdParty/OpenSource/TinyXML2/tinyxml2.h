@@ -30,9 +30,9 @@ distribution.
 #include <cstring>
 #include <cstdarg>
 
-#include "OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 #define IMEMORY_FROM_HEADER
-#include "OS/Interfaces/IMemory.h" //NOTE: this should be the last include in a .cpp
+#include <TheForge/OS/Interfaces/IMemory.h> //NOTE: this should be the last include in a .cpp
 
 /*
    TODO: intern strings instead of allocation.

@@ -27,8 +27,8 @@
 
 #include <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
-#include "../../OS/Interfaces/ILog.h"
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 typedef struct ResourceAllocator MemoryAllocator;
 
@@ -2730,7 +2730,7 @@ ResourceAllocator::ResourceAllocator(const AllocatorCreateInfo* pCreateInfo):
 	if (!gDebugGlobalMutex.Init())
 		return;
 #endif
-	
+
 	ASSERT(pCreateInfo->device);
 
 	memset(&m_pBlockVectors, 0, sizeof(m_pBlockVectors));
@@ -2750,7 +2750,7 @@ ResourceAllocator::ResourceAllocator(const AllocatorCreateInfo* pCreateInfo):
 			return;
 		if (!m_OwnAllocationsMutex[i].Init())
 			return;
-		
+
 		for (size_t j = 0; j < RESOURCE_BLOCK_VECTOR_TYPE_COUNT; ++j)
 		{
 			m_pBlockVectors[i][j] = conf_placement_new<AllocatorBlockVector>(AllocatorAllocate<AllocatorBlockVector>(), this);
@@ -2768,11 +2768,11 @@ ResourceAllocator::~ResourceAllocator()
 			resourceAlloc_delete(m_pOwnAllocations[i][j]);
 			resourceAlloc_delete(m_pBlockVectors[i][j]);
 		}
-		
+
 		m_BlocksMutex[i].Destroy();
 		m_OwnAllocationsMutex[i].Destroy();
 	}
-	
+
 #if RESOURCE_DEBUG_GLOBAL_MUTEX
 	gDebugGlobalMutex.Destroy();
 #endif
@@ -3513,7 +3513,7 @@ long createBuffer(
     {
 		suballocType = RESOURCE_SUBALLOCATION_TYPE_BUFFER_SRV_UAV;
     }
-        
+
 	// Get the proper resource options for the buffer usage.
 	MTLResourceOptions mtlResourceOptions = 0;
 	switch (pMemoryRequirements->usage)
@@ -3548,7 +3548,7 @@ long createBuffer(
 	    if (pBuffer->mDesc.mDescriptors & DESCRIPTOR_TYPE_INDIRECT_COMMAND_BUFFER)
         {
             MTLIndirectCommandBufferDescriptor* icbDescriptor = [MTLIndirectCommandBufferDescriptor alloc];
-            
+
             switch (pBuffer->mDesc.mICBDrawType)
             {
                 case INDIRECT_DRAW:
@@ -3560,16 +3560,16 @@ long createBuffer(
                 default:
                     assert(0); // unsupported command type
             }
-            
+
             icbDescriptor.inheritBuffers = (pBuffer->mDesc.mFlags & BUFFER_CREATION_FLAG_ICB_INHERIT_BUFFERS);
             icbDescriptor.inheritPipelineState = (pBuffer->mDesc.mFlags & BUFFER_CREATION_FLAG_ICB_INHERIT_PIPELINE);
-            
+
             icbDescriptor.maxVertexBufferBindCount = pBuffer->mDesc.mICBMaxVertexBufferBind + 1;
             icbDescriptor.maxFragmentBufferBindCount = pBuffer->mDesc.mICBMaxFragmentBufferBind + 1;
-            
+
             pBuffer->mtlIndirectCommandBuffer = [allocator->m_Device newIndirectCommandBufferWithDescriptor:icbDescriptor maxCommandCount:pBuffer->mDesc.mElementCount options:0];
-            
-            
+
+
 //            if (pCreateInfo->pDebugName)
 //            {
 //                pBuffer->mtlIndirectCommandBuffer.label = [[NSString alloc] initWithBytesNoCopy:(void*)pCreateInfo->pDebugName length: wcslen(pCreateInfo->pDebugName)*4 encoding:NSUTF32LittleEndianStringEncoding freeWhenDone:NO];
@@ -3600,14 +3600,14 @@ long createBuffer(
 			pBuffer->mtlBuffer = [allocator->m_Device newBufferWithLength:pCreateInfo->mSize options:mtlResourceOptions];
 			assert(pBuffer->mtlBuffer);
 			pBuffer->mtlBuffer.label = [NSString stringWithFormat:@"Owned Buffer %p", pBuffer->mtlBuffer];
-			
+
 			if (pMemoryRequirements->flags & RESOURCE_MEMORY_REQUIREMENT_PERSISTENT_MAP_BIT &&
 				pMemoryRequirements->usage != RESOURCE_MEMORY_USAGE_GPU_ONLY)
 			{
 				pBuffer->pMtlAllocation->GetOwnAllocation()->m_pMappedData = pBuffer->mtlBuffer.contents;
 			}
 		}
-		
+
 		if (pCreateInfo->pDebugName)
 		{
 			pBuffer->mtlBuffer.label = [[[NSString alloc] initWithBytesNoCopy:(void*)pCreateInfo->pDebugName length: wcslen(pCreateInfo->pDebugName)*4 encoding:NSUTF32LittleEndianStringEncoding freeWhenDone:NO] stringByAppendingFormat:@" %p", pBuffer->mtlBuffer];
@@ -3661,7 +3661,7 @@ long createTexture(
 	AllocatorSuballocationType suballocType;
 	if (!resourceAllocFindSuballocType(pCreateInfo->pDesc, &suballocType))
 		return false;
-    
+
 #ifdef TARGET_IOS
     // For memoryless textures, avoid a heap allocation.
     if ([pCreateInfo->pDesc storageMode] == MTLStorageModeMemoryless)
@@ -3669,7 +3669,7 @@ long createTexture(
         pTexture->mtlTexture = [allocator->m_Device newTextureWithDescriptor:pCreateInfo->pDesc];
         assert(pTexture->mtlTexture);
         pTexture->mtlTexture.label = [NSString stringWithFormat:@"Memoryless Texture %p", pTexture->mtlTexture];
-        
+
         if (pCreateInfo->pDebugName)
         {
             pTexture->mtlTexture.label = [[NSString alloc] initWithBytesNoCopy:(void*)pCreateInfo->pDebugName length: wcslen(pCreateInfo->pDebugName)*4 encoding:NSUTF32LittleEndianStringEncoding freeWhenDone:NO];
@@ -3677,7 +3677,7 @@ long createTexture(
         return true;
     }
 #endif
-        
+
 	// Allocate memory using allocator.
 	AllocationInfo info;
 	info.mSizeAlign = [allocator->m_Device heapTextureSizeAndAlignWithDescriptor:pCreateInfo->pDesc];
@@ -3704,7 +3704,7 @@ long createTexture(
 		{
 			pTexture->mtlTexture.label = [[[NSString alloc] initWithBytesNoCopy:(void*)pCreateInfo->pDebugName length: wcslen(pCreateInfo->pDebugName)*4 encoding:NSUTF32LittleEndianStringEncoding freeWhenDone:NO]  stringByAppendingFormat:@" %p", pTexture->mtlTexture];
 		}
-		
+
 		// Bind texture with memory.
 		if (pTexture->pMtlAllocation)
 		{
@@ -3736,7 +3736,7 @@ void destroyTexture(ResourceAllocator* allocator, Texture* pTexture)
 			[(id<MPSSVGFTextureAllocator>)pTexture->mpsTextureAllocator returnTexture:pTexture->mtlTexture];
 			pTexture->mpsTextureAllocator = nil;
 		}
-		
+
 		pTexture->mtlTexture = nil;
 
 		if (pTexture->pMtlAllocation)

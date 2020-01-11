@@ -10,9 +10,9 @@
 #include <new> // for placement new
 #include <ctype.h>
 
-#include "../../../EASTL/vector.h"
-#include "../../../EASTL/string.h"
-#include "../../../EASTL/deque.h"
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
+#include <EASTL/deque.h>
 
 
 #ifndef NULL

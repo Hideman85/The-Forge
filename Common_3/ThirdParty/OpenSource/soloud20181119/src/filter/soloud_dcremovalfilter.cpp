@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 
 #include "soloud.h"
 #include "soloud_dcremovalfilter.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -67,14 +67,14 @@ namespace SoLoud
 			{
 				int chofs = j * mBufferLength;
 				int bchofs = j * aSamples;
-								
+
 				float n = aBuffer[i + bchofs];
 				mTotals[j] -= mBuffer[mOffset + chofs];
 				mTotals[j] += n;
 				mBuffer[mOffset + chofs] = n;
-			    
+
 			    n -= mTotals[j] / mBufferLength;
-			    
+
 				aBuffer[i + bchofs] += (n - aBuffer[i + bchofs]) * mParam[0];
 			}
 			//prevofs = mOffset;
@@ -99,7 +99,7 @@ namespace SoLoud
 			return INVALID_PARAMETER;
 
         mLength = aLength;
-		
+
 		return 0;
 	}
 

@@ -4,7 +4,7 @@
 #if PROFILE_ENABLED
 
 #include "../../../Renderer/GpuProfiler.h"
-#include "../../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 #include <algorithm>
 
 #ifdef _WIN32
@@ -41,8 +41,8 @@ int64_t ProfileGetTick()
 //#include <algorithm>
 
 //EASTL Includes
-#include "../EASTL/sort.h"
-#include "../EASTL/algorithm.h"
+#include <EASTL/sort.h>
+#include <EASTL/algorithm.h>
 
 
 
@@ -66,9 +66,9 @@ int64_t ProfileGetTick()
 #define P_INVALID_SOCKET(f) (f < 0)
 #endif
 
-#endif 
+#endif
 
-#include "../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #if PROFILE_WEBSERVER || PROFILE_CONTEXT_SWITCH_TRACE
 typedef ThreadFunction ProfileThreadFunc;
@@ -115,7 +115,7 @@ P_THREAD_LOCAL ProfileThreadLog* g_ProfileThreadLog = nullptr;
 
 void ProfileShutdown();
 struct ForceProfileThreadExit
-{	
+{
 	~ForceProfileThreadExit()
 	{
 		ProfileOnThreadExit();
@@ -616,7 +616,7 @@ const char* ProfileCounterFullName(int nCounter)
 	int nOffset = 0;
 	while (nIndex >= 0 && nOffset < (int)sizeof(Buffer) - 2)
 	{
-		uint32_t nLen = S.CounterInfo[nNodes[nIndex]].nNameLen + nOffset;// < sizeof(Buffer)-1 
+		uint32_t nLen = S.CounterInfo[nNodes[nIndex]].nNameLen + nOffset;// < sizeof(Buffer)-1
 		nLen = ProfileMin((uint32_t)(sizeof(Buffer) - 2 - nOffset), nLen);
 		memcpy(&Buffer[nOffset], S.CounterInfo[nNodes[nIndex]].pName, nLen);
 
@@ -1075,7 +1075,7 @@ void ProfileFlipCpu()
 		if (pFrameCurrent->nFrameStartGpuTimer != (uint32_t)-1)
 		{
 			uint64_t nTick = ProfileGpuGetTimeStamp(pFrameCurrent->nFrameStartGpuTimer);
-		
+
 			pFrameCurrent->nFrameStartGpu = (nTick == PROFILE_INVALID_TICK) ? 0 : nTick;
 		}
 
@@ -1158,7 +1158,7 @@ void ProfileFlipCpu()
 					{
 						// Get current log's initial gpu tick
 						uint64_t nGPUTick = PROFILE_INVALID_TICK;
-						if (pFrameCurrent->nFrameStartGpuTimer != (uint32_t)-1) 
+						if (pFrameCurrent->nFrameStartGpuTimer != (uint32_t)-1)
 							nGPUTick = ProfileGpuGetTimeStamp(pLog, pFrameCurrent->nFrameStartGpuTimer);
 						uint64_t nLastTick = (nGPUTick == PROFILE_INVALID_TICK) ? pFrameCurrent->nFrameStartGpu : nGPUTick;
 
@@ -2172,7 +2172,7 @@ void ProfileDumpHtml(ProfileWriteCallback CB, void* Handle, int nMaxFrames, cons
 	//int64_t nTicksPerSecondGpu = ProfileTicksPerSecondGpu();
 
 	//int64_t nTickReferenceCpu = 0, nTickReferenceGpu = 0;
-	
+
 #if PROFILE_DEBUG
 	printf("dumping %d frames\n", nNumFrames);
 	printf("dumping frame %d to %d\n", nFirstFrame, nLastFrame);
@@ -2446,7 +2446,7 @@ void ProfileDumpToFile()
 {
 	std::lock_guard<std::recursive_mutex> Lock(ProfileMutex());
 	Profile & S = g_Profile;
-	
+
     FileStream* fh = fsOpenFile(S.DumpPath, FM_WRITE);
 
 	if (fh)
@@ -2995,7 +2995,7 @@ void ProfileTraceThread(void* unused)
 	{
 		PathHandle path = fsCreatePath(fsGetSystemFileSystem(), "\\\\.\\pipe\\microprofile-contextswitch");
 		FileStream* fh = fsOpenFile(path, FM_WRITE_BINARY);
-	
+
 		if(!fh)
 		{
 			Sleep(1000);

@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 
 #include "soloud.h"
 #include "soloud_echofilter.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 namespace SoLoud
 {
@@ -62,9 +62,9 @@ namespace SoLoud
 			{
 				int chofs = j * mBufferLength;
 				int bchofs = j * aSamples;
-				
+
 				mBuffer[mOffset + chofs] = mParent->mFilter * mBuffer[prevofs + chofs] + (1 - mParent->mFilter) * mBuffer[mOffset + chofs];
-				
+
 				float n = aBuffer[i + bchofs] + mBuffer[mOffset + chofs] * decay;
 				mBuffer[mOffset + chofs] = n;
 
@@ -95,7 +95,7 @@ namespace SoLoud
 		mDecay = aDecay;
 		mDelay = aDelay;
 		mFilter = aFilter;
-		
+
 		return 0;
 	}
 

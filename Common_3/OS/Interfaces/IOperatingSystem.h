@@ -61,7 +61,7 @@ typedef uint64_t uint64;
 
 #include <stdio.h>
 #include <stdint.h>
-#include "../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 // For time related functions such as getting localtime
 #include <time.h>

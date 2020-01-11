@@ -40,10 +40,10 @@
 #pragma warning(pop)
 #endif  // _MSC_VER
 
-#include "../../../../../EASTL/vector_map.h"
-#include "../../../../../EASTL/map.h"
-#include "../../../../../EASTL/utility.h"
-#include "../../../../../EASTL/string.h"
+#include <EASTL/vector_map.h>
+#include <EASTL/map.h>
+#include <EASTL/utility.h>
+#include <EASTL/string.h>
 
 namespace ozz {
 // Redirects std::map to ozz::Map in order to replace std default allocator by

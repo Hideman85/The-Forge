@@ -29,7 +29,7 @@
 #define OZZ_OZZ_ANIMATION_OFFLINE_RAW_TRACK_H_
 
 // CONFFX_BEGIN
-#include "../../../../../../../OS/Math/MathTypes.h"
+#include <TheForge/OS/Math/MathTypes.h>
 
 #include "ozz/base/containers/string.h"
 #include "ozz/base/containers/vector.h"

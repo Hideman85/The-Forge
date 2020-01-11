@@ -26,7 +26,7 @@
 #define RESOURCE_RESOURCE_H
 
 #define IMEMORY_FROM_HEADER
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 typedef struct ResourceAllocator MemoryAllocator;
 

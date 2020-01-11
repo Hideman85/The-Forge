@@ -31,7 +31,7 @@
 #pragma warning(disable : 4996)    // warning C4996: 'std::move_backward::_Unchecked_iterators::_Deprecate'
 #endif
 
-#include "../../ThirdParty/OpenSource/SPIRV_Cross/spirv_cross.hpp"
+#include <spirv_cross.hpp>
 
 // helper functions
 void ReflectBoundResources(

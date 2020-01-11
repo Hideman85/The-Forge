@@ -29,8 +29,8 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
+#include <EASTL/vector.h>
+#include <EASTL/unordered_map.h>
 
 #include "../Interfaces/IOperatingSystem.h"
 #include "../Interfaces/ILog.h"
@@ -175,7 +175,7 @@ void openWindow(const char* app_name, WindowsDesc* winDesc)
 	XFlush(winDesc->handle.display);
 	winDesc->handle.xlib_wm_delete_window = XInternAtom(winDesc->handle.display, "WM_DELETE_WINDOW", False);
 	XSetWMProtocols(winDesc->handle.display, winDesc->handle.window, &winDesc->handle.xlib_wm_delete_window, 1);
-	
+
 	// Restrict window min size
 	XSizeHints* size_hints = XAllocSizeHints();
 	size_hints->flags = PMinSize;
@@ -245,7 +245,7 @@ int LinuxMain(int argc, char** argv, IApp* app)
 		return EXIT_FAILURE;
 
 	Log::Init();
-	
+
 	pApp = app;
 
 	//Used for automated testing, if enabled app will exit after 120 frames
@@ -306,7 +306,7 @@ int LinuxMain(int argc, char** argv, IApp* app)
 
 	pApp->Unload();
 	pApp->Exit();
-	
+
 	Log::Exit();
 	fsDeinitAPI();
 	MemAllocExit();

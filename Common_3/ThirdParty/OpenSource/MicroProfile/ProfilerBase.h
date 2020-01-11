@@ -30,7 +30,7 @@
 // Call these functions from your code:
 //  ProfileOnThreadCreate
 //  ProfileMouseButton
-//  ProfileMousePosition 
+//  ProfileMousePosition
 //  ProfileModKey
 //  ProfileFlip  				<-- Call this once per frame
 //  ProfileDraw  				<-- Call this once per frame
@@ -71,7 +71,7 @@
 // CONFFX: We do not support profile when dealing with multiple runtime graphic apis
 // CONFFX: We do not support xbox yet
 
-#include "../../../OS/Interfaces/IProfiler.h"
+#include <TheForge/OS/Interfaces/IProfiler.h>
 
 #if 0 == PROFILE_ENABLED
 
@@ -133,11 +133,11 @@
 
 #ifndef PROFILE_NOCXX11
 //#include <thread>
-#include "../../../OS/Interfaces/IThread.h"
+#include <TheForge/OS/Interfaces/IThread.h>
 #include <mutex>
 #include <atomic>
 #endif
-#include "../../../OS/Interfaces/IFileSystem.h"
+#include <TheForge/OS/Interfaces/IFileSystem.h>
 
 #ifndef PROFILE_API
 #define PROFILE_API
@@ -222,7 +222,7 @@ typedef uint32_t ProfileProcessIdType;
 #endif
 
 
-#ifndef P_GETCURRENTTHREADID 
+#ifndef P_GETCURRENTTHREADID
 #define P_GETCURRENTTHREADID() 0
 typedef uint32_t ProfileThreadIdType;
 #endif
@@ -479,7 +479,7 @@ struct ProfileScopeHandlerCpu
 
 #ifndef PROFILE_MAX_THREADS
 #define PROFILE_MAX_THREADS 256
-#endif 
+#endif
 
 #ifndef PROFILE_UNPACK_RED
 #define PROFILE_UNPACK_RED(c) ((c)>>16)
@@ -500,7 +500,7 @@ struct ProfileScopeHandlerCpu
 // We disable context switch trace because it's unable to open the file needed, and because
 // no documentation was found on how to use this
 #ifndef PROFILE_CONTEXT_SWITCH_TRACE
-#if defined(_WIN32) 
+#if defined(_WIN32)
 #define PROFILE_CONTEXT_SWITCH_TRACE 0
 #elif defined(__APPLE__) && !TARGET_OS_IPHONE
 #define PROFILE_CONTEXT_SWITCH_TRACE 0

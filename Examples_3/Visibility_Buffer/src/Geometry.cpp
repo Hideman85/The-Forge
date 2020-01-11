@@ -24,11 +24,11 @@
 
 #include "Geometry.h"
 
-#include "../../../Common_3/ThirdParty/OpenSource/EASTL/unordered_set.h"
+#include <EASTL/unordered_set.h>
 
-#include "../../../Common_3/ThirdParty/OpenSource/assimp/4.1.0/include/assimp/cimport.h"
-#include "../../../Common_3/ThirdParty/OpenSource/assimp/4.1.0/include/assimp/scene.h"
-#include "../../../Common_3/ThirdParty/OpenSource/assimp/4.1.0/include/assimp/postprocess.h"
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include "../../../Common_3/OS/Interfaces/IFileSystem.h"
 #include "../../../Common_3/OS/Interfaces/ILog.h"
 #include "../../../Common_3/OS/Core/Compiler.h"
@@ -995,7 +995,7 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 	Scene* scene = (Scene*)conf_calloc(1, sizeof(Scene));
 
     PathHandle cachedModelFilePath = fsAppendPathExtension(filePath, "cached");
-	
+
 	eastl::string modelVersion;
     FileStream* fh = fsOpenFile(cachedModelFilePath, FM_READ_BINARY);
     if (fh) {
@@ -1014,16 +1014,16 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 
         scene->indices = (uint32_t*)conf_malloc(scene->totalTriangles * 3 * sizeof(uint32_t));
         fsReadFromStream(fh, scene->indices, scene->totalTriangles * 3 * sizeof(uint32_t));
-        
+
         scene->positions = (SceneVertexPos*)conf_malloc(scene->totalVertices * sizeof(SceneVertexPos));
         fsReadFromStream(fh, scene->positions, scene->totalVertices * sizeof(SceneVertexPos));
-        
+
         scene->texCoords = (SceneVertexTexCoord*)conf_malloc(scene->totalVertices * sizeof(SceneVertexTexCoord));
 		fsReadFromStream(fh, scene->texCoords, scene->totalVertices * sizeof(SceneVertexTexCoord));
-        
+
         scene->normals = (SceneVertexNormal*)conf_malloc(scene->totalVertices * sizeof(SceneVertexNormal));
 		fsReadFromStream(fh, scene->normals, scene->totalVertices * sizeof(SceneVertexNormal));
-        
+
         scene->tangents = (SceneVertexTangent*)conf_malloc(scene->totalVertices * sizeof(SceneVertexTangent));
 		fsReadFromStream(fh, scene->tangents, scene->totalVertices * sizeof(SceneVertexTangent));
 
@@ -1036,14 +1036,14 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 		AssimpImporter::Model model;
 		importer.ImportModel(filePath, &model);
 		LOGF(LogLevel::eINFO, "Assimp Load %f ms", timer.GetUSec(true) / 1000.0f);
-		
+
 		for (int i = 0; i < model.mMeshArray.size(); i++)
 		{
 			AssimpImporter::Mesh mesh = model.mMeshArray[i];
 			scene->totalVertices += (uint32_t)mesh.mPositions.size();
 			scene->totalTriangles += (uint32_t)mesh.mIndices.size() / 3;
 		}
-		
+
 		scene->indices = (uint32_t*)conf_malloc(scene->totalTriangles * 3 * sizeof(uint32_t));
 		scene->positions = (SceneVertexPos*)conf_malloc(scene->totalVertices * sizeof(SceneVertexPos));
 		scene->texCoords = (SceneVertexTexCoord*)conf_malloc(scene->totalVertices * sizeof(SceneVertexTexCoord));
@@ -1068,17 +1068,17 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 				float2 tc;
 				tc.x = mesh.mUvs[j].getX();
 				tc.y = 1.0f - mesh.mUvs[j].getY();
-				
+
 				float3 normal;
 				normal.x = mesh.mNormals[j].getX();
 				normal.y = mesh.mNormals[j].getY();
 				normal.z = mesh.mNormals[j].getZ();
-				
+
 				float3 tangent;
 				tangent.x = mesh.mTangents[j].getX();
 				tangent.y = mesh.mTangents[j].getY();
 				tangent.z = mesh.mTangents[j].getZ();
-				
+
 				scene->positions[vertex] = position;
 #if defined(METAL) || defined(__linux__)
 				scene->normals[vertex].nx = normal.x;
@@ -1096,7 +1096,7 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 				scene->tangents[vertex].tangent = encodeDir(tangent);
 				scene->texCoords[vertex].texCoord = pack2Floats(float2(tc.x, 1.0f - tc.y));
 #endif
-				
+
 				++vertex;
 			}
 
@@ -1169,7 +1169,7 @@ Scene* loadScene(const Path* filePath, float scale, float offsetX, float offsetY
 	assimpScene.Open(fileName, FileMode::FM_READ_BINARY, FSRoot::FSR_Absolute);
 	if (!assimpScene.IsOpen())
 	{
-		LOGF(eERROR, 
+		LOGF(eERROR,
 			"Could not open scene %s.\nPlease make sure you have downloaded the art assets by using the PRE_BUILD command in the root "
 			"directory",
 			fileName);

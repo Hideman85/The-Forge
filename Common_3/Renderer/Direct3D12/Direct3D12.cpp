@@ -43,21 +43,21 @@
 
 #include "../IRenderer.h"
 
-#include "../../ThirdParty/OpenSource/EASTL/sort.h"
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../ThirdParty/OpenSource/EASTL/string_hash_map.h"
+#include <EASTL/sort.h>
+#include <EASTL/string.h>
+#include <EASTL/unordered_map.h>
+#include <EASTL/string_hash_map.h>
 
 #include "../../ThirdParty/OpenSource/winpixeventruntime/Include/WinPixEventRuntime/pix3.h"
 
-#include "../../ThirdParty/OpenSource/renderdoc/renderdoc_app.h"
+#include <renderdoc_app.h>
 
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_query.h"
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_query.h>
 
-#include "../../OS/Interfaces/ILog.h"
-#include "../../OS/Core/RingBuffer.h"
-#include "../../OS/Core/GPUConfig.h"
+#include <TheForge/OS/Interfaces/ILog.h>
+#include <TheForge/OS/Core/RingBuffer.h>
+#include <TheForge/OS/Core/GPUConfig.h>
 
 #include "Direct3D12CapBuilder.h"
 #include "Direct3D12Hooks.h"
@@ -85,7 +85,7 @@ extern "C"
 }
 #endif
 
-#include "../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 #define D3D12_GPU_VIRTUAL_ADDRESS_NULL ((D3D12_GPU_VIRTUAL_ADDRESS)0)
 #define D3D12_GPU_VIRTUAL_ADDRESS_UNKNOWN ((D3D12_GPU_VIRTUAL_ADDRESS)-1)
@@ -1977,7 +1977,7 @@ void removeQueue(Queue* pQueue)
 	waitQueueIdle(pQueue);
 
 	::removeFence(pQueue->pRenderer, pQueue->pQueueFence);
-	
+
 	SAFE_RELEASE(pQueue->pDxQueue);
 	SAFE_FREE(pQueue);
 }
@@ -4528,14 +4528,14 @@ void cmdBindPushConstants(Cmd* pCmd, RootSignature* pRootSignature, const char* 
 	ASSERT(pConstants);
 	ASSERT(pRootSignature);
 	ASSERT(pName);
-	
+
 	// Set root signature if the current one differs from pRootSignature
 	reset_root_signature(pCmd, pRootSignature);
 
 	const DescriptorInfo* pDesc = get_descriptor(pRootSignature, pName);
 	ASSERT(pDesc);
 	ASSERT(DESCRIPTOR_TYPE_ROOT_CONSTANT == pDesc->mDesc.type);
-	
+
 	if (pRootSignature->mPipelineType == PIPELINE_TYPE_GRAPHICS)
 		pCmd->pDxCmdList->SetGraphicsRoot32BitConstants(pRootSignature->pDxRootConstantRootIndices[pDesc->mIndexInParent], pDesc->mDesc.size, pConstants, 0);
 	else
@@ -4548,7 +4548,7 @@ void cmdBindPushConstantsByIndex(Cmd* pCmd, RootSignature* pRootSignature, uint3
 	ASSERT(pConstants);
 	ASSERT(pRootSignature);
 	ASSERT(paramIndex >= 0 && paramIndex < pRootSignature->mDescriptorCount);
-	
+
 	// Set root signature if the current one differs from pRootSignature
 	reset_root_signature(pCmd, pRootSignature);
 
@@ -6239,7 +6239,7 @@ void releasePage(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture)
 	if (map)
 	{
 		unmapBuffer(pRenderer, pTexture->mRemovePage);
-	}	
+	}
 
 	for (int i = 0; i < (int)removePageCount; ++i)
 	{
@@ -6319,7 +6319,7 @@ void fillVirtualTexture(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, Fence
 
 			memcpy(pPage->pIntermediateBuffer->pCpuMappedAddress, pData, pPage->size);
 
-			
+
 			D3D12_TILED_RESOURCE_COORDINATE startCoord;
 			startCoord.X = pPage->offset.X / (uint)pTexture->mSparseVirtualTexturePageWidth;
 			startCoord.Y = pPage->offset.Y / (uint)pTexture->mSparseVirtualTexturePageHeight;
@@ -6369,8 +6369,8 @@ void fillVirtualTexture(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, Fence
 			tileCounts.data(),
 			D3D12_TILE_MAPPING_FLAG_NONE);
 	}
-	
-	regionSizes.set_capacity(0);	
+
+	regionSizes.set_capacity(0);
 	rangeFlags.set_capacity(0);
 	tileCounts.set_capacity(0);
 }
@@ -6415,7 +6415,7 @@ void fillVirtualTextureLevel(Cmd* pCmd, Renderer* pRenderer, Texture* pTexture, 
 					mapBuffer(pRenderer, pPage->pIntermediateBuffer, NULL);
 				}
 
-				memcpy(pPage->pIntermediateBuffer->pCpuMappedAddress, pData, pPage->size);				
+				memcpy(pPage->pIntermediateBuffer->pCpuMappedAddress, pData, pPage->size);
 
 				D3D12_TILED_RESOURCE_COORDINATE startCoord;
 				startCoord.X = pPage->offset.X / (uint)pTexture->mSparseVirtualTexturePageWidth;
@@ -6588,7 +6588,7 @@ void addVirtualTexture(Renderer * pRenderer, const TextureDesc * pDesc, Texture 
 				{
 					for (uint32_t x = 0; x < sparseBindCounts.getX(); x++)
 					{
-						// Offset 
+						// Offset
 						D3D12_TILED_RESOURCE_COORDINATE offset;
 						offset.X = x * imageGranularity.X;
 						offset.Y = y * imageGranularity.Y;
@@ -6646,10 +6646,10 @@ void updateVirtualTexture(Renderer* pRenderer, Queue* pQueue, Texture* pTexture)
 {
 	if (pTexture->mVisibility)
 	{
-		// Create command buffer to transition resources to the correct state		
+		// Create command buffer to transition resources to the correct state
 		CmdPool* cmdPool = NULL;
 		Cmd*     cmd = NULL;
-		
+
 		addCmdPool(pRenderer, pQueue, false, &cmdPool);
 		addCmd(cmdPool, false, &cmd);
 

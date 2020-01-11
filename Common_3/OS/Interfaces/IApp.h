@@ -77,7 +77,7 @@ void drawFrame(float deltaTime);
 #define _IAPP_H_
 
 #include "IOperatingSystem.h"
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
+#include <EASTL/string.h>
 #include "ILog.h"
 
 class IApp
@@ -112,7 +112,7 @@ public:
 
 	WindowsDesc*    pWindow;
 	const char*     pCommandLine;
-	
+
 	static int          argc;
 	static const char** argv;
 };

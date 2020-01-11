@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 
 #include <math.h>
 #include "soloud_internal.h"
-#include "../../../../OS/Interfaces/IMemory.h"
+#include <TheForge/OS/Interfaces/IMemory.h>
 
 // 3d audio operations
 
@@ -52,7 +52,7 @@ namespace SoLoud
 		{
 			return (float)sqrt(mX * mX + mY * mY + mZ * mZ);
 		}
-		
+
 		void normalize()
 		{
 			float m = mag();
@@ -65,12 +65,12 @@ namespace SoLoud
 			mY /= m;
 			mZ /= m;
 		}
-		
+
 		float dot(vec3 a)
 		{
 			return mX * a.mX + mY * a.mY + mZ * a.mZ;
 		}
-		
+
 		vec3 sub(vec3 a)
 		{
 			vec3 r;
@@ -369,7 +369,7 @@ namespace SoLoud
 		handle h = play(aSound, aVolume, 0, 1, aBus);
 		lockAudioMutex();
 		int v = getVoiceFromHandle(h);
-		if (v < 0) 
+		if (v < 0)
 		{
 			unlockAudioMutex();
 			return h;
@@ -404,7 +404,7 @@ namespace SoLoud
 		}
 
 		updateVoiceVolume(v);
-		
+
 		// Fix initial voice volume ramp up
 		int i;
 		for (i = 0; i < MAX_CHANNELS; i++)
@@ -439,7 +439,7 @@ namespace SoLoud
 		handle h = play(aSound, aVolume, 0, 1, aBus);
 		lockAudioMutex();
 		int v = getVoiceFromHandle(h);
-		if (v < 0) 
+		if (v < 0)
 		{
 			unlockAudioMutex();
 			return h;
@@ -448,7 +448,7 @@ namespace SoLoud
 		mVoice[v]->mFlags |= AudioSourceInstance::PROCESS_3D;
 		set3dSourceParameters(h, aPosX, aPosY, aPosZ, aVelX, aVelY, aVelZ);
 		time lasttime = mLastClockedTime;
-		if (lasttime == 0) 
+		if (lasttime == 0)
 			mLastClockedTime = aSoundTime;
 		vec3 pos;
 		pos.mX = aPosX;
@@ -507,7 +507,7 @@ namespace SoLoud
 	}
 
 
-	
+
 	result Soloud::set3dSoundSpeed(float aSpeed)
 	{
 		if (aSpeed <= 0)
@@ -516,13 +516,13 @@ namespace SoLoud
 		return SO_NO_ERROR;
 	}
 
-	
+
 	float Soloud::get3dSoundSpeed()
 	{
 		return m3dSoundSpeed;
 	}
 
-	
+
 	void Soloud::set3dListenerParameters(float aPosX, float aPosY, float aPosZ, float aAtX, float aAtY, float aAtZ, float aUpX, float aUpY, float aUpZ, float aVelocityX, float aVelocityY, float aVelocityZ)
 	{
 		m3dPosition[0] = aPosX;
@@ -539,7 +539,7 @@ namespace SoLoud
 		m3dVelocity[2] = aVelocityZ;
 	}
 
-	
+
 	void Soloud::set3dListenerPosition(float aPosX, float aPosY, float aPosZ)
 	{
 		m3dPosition[0] = aPosX;
@@ -547,7 +547,7 @@ namespace SoLoud
 		m3dPosition[2] = aPosZ;
 	}
 
-	
+
 	void Soloud::set3dListenerAt(float aAtX, float aAtY, float aAtZ)
 	{
 		m3dAt[0] = aAtX;
@@ -555,7 +555,7 @@ namespace SoLoud
 		m3dAt[2] = aAtZ;
 	}
 
-	
+
 	void Soloud::set3dListenerUp(float aUpX, float aUpY, float aUpZ)
 	{
 		m3dUp[0] = aUpX;
@@ -563,7 +563,7 @@ namespace SoLoud
 		m3dUp[2] = aUpZ;
 	}
 
-	
+
 	void Soloud::set3dListenerVelocity(float aVelocityX, float aVelocityY, float aVelocityZ)
 	{
 		m3dVelocity[0] = aVelocityX;
@@ -571,7 +571,7 @@ namespace SoLoud
 		m3dVelocity[2] = aVelocityZ;
 	}
 
-	
+
 	void Soloud::set3dSourceParameters(handle aVoiceHandle, float aPosX, float aPosY, float aPosZ, float aVelocityX, float aVelocityY, float aVelocityZ)
 	{
 		FOR_ALL_VOICES_PRE_3D
@@ -584,7 +584,7 @@ namespace SoLoud
 		FOR_ALL_VOICES_POST_3D
 	}
 
-	
+
 	void Soloud::set3dSourcePosition(handle aVoiceHandle, float aPosX, float aPosY, float aPosZ)
 	{
 		FOR_ALL_VOICES_PRE_3D
@@ -594,7 +594,7 @@ namespace SoLoud
 		FOR_ALL_VOICES_POST_3D
 	}
 
-	
+
 	void Soloud::set3dSourceVelocity(handle aVoiceHandle, float aVelocityX, float aVelocityY, float aVelocityZ)
 	{
 		FOR_ALL_VOICES_PRE_3D
@@ -604,7 +604,7 @@ namespace SoLoud
 		FOR_ALL_VOICES_POST_3D
 	}
 
-	
+
 	void Soloud::set3dSourceMinMaxDistance(handle aVoiceHandle, float aMinDistance, float aMaxDistance)
 	{
 		FOR_ALL_VOICES_PRE_3D
@@ -613,7 +613,7 @@ namespace SoLoud
 		FOR_ALL_VOICES_POST_3D
 	}
 
-	
+
 	void Soloud::set3dSourceAttenuation(handle aVoiceHandle, unsigned int aAttenuationModel, float aAttenuationRolloffFactor)
 	{
 		FOR_ALL_VOICES_PRE_3D
@@ -622,7 +622,7 @@ namespace SoLoud
 		FOR_ALL_VOICES_POST_3D
 	}
 
-	
+
 	void Soloud::set3dSourceDopplerFactor(handle aVoiceHandle, float aDopplerFactor)
 	{
 		FOR_ALL_VOICES_PRE_3D

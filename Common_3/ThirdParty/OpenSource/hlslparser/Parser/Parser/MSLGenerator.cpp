@@ -16,7 +16,7 @@
 #include <string.h>
 #include "StringLibrary.h"
 
-#include "../../../EASTL/sort.h"
+#include <EASTL/sort.h>
 
 static const HLSLType kFloatType(HLSLBaseType_Float);
 static const HLSLType kUintType(HLSLBaseType_Uint);
@@ -597,7 +597,7 @@ public:
 				// add the globals we found
 				{
 					eastl::vector < eastl::string > allStrings = visitor.m_foundNames.GetFlatStrings();
-			
+
 					for (int i = 0; i < allStrings.size(); i++)
 					{
 						AddString(allStrings[i]);
@@ -1161,7 +1161,7 @@ void MSLGenerator::PrependDeclarations()
 	m_writer.WriteLine(0, "inline float2 set_column(thread float2x4& m, int i, float2 v) {");
 	m_writer.WriteLine(1, "    m[0][i] = v.x; m[1][i] = v.y; return v;");
 	m_writer.WriteLine(0, "}");
-	
+
 	m_writer.WriteLine(0, "inline float3x3 matrix_ctor(float4x4 m) {");
 	m_writer.WriteLine(1, "    return float3x3(m[0].xyz, m[1].xyz, m[2].xyz);");
 	m_writer.WriteLine(0, "}");
@@ -1365,7 +1365,7 @@ bool MSLGenerator::Generate(StringLibrary * stringLibrary, HLSLTree* tree, Targe
 	m_entryName = MakeCached(entryName);
 	m_secondaryEntryName = MakeCached(entryName);
 	m_options = options;
-	
+
 	m_nextTextureRegister = 0;
 	m_nextSamplerRegister = 0;
 	m_nextBufferRegister = 0; // options start at 1
@@ -1557,7 +1557,7 @@ void MSLGenerator::OutputShaderClass(const char* shaderClassName)
 	}
 	m_writer.EndLine(argCount ? ") :" : ")");
 
-	
+
 	if (argCount)
 	{
 		m_writer.BeginLine(2);
@@ -2421,7 +2421,7 @@ void MSLGenerator::OutputMain(HLSLTree* tree, HLSLFunction* entryFunction, HLSLF
 			{
 				continue;
 			}
-			
+
 			if (numWritten >= 1)
 			{
 				m_writer.Write(", ");
@@ -2543,12 +2543,12 @@ void MSLGenerator::OutputStatements(int indent, HLSLStatement* statement)
 			{
 				m_writer.Write("sampler %s", RawStr(samplerState->name));
 			}
-					
+
 
 			//	m_writer.Write("[");
 			//	OutputExpression(samplerState->type.arraySize, NULL, NULL, false);
 			//	m_writer.Write("]");
-				
+
 
 			m_writer.EndLine(";");
 		}
@@ -2793,7 +2793,7 @@ void MSLGenerator::OutputStatements(int indent, HLSLStatement* statement)
 					default:
 						break;
 					}
-				}				
+				}
 
 				m_writer.Write(" %s", RawStr(buffer->name));
 				m_writer.EndLine(";");
@@ -2808,7 +2808,7 @@ void MSLGenerator::OutputStatements(int indent, HLSLStatement* statement)
 			{
 				OutputBuffer(indent, buffer);
 			}
-			
+
 		}
 		else if (statement->nodeType == HLSLNodeType_Function)
 		{
@@ -2942,7 +2942,7 @@ void MSLGenerator::OutputStatements(int indent, HLSLStatement* statement)
 			HLSLForStatement* forStatement = static_cast<HLSLForStatement*>(statement);
 			m_writer.BeginLine(indent, RawStr(forStatement->fileName), forStatement->line);
 			m_writer.Write("for (");
-			
+
 			if (forStatement->initialization)
 				OutputDeclaration(forStatement->initialization);
 			else if (forStatement->initializationWithoutDeclaration)
@@ -3263,7 +3263,7 @@ void MSLGenerator::OutputStruct(int indent, HLSLStruct* structure)
 				{
 					OutputDeclaration(field->type, field->name, NULL, NULL);
 				}
-				
+
 			}
 
 			m_writer.Write(";");
@@ -3432,7 +3432,7 @@ void MSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType* 
 				m_writer.Write("Texture2DArraySampler(%s_texture, %s_sampler)", RawStr(name), RawStr(name));
 			else
 				m_writer.Write("<unhandled texture type>");
-		}	
+		}
 		//add buffer's name
 		else if (pDeclaration->buffer)
 		{
@@ -3489,7 +3489,7 @@ void MSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType* 
 		{
 			OutputExpressionList(constructorExpression->params);
 		}
-		
+
 		m_writer.Write(")");
 	}
 	else if (expression->nodeType == HLSLNodeType_LiteralExpression)
@@ -3745,7 +3745,7 @@ void MSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType* 
 		HLSLArrayAccess* arrayAccess = static_cast<HLSLArrayAccess*>(expression);
 
 		if (IsTexture(arrayAccess->array->expressionType))
-		{						
+		{
 			HLSLBaseType indexType = arrayAccess->index->expressionType.baseType;
 			HLSLBaseType scalarType = GetScalarBaseType(indexType);
 
@@ -3882,7 +3882,7 @@ void MSLGenerator::OutputExpression(HLSLExpression* expression, const HLSLType* 
 					break;
 				}
 			}
-			
+
 			//This is for SampleLevel
 			if (params.size() > 3)
 			{
@@ -4703,7 +4703,7 @@ CachedString MSLGenerator::TranslateInputSemantic(const CachedString & semantic,
 		return MakeCached("thread_index_in_threadgroup");
 	else  if (m_target == Target_ComputeShader && (String_Equal(semantic, "SV_GroupThreadID")))
 		return MakeCached("thread_position_in_threadgroup");
-	
+
 
 	else
 	{

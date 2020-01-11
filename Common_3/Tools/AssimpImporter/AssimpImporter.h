@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include "../../ThirdParty/OpenSource/EASTL/string.h"
-#include "../../ThirdParty/OpenSource/EASTL/vector.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_set.h"
-#include "../../ThirdParty/OpenSource/EASTL/unordered_map.h"
-#include "../../OS/Math/MathTypes.h"
-#include "../../OS/Interfaces/IOperatingSystem.h"
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
+#include <EASTL/unordered_set.h>
+#include <EASTL/unordered_map.h>
+#include <TheForge/OS/Math/MathTypes.h>
+#include <TheForge/OS/Interfaces/IOperatingSystem.h>
 
 struct BoundingBox
 {

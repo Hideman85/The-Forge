@@ -66,3 +66,4 @@ Tools/ShaderBuildCommand/packages/
 cmake-build-debug/
 CMakeFiles/
 build/
+include

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_base.h"
-#include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_apis.h"
+#include <tinyimageformat_base.h>
+#include <tinyimageformat_apis.h>
 
 inline void utils_caps_builder(Renderer* pRenderer) {
 	memset(pRenderer->capBits.canShaderReadFrom, 0, sizeof(pRenderer->capBits.canShaderReadFrom));
