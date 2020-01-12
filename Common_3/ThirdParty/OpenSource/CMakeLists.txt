@@ -40,7 +40,7 @@ copy_headers("${BASISU_TRANSCODER_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 ##      EASTL
 ##########################################
 # Build target
-file(GLOB EASTL_SOURCES "EASTL/*.cpp")
+file(GLOB_RECURSE EASTL_SOURCES "EASTL/*.cpp")
 #set(EASTL_SOURCES
 #        EASTL/EAStdC/EAMemory.cpp
 #        EASTL/intrusive_list.cpp
@@ -93,7 +93,7 @@ copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/gainput/lib/include" "${CMAKE_SOURCE_D
 ##      Imgui
 ##########################################
 set(IMGUI_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/imgui")
-add_library(imgui STATIC imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp)
+add_library(imgui STATIC imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp)
 target_include_directories(imgui PUBLIC ${IMGUI_INCLUDES})
 list(APPEND THE_FORGE_LIBS imgui)
 copy_headers("${IMGUI_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
@@ -194,7 +194,7 @@ copy_headers("${SOLOUD_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 # Build target
 file(GLOB SPIRV_SOURCES "SPIRV_Cross/*.cpp")
 set(SPIRV_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/SPIRV_Cross)
-add_library(SPIRV STATIC ${MP_SOURCES})
+add_library(SPIRV STATIC ${SPIRV_SOURCES})
 
 list(APPEND THE_FORGE_LIBS SPIRV)
 copy_headers("${SPIRV_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")

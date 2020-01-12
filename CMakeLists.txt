@@ -12,13 +12,15 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ##########################################
-##      Turn on/off verbose
+##      Verbose mode
 ##########################################
-set(CMAKE_VERBOSE_MAKEFILE FALSE)
-#set(CMAKE_VERBOSE_MAKEFILE TRUE)
+if (VERBOSE)
+    set(CMAKE_VERBOSE_MAKEFILE TRUE)
+    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -Wl,--verbose)
+endif()
 
 ##########################################
 ##      Compilation options
@@ -32,6 +34,11 @@ option(VULKAN "Build with vulkan support" ON)
 option(METAL "Build with metal support" ON)
 option(DIRECT3D11 "Build with D3DX11 support" OFF)
 option(DIRECT3D12 "Build with D3DX12 support" OFF)
+
+##########################################
+##      Add definitions
+##########################################
+add_definitions(-DVULKAN=TRUE)
 
 ##########################################
 ##      Include TheForge dirs
@@ -53,21 +60,6 @@ if (NOT EXISTS "${CMAKE_SOURCE_DIR}/include")
     copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3" "${CMAKE_SOURCE_DIR}/include/TheForge")
 endif()
 include_directories(${CMAKE_SOURCE_DIR}/include)
-
-##########################################
-##      System deps
-##########################################
-find_package(Vulkan REQUIRED)
-include_directories(${Vulkan_INCLUDE_DIR})
-link_libraries(${Vulkan_LIBRARIES})
-add_definitions(-DVULKAN=TRUE)
-
-if (UNIX)
-    find_package(X11 REQUIRED)
-    find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
-    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
-    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} -pthread)
-endif()
 
 ##########################################
 ##      Compile nested deps
@@ -114,6 +106,8 @@ set(THE_FORGE_SOURCES
         Common_3/Renderer/CommonShaderReflection.cpp
         Common_3/Renderer/GpuProfiler.cpp
         Common_3/Renderer/ResourceLoader.cpp
+        Common_3/Tools/AssimpImporter/AssimpImporter.cpp
+        Common_3/Tools/SpirvTools/SpirvTools.cpp
         Middleware_3/Animation/AnimatedObject.cpp
         Middleware_3/Animation/Animation.cpp
         Middleware_3/Animation/Clip.cpp
@@ -285,6 +279,24 @@ add_library(TheForge STATIC IMPORTED)
 set_target_properties(TheForge PROPERTIES IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/${THE_FORGE_LIB})
 add_dependencies(TheForge ${THE_FORGE_LIB})
 link_libraries(TheForge)
+
+##########################################
+##      System deps
+##########################################
+find_package(Vulkan REQUIRED)
+find_package(ZLIB REQUIRED)
+include_directories(${Vulkan_INCLUDE_DIR} ${ZLIB_INCLUDE_DIRS})
+link_libraries(${Vulkan_LIBRARIES} ${ZLIB_LIBRARIES} ${CMAKE_DL_LIBS})
+
+if (UNIX)
+    find_package(X11 REQUIRED)
+    find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
+    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
+    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} Threads::Threads)
+    #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -msse4.1)
+endif()
 
 ##########################################
 ##      Unit tests & Samples
