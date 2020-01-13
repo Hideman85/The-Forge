@@ -2,9 +2,9 @@
 
 extern "C"
 {
-#include <TheForge/ThirdParty/OpenSource/lua-5.3.5/src/lua.h>
-#include <TheForge/ThirdParty/OpenSource/lua-5.3.5/src/lualib.h>
-#include <TheForge/ThirdParty/OpenSource/lua-5.3.5/src/lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 }
 
 #include <EASTL/string.h>

@@ -55,4 +55,4 @@ void LuaManager::AddAsyncScript(const Path* scriptPath, T callbackLambda)
 	AddAsyncScript(scriptPath, lambdaWrap);
 }
 
-#include <TheForge/ThirdParty/OpenSource/FluidStudios/MemoryManager/nommgr.h>
+#include <nommgr.h>

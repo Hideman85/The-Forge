@@ -41,22 +41,7 @@ copy_headers("${BASISU_TRANSCODER_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 ##########################################
 # Build target
 file(GLOB_RECURSE EASTL_SOURCES "EASTL/*.cpp")
-#set(EASTL_SOURCES
-#        EASTL/EAStdC/EAMemory.cpp
-#        EASTL/intrusive_list.cpp
-#        EASTL/red_black_tree.cpp
-#        EASTL/numeric_limits.cpp
-#        EASTL/thread_support.cpp
-#        EASTL/assert.cpp
-#        EASTL/string.cpp
-#        EASTL/allocator_forge.cpp
-#        EASTL/allocator_eastl.cpp
-#        EASTL/hashtable.cpp
-#        EASTL/fixed_pool.cpp
-#        EASTL/EAStdC/EASprintf.cpp
-#)
 add_library(EASTL STATIC ${EASTL_SOURCES})
-#set_target_properties(EASTL PROPERTIES INCLUDE_DIRECTORIES "")
 
 list(APPEND THE_FORGE_LIBS EASTL)
 copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/EASTL" "${CMAKE_SOURCE_DIR}/include/EASTL")
@@ -64,15 +49,13 @@ copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/EASTL" "${CMAKE_SOURCE_DIR}/include/EA
 ##########################################
 ##      FluidStudios
 ##########################################
-if (USE_LUA)
-    # Build target
-    file(GLOB FS_SOURCES "FluidStudios/MemoryManager/*.cpp")
-    set(FS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/FluidStudios/MemoryManager)
-    add_library(FS STATIC ${FS_SOURCES})
+# Build target
+file(GLOB FS_SOURCES "FluidStudios/MemoryManager/*.cpp")
+set(FS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/FluidStudios/MemoryManager)
+add_library(FluidStudio STATIC ${FS_SOURCES})
 
-    list(APPEND THE_FORGE_LIBS FS)
-#    list(APPEND THE_FORGE_LIBS_INCLUDES ${FS_INCLUDES})
-endif()
+list(APPEND THE_FORGE_LIBS FluidStudio)
+copy_headers("${FS_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Fontstash
@@ -112,12 +95,12 @@ copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/libzip" "${CMAKE_SOURCE_DIR}/include")
 ##########################################
 if (USE_LUA)
     # Build target
-    file(GLOB LUA_SOURCES "lua-5.3.5/src/*.cpp")
+    file(GLOB LUA_SOURCES "lua-5.3.5/src/*.c")
     set(LUA_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/lua-5.3.5/src)
-    add_library(Lua STATIC ${FS_SOURCES})
+    add_library(Lua STATIC ${LUA_SOURCES})
 
     list(APPEND THE_FORGE_LIBS Lua)
-#    list(APPEND THE_FORGE_LIBS_INCLUDES ${LUA_INCLUDES})
+    copy_headers("${LUA_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 endif()
 
 ##########################################
@@ -125,11 +108,11 @@ endif()
 ##########################################
 # Build target
 file(GLOB MO_SOURCES "meshoptimizer/src/*.cpp")
-set(MO_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/meshoptimizer/src)
 add_library(MeshOptimizer STATIC ${MO_SOURCES})
 
 list(APPEND THE_FORGE_LIBS MeshOptimizer)
-copy_headers("${MO_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/meshoptimizer/src" "${CMAKE_SOURCE_DIR}/include")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/meshoptimizer/tools" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      MicroProfile
@@ -174,7 +157,7 @@ copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/ozz-animation/include" "${CMAKE_SOURCE
 ##########################################
 ##      Render doc
 ##########################################
-# Not use
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/renderdoc" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      Soloud
@@ -230,7 +213,7 @@ copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/tinyimageformat" "${CMAKE_SOURCE_DIR}/
 copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/tinyktx" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
-##      tinydds
+##      TinyXML2
 ##########################################
 add_library(TinyXML2 STATIC TinyXML2/tinyxml2.cpp)
 list(APPEND THE_FORGE_LIBS TinyXML2)

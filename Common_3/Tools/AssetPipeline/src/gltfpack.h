@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "../../../ThirdParty/OpenSource/meshoptimizer/tools/cgltf.h"
-#include "../../../ThirdParty/OpenSource/meshoptimizer/tools/fast_obj.h"
+#include <cgltf.h>
+#include <fast_obj.h>
 #include <EASTL/vector.h>
 
 struct Attr

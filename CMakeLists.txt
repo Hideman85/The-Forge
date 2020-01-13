@@ -22,11 +22,19 @@ if (VERBOSE)
     set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -Wl,--verbose)
 endif()
 
+
+# Generic optimizations
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -flto -fwhole-program")
+# Experimental options, should be used with caution
+# Good topic https://stackoverflow.com/questions/14492436/g-optimization-beyond-o3-ofast
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -funroll-loops -funroll-all-loops")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native -mtune=native")
+
 ##########################################
 ##      Compilation options
 ##########################################
 option(USE_ASSIMP "Build package with assimp support." ON)
-option(USE_LUA "Build package with lua support." OFF)
+option(USE_LUA "Build package with lua support." ON)
 option(COMPILE_UNIT_TESTS "Build unit tests." ON)
 option(COMPILE_SAMPLE "Build visibility buffer sample." ON)
 
@@ -39,6 +47,7 @@ option(DIRECT3D12 "Build with D3DX12 support" OFF)
 ##      Add definitions
 ##########################################
 add_definitions(-DVULKAN=TRUE)
+add_definitions(-DUSE_MEMORY_TRACKING=TRUE)
 
 ##########################################
 ##      Include TheForge dirs
@@ -52,13 +61,15 @@ macro(copy_headers SRC_DIR DST_DIR)
     endforeach()
 endmacro()
 
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/include")
-    file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/TheForge")
-    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/OS" "${CMAKE_SOURCE_DIR}/include/TheForge/OS")
-    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Renderer" "${CMAKE_SOURCE_DIR}/include/TheForge/Renderer")
-    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Tools" "${CMAKE_SOURCE_DIR}/include/TheForge/Tools")
-    copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3" "${CMAKE_SOURCE_DIR}/include/TheForge")
+if (EXISTS "${CMAKE_SOURCE_DIR}/include")
+    file(REMOVE_RECURSE "${CMAKE_SOURCE_DIR}/include")
 endif()
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/TheForge")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/OS" "${CMAKE_SOURCE_DIR}/include/TheForge/OS")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Renderer" "${CMAKE_SOURCE_DIR}/include/TheForge/Renderer")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Tools" "${CMAKE_SOURCE_DIR}/include/TheForge/Tools")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3" "${CMAKE_SOURCE_DIR}/include/TheForge")
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 ##########################################
@@ -107,6 +118,11 @@ set(THE_FORGE_SOURCES
         Common_3/Renderer/GpuProfiler.cpp
         Common_3/Renderer/ResourceLoader.cpp
         Common_3/Tools/AssimpImporter/AssimpImporter.cpp
+        Common_3/Tools/AssetPipeline/src/AssetLoader.cpp
+        Common_3/Tools/AssetPipeline/src/AssetPipeline.cpp
+        Common_3/Tools/AssetPipeline/src/gltfpack.cpp
+        Common_3/Tools/AssetPipeline/src/TFXImporter.cpp
+        Common_3/Tools/AssetPipeline/src/TressFXAsset.cpp
         Common_3/Tools/SpirvTools/SpirvTools.cpp
         Middleware_3/Animation/AnimatedObject.cpp
         Middleware_3/Animation/Animation.cpp
@@ -132,7 +148,6 @@ if (USE_LUA)
             ${THE_FORGE_SOURCES}
             Middleware_3/LUA/LuaManager.cpp
             Middleware_3/LUA/LuaManagerImpl.cpp
-            Middleware_3/LUA/LunaV.hpp
     )
 endif()
 if (USE_ASSIMP)
@@ -259,7 +274,7 @@ target_link_libraries(TheForge-static PUBLIC ${THE_FORGE_LIBS} zip)
 ##########################################
 set(THE_FORGE_LIBS "${THE_FORGE_LIBS};TheForge-static")
 set(THE_FORGE_LIBS_COMBINED)
-foreach(LIB ${THE_FORGE_LIBS} zip)
+foreach(LIB ${THE_FORGE_LIBS} zip IrrXML)
     set(THE_FORGE_LIBS_COMBINED "${THE_FORGE_LIBS_COMBINED};${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_STATIC_LIBRARY_PREFIX}${LIB}${CMAKE_STATIC_LIBRARY_SUFFIX}")
 endforeach()
 
