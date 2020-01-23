@@ -84,7 +84,17 @@ copy_headers("${IMGUI_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 ##########################################
 ##      LibZip
 ##########################################
-set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Linux/libzip.a)
+if (WIN32)
+    set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Win64/Release/libzip-static.lib)
+elseif(IOS)
+    set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/iOS/libzip.a)
+elseif(APPLE)
+    set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/macOS/libzip.a)
+elseif(ANDROID)
+    set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Android-ARM64/libzip.a)
+elseif(UNIX)
+    set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Linux/libzip.a)
+endif()
 add_custom_target(libzip_copy)
 add_custom_command(TARGET libzip_copy PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${LIB_ZIP_FILE} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 

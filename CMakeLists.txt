@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.15)
 cmake_policy(SET CMP0077 NEW) # for option overriding
+cmake_minimum_required(VERSION 3.15)
 project(TheForge)
 
 ##########################################
@@ -43,8 +43,6 @@ option(METAL "Build with metal support" OFF)
 option(DIRECT3D11 "Build with D3DX11 support" OFF)
 option(DIRECT3D12 "Build with D3DX12 support" OFF)
 
-option(MINGW_USE_UNIX_PTHREAD "Build for windows with MingW64 & pthread support" OFF)
-
 ##########################################
 ##      Add definitions
 ##########################################
@@ -82,9 +80,6 @@ if (VULKAN)
 endif()
 if (WIN32)
     link_libraries("/usr/x86_64-w64-mingw32/lib/libz.a")
-    if (MINGW AND MINGW_USE_UNIX_PTHREAD)
-        link_libraries(-pthread)
-    endif()
 else()
     link_libraries(-lz ${CMAKE_DL_LIBS})
 endif ()
@@ -289,6 +284,7 @@ if (WIN32 OR MSVC)
             Common_3/OS/Windows/WindowsFileSystem.cpp
             Common_3/OS/Windows/WindowsLog.cpp
             Common_3/OS/Windows/WindowsTime.cpp
+            Common_3/OS/Windows/WindowsThread.cpp
             ${THE_FORGE_D3D11_SOURCES}
             ${THE_FORGE_D3D12_SOURCES}
             ${THE_FORGE_VULKAN_SOURCES}
@@ -307,21 +303,6 @@ if (UNIX AND NOT WIN32)
             Common_3/OS/Linux/LinuxLog.cpp
             Common_3/OS/Linux/LinuxThread.cpp
             Common_3/OS/Linux/LinuxTime.cpp
-            ${THE_FORGE_VULKAN_SOURCES}
-    )
-endif()
-
-if (MINGW AND MINGW_USE_UNIX_PTHREAD)
-    set(THE_FORGE_SOURCES
-            ${THE_FORGE_SOURCES}
-            Common_3/OS/Linux/LinuxThread.cpp
-            ${THE_FORGE_VULKAN_SOURCES}
-    )
-else()
-    set(THE_FORGE_SOURCES
-            ${THE_FORGE_SOURCES}
-            Common_3/OS/Linux/LinuxThread.cpp
-            Common_3/OS/Windows/WindowsThread.cpp
             ${THE_FORGE_VULKAN_SOURCES}
     )
 endif()
