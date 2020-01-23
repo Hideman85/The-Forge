@@ -13,7 +13,8 @@
 #include <EASTL/string.h>
 
 #define NOMINMAX
-#include <Windows.h>
+#include <windows.h>
+
 
 
 eastl::string ReadFile(const char* fileName)

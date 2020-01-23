@@ -13,7 +13,8 @@
 // Written by IAS. :)
 // ---------------------------------------------------------------------------
 
-#include <Windows.h>
+#include <windows.h>
+
 #include <windowsx.h>
 #include <d3d11_1.h>
 #include <dxgi1_2.h>
@@ -492,7 +493,7 @@ void InitGraphics()
 HRESULT	CompileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefines, LPCSTR pEntryPoint, LPCSTR pShaderModel, ID3DBlob** ppBytecodeBlob)
 {
 	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR;
-	
+
 #ifdef _DEBUG
 	compileFlags |= D3DCOMPILE_DEBUG;
 #endif

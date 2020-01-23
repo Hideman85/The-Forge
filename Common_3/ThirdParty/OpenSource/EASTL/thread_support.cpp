@@ -13,8 +13,9 @@
 	#ifndef WIN32_LEAN_AND_MEAN
 		#define WIN32_LEAN_AND_MEAN
 	#endif
-	#include <Windows.h>
-	#pragma warning(pop)    
+	#include <windows.h>
+
+	#pragma warning(pop)
 #endif
 
 
@@ -49,7 +50,7 @@ namespace eastl
 					pthread_mutexattr_t attr;
 
 					pthread_mutexattr_init(&attr);
-					pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_PRIVATE); 
+					pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_PRIVATE);
 					pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 					pthread_mutex_init(&mMutex, &attr);
 					pthread_mutexattr_destroy(&attr);
@@ -91,7 +92,7 @@ namespace eastl
 		// shared_ptr_auto_mutex
 		/////////////////////////////////////////////////////////////////
 
-		// We could solve this by having single global mutex for all shared_ptrs, a set of mutexes for shared_ptrs, 
+		// We could solve this by having single global mutex for all shared_ptrs, a set of mutexes for shared_ptrs,
 		// a single mutex for every shared_ptr, or have a template parameter that enables mutexes for just some shared_ptrs.
 		eastl::late_constructed<mutex, true> gSharedPtrMutex;
 

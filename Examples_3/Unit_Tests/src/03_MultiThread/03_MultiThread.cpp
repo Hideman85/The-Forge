@@ -49,7 +49,8 @@
 #if defined(_WIN32)
 #if defined(_DURANGO)
 #else
-#include <Windows.h>
+#include <windows.h>
+
 #include <comdef.h>
 #include <Wbemidl.h>
 #pragma comment(lib, "wbemuuid.lib")

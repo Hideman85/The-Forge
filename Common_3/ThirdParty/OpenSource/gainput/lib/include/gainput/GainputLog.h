@@ -15,7 +15,8 @@
 
 #if defined(GAINPUT_DEBUG) || defined(GAINPUT_DEV)
 	#include <stdio.h>
-    #include <Windows.h>
+    #include <windows.h>
+
 	#define GAINPUT_LOG(...) { char buf[1024]; sprintf(buf, __VA_ARGS__); OutputDebugStringA(buf); }
 #endif
 

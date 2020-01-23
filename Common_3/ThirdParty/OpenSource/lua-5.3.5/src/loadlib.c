@@ -150,7 +150,7 @@ static lua_CFunction lsys_sym (lua_State *L, void *lib, const char *sym) {
 #include <windows.h>
 
 #ifdef _DURANGO
-#include <WinBase.h>
+#include <winbase.h>
 #endif
 
 

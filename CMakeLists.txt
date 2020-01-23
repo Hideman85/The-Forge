@@ -39,15 +39,64 @@ option(COMPILE_UNIT_TESTS "Build unit tests." ON)
 option(COMPILE_SAMPLE "Build visibility buffer sample." ON)
 
 option(VULKAN "Build with vulkan support" ON)
-option(METAL "Build with metal support" ON)
+option(METAL "Build with metal support" OFF)
 option(DIRECT3D11 "Build with D3DX11 support" OFF)
 option(DIRECT3D12 "Build with D3DX12 support" OFF)
+
+option(MINGW_USE_UNIX_PTHREAD "Build for windows with MingW64 & pthread support" OFF)
 
 ##########################################
 ##      Add definitions
 ##########################################
-add_definitions(-DVULKAN=TRUE)
+if (${VULKAN})
+    add_definitions(-DVULKAN=TRUE)
+endif()
+if (${METAL})
+    add_definitions(-DMETAL=TRUE)
+endif()
+if (${DIRECT3D11})
+    add_definitions(-DDIRECT3D11=TRUE)
+endif()
+if (${DIRECT3D12})
+    add_definitions(-DDIRECT3D12=TRUE)
+endif()
+
+# Definition for fixing cross compiling with GCC or CLANG for ModifiedSonyMath lib
+add_definitions(-DCPP14=TRUE)
+add_definitions(-DCPP11=TRUE)
+
 add_definitions(-DUSE_MEMORY_TRACKING=TRUE)
+
+##########################################
+##      System deps
+##########################################
+if (VULKAN)
+    if (WIN32)
+        include_directories("${CMAKE_SOURCE_DIR}/VulkanSDK/WinVulkan/Include")
+        link_libraries("${CMAKE_SOURCE_DIR}/VulkanSDK/WinVulkan/Lib/vulkan-1.lib")
+    else()
+        find_package(Vulkan REQUIRED)
+        include_directories(${Vulkan_INCLUDE_DIR})
+        link_libraries(${Vulkan_LIBRARIES})
+    endif()
+endif()
+if (WIN32)
+    link_libraries("/usr/x86_64-w64-mingw32/lib/libz.a")
+    if (MINGW AND MINGW_USE_UNIX_PTHREAD)
+        link_libraries(-pthread)
+    endif()
+else()
+    link_libraries(-lz ${CMAKE_DL_LIBS})
+endif ()
+
+if (UNIX)
+    find_package(X11 REQUIRED)
+    find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
+    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
+    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} Threads::Threads)
+endif()
 
 ##########################################
 ##      Include TheForge dirs
@@ -107,7 +156,6 @@ set(THE_FORGE_SOURCES
         Common_3/OS/FileSystem/MemoryStream.cpp
         Common_3/OS/FileSystem/SystemFileStream.cpp
         Common_3/OS/FileSystem/SystemRun.cpp
-        Common_3/OS/FileSystem/UnixFileSystem.cpp
         Common_3/OS/FileSystem/ZipFileStream.cpp
         Common_3/OS/FileSystem/ZipFileSystem.cpp
         Common_3/OS/Image/Image.cpp
@@ -240,7 +288,6 @@ if (WIN32 OR MSVC)
             Common_3/OS/Windows/WindowsBase.cpp
             Common_3/OS/Windows/WindowsFileSystem.cpp
             Common_3/OS/Windows/WindowsLog.cpp
-            Common_3/OS/Windows/WindowsThread.cpp
             Common_3/OS/Windows/WindowsTime.cpp
             ${THE_FORGE_D3D11_SOURCES}
             ${THE_FORGE_D3D12_SOURCES}
@@ -251,14 +298,30 @@ endif()
 ##########################################
 ##      Make sources linux specific
 ##########################################
-if (UNIX)
+if (UNIX AND NOT WIN32)
     set(THE_FORGE_SOURCES
             ${THE_FORGE_SOURCES}
             Common_3/OS/Linux/LinuxBase.cpp
+            Common_3/OS/FileSystem/UnixFileSystem.cpp
             Common_3/OS/Linux/LinuxFileSystem.cpp
             Common_3/OS/Linux/LinuxLog.cpp
             Common_3/OS/Linux/LinuxThread.cpp
             Common_3/OS/Linux/LinuxTime.cpp
+            ${THE_FORGE_VULKAN_SOURCES}
+    )
+endif()
+
+if (MINGW AND MINGW_USE_UNIX_PTHREAD)
+    set(THE_FORGE_SOURCES
+            ${THE_FORGE_SOURCES}
+            Common_3/OS/Linux/LinuxThread.cpp
+            ${THE_FORGE_VULKAN_SOURCES}
+    )
+else()
+    set(THE_FORGE_SOURCES
+            ${THE_FORGE_SOURCES}
+            Common_3/OS/Linux/LinuxThread.cpp
+            Common_3/OS/Windows/WindowsThread.cpp
             ${THE_FORGE_VULKAN_SOURCES}
     )
 endif()
@@ -294,24 +357,6 @@ add_library(TheForge STATIC IMPORTED)
 set_target_properties(TheForge PROPERTIES IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/${THE_FORGE_LIB})
 add_dependencies(TheForge ${THE_FORGE_LIB})
 link_libraries(TheForge)
-
-##########################################
-##      System deps
-##########################################
-find_package(Vulkan REQUIRED)
-find_package(ZLIB REQUIRED)
-include_directories(${Vulkan_INCLUDE_DIR} ${ZLIB_INCLUDE_DIRS})
-link_libraries(${Vulkan_LIBRARIES} ${ZLIB_LIBRARIES} ${CMAKE_DL_LIBS})
-
-if (UNIX)
-    find_package(X11 REQUIRED)
-    find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads REQUIRED)
-    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
-    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} Threads::Threads)
-    #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -msse4.1)
-endif()
 
 ##########################################
 ##      Unit tests & Samples

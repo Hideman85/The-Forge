@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
 */
-#ifdef __linux__
+#ifdef __linux__ || (defined(__MINGW32__) && defined(MINGW_USE_UNIX_PTHREAD))
 
 #include <sys/sysctl.h>
 
@@ -51,7 +51,7 @@ void Mutex::Destroy()
 void Mutex::Acquire()
 {
 	uint32_t count = 0;
-	
+
 	while(count < mSpinCount && pthread_mutex_trylock(&pHandle) != 0)
 		++count;
 

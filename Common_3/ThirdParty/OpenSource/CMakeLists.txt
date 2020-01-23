@@ -162,14 +162,14 @@ copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/renderdoc" "${CMAKE_SOURCE_DIR}/includ
 ##########################################
 ##      Soloud
 ##########################################
-file(GLOB_RECURSE SOLOUD_SOURCES "soloud20181119/src/*.cpp")
-set(SOLOUD_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/soloud20181119/include")
-
-add_library(Soloud STATIC ${SOLOUD_SOURCES})
-target_include_directories(Soloud PUBLIC ${SOLOUD_INCLUDES})
-
-list(APPEND THE_FORGE_LIBS Soloud)
-copy_headers("${SOLOUD_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
+#file(GLOB_RECURSE SOLOUD_SOURCES "soloud20181119/src/*.cpp")
+#set(SOLOUD_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/soloud20181119/include")
+#
+#add_library(Soloud STATIC ${SOLOUD_SOURCES})
+#target_include_directories(Soloud PUBLIC ${SOLOUD_INCLUDES})
+#
+#list(APPEND THE_FORGE_LIBS Soloud)
+#copy_headers("${SOLOUD_INCLUDES}" "${CMAKE_SOURCE_DIR}/include")
 
 ##########################################
 ##      SPIRV_Cross

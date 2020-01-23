@@ -67,3 +67,5 @@ cmake-build-debug/
 CMakeFiles/
 build/
 include
+VulkanSDK
+Binary

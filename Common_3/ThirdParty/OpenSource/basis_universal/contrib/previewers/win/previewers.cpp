@@ -1,4 +1,7 @@
-#include <Windows.h>
+
+#include <windows.h>
+
+
 #include <ShlObj.h>
 #include <tchar.h>
 

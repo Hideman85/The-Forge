@@ -465,7 +465,7 @@ inline const Vector2 operator * (float scalar, const Vector2 & vec)
 
 inline const Vector2 absPerElem(const Vector2 & vec)
 {
-#if defined(__linux__)
+#if defined(CPP11)
 // linux build uses c++11 standard
     return Vector2(std::fabs(vec.getX()), std::fabs(vec.getY()));
 #else
@@ -513,23 +513,23 @@ inline float lengthSqr(const Vector2 & vec)
 
 inline float length(const Vector2 & vec)
 {
-#if __linux__
+#if defined(CPP11)
 // linux build uses c++11 standard
     return std::sqrt(lengthSqr(vec));
 #else
     return std::sqrtf(lengthSqr(vec));
-#endif	
+#endif
 }
 
 inline const Vector2 normalize(const Vector2 & vec)
 {
     const float lenSqr = lengthSqr(vec);
-#if __linux__
+#if defined(CPP11)
 // linux build uses c++11 standard
     const float lenInv = (1.0f / std::sqrt(lenSqr));
 #else
     const float lenInv = (1.0f / std::sqrtf(lenSqr));
-#endif	
+#endif
     return Vector2((vec.getX() * lenInv), (vec.getY() * lenInv));
 }
 
@@ -645,12 +645,12 @@ inline Point2 & Point2::operator -= (const Vector2 & vec)
 
 inline const Point2 absPerElem(const Point2 & pnt)
 {
-#if __linux__
+#if defined(CPP11)
 // linux build uses c++11 standard
     return Point2(std::fabs(pnt.getX()), std::fabs(pnt.getY()));
 #else
     return Point2(std::fabsf(pnt.getX()), std::fabsf(pnt.getY()));
-#endif	
+#endif
 }
 
 inline const Point2 maxPerElem(const Point2 & pnt0, const Point2 & pnt1)
@@ -1323,12 +1323,12 @@ struct Matrix2
 	Vector2 mCol1;
 
 	Matrix2() {}
-	Matrix2(const Vector2 &col0, const Vector2 &col1) 
+	Matrix2(const Vector2 &col0, const Vector2 &col1)
 	{
 		mCol0 = col0;
 		mCol1 = col1;
 	}
-	Matrix2(const float m00, const float m01, const float m10, const float m11) 
+	Matrix2(const float m00, const float m01, const float m10, const float m11)
 	{
 		mCol0 = Vector2(m00, m10);
 		mCol1 = Vector2(m01, m11);
@@ -1369,7 +1369,7 @@ inline Matrix2 operator - (const Matrix2 &m) { return Matrix2(-m.mCol0, -m.mCol1
 [c,d][c*q+d*s,	c*r+b*t		]
 */
 
-inline Matrix2 operator * (const Matrix2 &m, const Matrix2 &n) 
+inline Matrix2 operator * (const Matrix2 &m, const Matrix2 &n)
 {
 	return Matrix2(
 		m.getCol(0)*n.getCol(0).getX() + m.getCol(1)*n.getCol(0).getY(),
@@ -1381,7 +1381,7 @@ inline Vector2 operator * (const Matrix2 &m, const Vector2 &v) { return Vector2(
 inline Matrix2 operator * (const Matrix2 &m, const float x)    { return Matrix2(m.mCol0 * x, m.mCol1 * x); }
 inline float det(const Matrix2 &m) { return (m.mCol0.getX() * m.mCol1.getY() - m.mCol1.getX() * m.mCol0.getY()); }
 
-inline Matrix2 operator ! (const Matrix2 &m) 
+inline Matrix2 operator ! (const Matrix2 &m)
 {
 	float invDet = 1.0f / det(m);
 

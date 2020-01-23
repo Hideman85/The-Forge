@@ -15,7 +15,8 @@
 	#ifndef WIN32_LEAN_AND_MEAN
 		#define WIN32_LEAN_AND_MEAN
 	#endif
-	#include <Windows.h>
+	#include <windows.h>
+
 	#pragma warning(pop)
 #elif defined(EA_PLATFORM_ANDROID)
 	#include <android/log.h>
@@ -30,9 +31,9 @@ namespace eastl
 {
 
 	/// gpAssertionFailureFunction
-	/// 
+	///
 	/// Global assertion failure function pointer. Set by SetAssertionFailureFunction.
-	/// 
+	///
 	EASTL_API EASTL_AssertionFailureFunction gpAssertionFailureFunction        = AssertionFailureFunctionDefault;
 	EASTL_API void*                          gpAssertionFailureFunctionContext = NULL;
 
@@ -46,7 +47,7 @@ namespace eastl
 	/// to store a C++ 'this' pointer, though other things are possible.
 	///
 	/// There is no thread safety here, so the user needs to externally make sure that
-	/// this function is not called in a thread-unsafe way. The easiest way to do this is 
+	/// this function is not called in a thread-unsafe way. The easiest way to do this is
 	/// to just call this function once from the main thread on application startup.
 	///
 	EASTL_API void SetAssertionFailureFunction(EASTL_AssertionFailureFunction pAssertionFailureFunction, void* pContext)

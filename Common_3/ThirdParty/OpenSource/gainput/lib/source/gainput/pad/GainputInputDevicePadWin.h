@@ -5,7 +5,12 @@
 // Cf. http://msdn.microsoft.com/en-us/library/windows/desktop/ee417005%28v=vs.85%29.aspx
 
 #include "../GainputWindows.h"
+#if defined(__MINGW32__)
+#include <xinput.h>
+#else
 #include <XInput.h>
+#endif
+
 
 namespace gainput
 {

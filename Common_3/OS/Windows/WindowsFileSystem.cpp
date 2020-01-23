@@ -29,7 +29,7 @@
 #if !defined(_DURANGO)
 #include "shlobj.h"
 #include "commdlg.h"
-#include <WinBase.h>
+#include <winbase.h>
 #endif
 
 #include "../FileSystem/FileSystemInternal.h"
