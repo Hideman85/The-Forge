@@ -13,7 +13,7 @@ if (USE_ASSIMP)
     set(ASSIMP_ANDROID_JNIIOSYSTEM OFF) # Disable because <android/api-level.h> not found # still trying to compile it
     set(ASSIMP_BUILD_ZLIB ON)
     add_subdirectory(assimp/4.1.0)
-    list(APPEND THE_FORGE_LIBS assimp)
+    list(APPEND THE_FORGE_LIBS assimp IrrXML)
     copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/assimp/4.1.0/include" "${CMAKE_SOURCE_DIR}/include")
 endif()
 
@@ -96,7 +96,7 @@ elseif(UNIX)
     set(LIB_ZIP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Linux/libzip.a)
 endif()
 add_custom_target(libzip_copy)
-add_custom_command(TARGET libzip_copy PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${LIB_ZIP_FILE} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+add_custom_command(TARGET libzip_copy PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${LIB_ZIP_FILE} "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_STATIC_LIBRARY_PREFIX}zip${LIB_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}")
 
 copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/libzip" "${CMAKE_SOURCE_DIR}/include")
 

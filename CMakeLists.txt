@@ -1,6 +1,12 @@
-cmake_policy(SET CMP0077 NEW) # for option overriding
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.13)
+
 project(TheForge)
+
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0077 NEW) # for option overriding
+    cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
 
 ##########################################
 ##      Configure our build system
@@ -13,6 +19,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+string(TOUPPER ${CMAKE_BUILD_TYPE} CONFIG)
+set(LIB_POSTFIX ${CMAKE_${CONFIG}_POSTFIX})
 
 ##########################################
 ##      Verbose mode
@@ -46,51 +55,58 @@ option(DIRECT3D12 "Build with D3DX12 support" OFF)
 ##########################################
 ##      Add definitions
 ##########################################
+set(COMPILE_DEFINITIONS)
 if (${VULKAN})
-    add_definitions(-DVULKAN=TRUE)
+    list(APPEND COMPILE_DEFINITIONS VULKAN=TRUE)
 endif()
 if (${METAL})
-    add_definitions(-DMETAL=TRUE)
+    list(APPEND COMPILE_DEFINITIONS METAL=TRUE)
 endif()
 if (${DIRECT3D11})
-    add_definitions(-DDIRECT3D11=TRUE)
+    list(APPEND COMPILE_DEFINITIONS DIRECT3D11=TRUE)
 endif()
 if (${DIRECT3D12})
-    add_definitions(-DDIRECT3D12=TRUE)
+    list(APPEND COMPILE_DEFINITIONS DIRECT3D12=TRUE)
 endif()
 
 # Definition for fixing cross compiling with GCC or CLANG for ModifiedSonyMath lib
-add_definitions(-DCPP14=TRUE)
-add_definitions(-DCPP11=TRUE)
+list(APPEND COMPILE_DEFINITIONS CPP14=TRUE)
+list(APPEND COMPILE_DEFINITIONS CPP11=TRUE)
 
-add_definitions(-DUSE_MEMORY_TRACKING=TRUE)
+list(APPEND COMPILE_DEFINITIONS USE_MEMORY_TRACKING=TRUE)
+add_compile_definitions(${COMPILE_DEFINITIONS})
 
 ##########################################
 ##      System deps
 ##########################################
+set(SYSTEM_DEPS)
 if (VULKAN)
     if (WIN32)
-        include_directories("${CMAKE_SOURCE_DIR}/VulkanSDK/WinVulkan/Include")
-        link_libraries("${CMAKE_SOURCE_DIR}/VulkanSDK/WinVulkan/Lib/vulkan-1.lib")
+        include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/VulkanSDK/WinVulkan/Include")
+        list(APPEND SYSTEM_DEPS "${CMAKE_SOURCE_DIR}/VulkanSDK/WinVulkan/Lib/vulkan-1.lib")
+    elseif(ANDROID)
+        find_package(Vulkan CONFIG)
+        include_directories(SYSTEM ${Vulkan_INCLUDE_DIR})
+        list(APPEND SYSTEM_DEPS -lvulkan)
     else()
-        find_package(Vulkan REQUIRED)
-        include_directories(${Vulkan_INCLUDE_DIR})
-        link_libraries(${Vulkan_LIBRARIES})
+        find_package(Vulkan CONFIG)
+        include_directories(SYSTEM ${Vulkan_INCLUDE_DIR})
+        list(APPEND SYSTEM_DEPS -lvulkan)
     endif()
 endif()
 if (WIN32)
-    link_libraries("/usr/x86_64-w64-mingw32/lib/libz.a")
+    list(APPEND SYSTEM_DEPS "/usr/x86_64-w64-mingw32/lib/libz.a")
 else()
-    link_libraries(-lz ${CMAKE_DL_LIBS})
+    list(APPEND SYSTEM_DEPS -lz)
 endif ()
+list(APPEND SYSTEM_DEPS ${CMAKE_DL_LIBS})
 
-if (UNIX)
+if (UNIX AND NOT ANDROID AND NOT MINGW)
     find_package(X11 REQUIRED)
     find_package(ALSA REQUIRED) # sudo apt install libclalsadrv-dev
     set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads REQUIRED)
-    include_directories(${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
-    link_libraries(${X11_LIBRARIES} ${ALSA_LIBRARIES} Threads::Threads)
+    include_directories(SYSTEM ${X11_INCLUDE_DIR} ${ALSA_INCLUDE_DIR})
+    list(APPEND SYSTEM_DEPS ${X11_LIBRARIES} ${ALSA_LIBRARIES} -pthread)
 endif()
 
 ##########################################
@@ -109,12 +125,21 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/include")
     file(REMOVE_RECURSE "${CMAKE_SOURCE_DIR}/include")
 endif()
 file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/TheForge")
-copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/OS" "${CMAKE_SOURCE_DIR}/include/TheForge/OS")
-copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Renderer" "${CMAKE_SOURCE_DIR}/include/TheForge/Renderer")
-copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Tools" "${CMAKE_SOURCE_DIR}/include/TheForge/Tools")
-copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3" "${CMAKE_SOURCE_DIR}/include/TheForge")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/OS"          "${CMAKE_SOURCE_DIR}/include/TheForge/OS")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Renderer"    "${CMAKE_SOURCE_DIR}/include/TheForge/Renderer")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Common_3/Tools"       "${CMAKE_SOURCE_DIR}/include/TheForge/Tools")
+copy_headers("${CMAKE_CURRENT_SOURCE_DIR}/Middleware_3"         "${CMAKE_SOURCE_DIR}/include/TheForge")
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(SYSTEM ${CMAKE_SOURCE_DIR}/include)
+
+##########################################
+##      Resources
+##########################################
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/Resources")
+file(COPY   Middleware_3/PaniniProjection/Shaders     DESTINATION     ${CMAKE_BINARY_DIR}/Resources/PaniniProjection)
+file(COPY   Middleware_3/ParallelPrimitives/Shaders   DESTINATION     ${CMAKE_BINARY_DIR}/Resources/ParallelPrimitives)
+file(COPY   Middleware_3/Text/Shaders                 DESTINATION     ${CMAKE_BINARY_DIR}/Resources/Text)
+file(COPY   Middleware_3/UI/Shaders                   DESTINATION     ${CMAKE_BINARY_DIR}/Resources/UI)
 
 ##########################################
 ##      Compile nested deps
@@ -160,7 +185,6 @@ set(THE_FORGE_SOURCES
         Common_3/Renderer/CommonShaderReflection.cpp
         Common_3/Renderer/GpuProfiler.cpp
         Common_3/Renderer/ResourceLoader.cpp
-        Common_3/Tools/AssimpImporter/AssimpImporter.cpp
         Common_3/Tools/AssetPipeline/src/AssetLoader.cpp
         Common_3/Tools/AssetPipeline/src/AssetPipeline.cpp
         Common_3/Tools/AssetPipeline/src/gltfpack.cpp
@@ -198,6 +222,7 @@ if (USE_ASSIMP)
             ${THE_FORGE_SOURCES}
             Common_3/OS/FileSystem/AssimpIOStream.cpp
             Common_3/OS/FileSystem/AssimpIOSystem.cpp
+            Common_3/Tools/AssimpImporter/AssimpImporter.cpp
     )
 endif()
 
@@ -314,30 +339,10 @@ add_library(TheForge-static STATIC ${THE_FORGE_SOURCES})
 target_link_libraries(TheForge-static PUBLIC ${THE_FORGE_LIBS} zip)
 
 ##########################################
-##      Combine all static libs
+##   Link all libs in the correct order
 ##########################################
-set(THE_FORGE_LIBS "${THE_FORGE_LIBS};TheForge-static")
-set(THE_FORGE_LIBS_COMBINED)
-foreach(LIB ${THE_FORGE_LIBS} zip IrrXML)
-    set(THE_FORGE_LIBS_COMBINED "${THE_FORGE_LIBS_COMBINED};${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_STATIC_LIBRARY_PREFIX}${LIB}${CMAKE_STATIC_LIBRARY_SUFFIX}")
-endforeach()
-
-set(THE_FORGE_LIB "${CMAKE_STATIC_LIBRARY_PREFIX}TheForge${CMAKE_STATIC_LIBRARY_SUFFIX}")
-
-add_custom_target(
-        ${THE_FORGE_LIB}
-        ALL
-        COMMAND ${CMAKE_AR} -rcT ${THE_FORGE_LIB} ${THE_FORGE_LIBS_COMBINED}
-        DEPENDS ${THE_FORGE_LIBS} libzip_copy
-)
-
-##########################################
-##      Finalize
-##########################################
-add_library(TheForge STATIC IMPORTED)
-set_target_properties(TheForge PROPERTIES IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/${THE_FORGE_LIB})
-add_dependencies(TheForge ${THE_FORGE_LIB})
-link_libraries(TheForge)
+list(APPEND THE_FORGE_LIBS zip TheForge-static ${SYSTEM_DEPS})
+link_libraries(${THE_FORGE_LIBS})
 
 ##########################################
 ##      Unit tests & Samples
